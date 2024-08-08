@@ -1,10 +1,9 @@
 import React from "react";
 
-const Home = ({ user, handleLogOut }) => {
+const Home = ({ user }) => {
   return (
-    <div className="h-screen w-screen bg-red">
-      <h1>Welcome, {user.email}</h1>
-      <button onClick={handleLogOut}>Log Out</button>
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-red-100">
+      <h1>Welcome, {user.email}!</h1>
     </div>
   );
 };

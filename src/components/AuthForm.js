@@ -27,7 +27,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <div className="w-10/12 md:w-6/12 lg:w-3/12 border border-black flex flex-col justify-center items-center gap-2 py-4 px-6 rounded-lg">
+      <div className="w-10/12 md:w-6/12 lg:w-3/12 border border-black flex flex-col justify-center items-center gap-2 py-4 px-6 rounded-lg bg-red-100">
         <h1 className="text-2xl mb-2">{isLogin ? "Log In" : "Sign Up"}</h1>
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
           {!isLogin && (

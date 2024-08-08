@@ -3,6 +3,7 @@ import { auth } from "./firebase/firebaseConfig";
 import { signUp, logIn, logOut } from "./firebase/authService";
 import { onAuthStateChanged } from "firebase/auth";
 import AuthForm from "./components/AuthForm";
+import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 
 function App() {
@@ -21,7 +22,10 @@ function App() {
       {!user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
-        <Home user={user} handleLogOut={logOut} />
+        <div className="flex flex-col min-h-screen">
+          <Navbar handleLogOut={logOut} />
+          <Home user={user} />
+        </div>
       )}
     </div>
   );
