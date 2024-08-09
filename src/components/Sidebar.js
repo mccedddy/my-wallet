@@ -1,33 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase/firebaseConfig";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  deleteField,
+  arrayUnion,
+  arrayRemove,
+  onSnapshot,
+} from "firebase/firestore";
 
 const Sidebar = ({ user }) => {
   const [walletName, setWalletName] = useState("");
-  const [wallets, setWallets] = useState(["Wallet", "Gcash"]);
+  const [wallets, setWallets] = useState([]);
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
+
+  // Fetch wallets
+  useEffect(() => {
+    if (user?.email) {
+      const userDocRef = doc(db, "users", user.email);
+      const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setWallets(data.wallets || []);
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   const handleAddWallet = async (e) => {
     e.preventDefault();
     if (walletName && !wallets.includes(walletName)) {
-      setWallets([...wallets, walletName]);
-      console.log("Added wallet:", walletName);
-      setWalletName("");
+      try {
+        const userDocRef = doc(db, "users", user.email);
+        await updateDoc(userDocRef, {
+          wallets: arrayUnion(walletName),
+        });
+        console.log("Added wallet:", walletName);
+        setWalletName("");
+      } catch (error) {
+        console.error("Error adding wallet: ", error);
+      }
     }
   };
 
-  const handleDeleteWallet = (walletToDelete) => {
-    // Remove wallet
-    const updatedWallets = wallets.filter(
-      (wallet) => wallet !== walletToDelete
-    );
-    setWallets(updatedWallets);
+  const handleDeleteWallet = async (walletToDelete) => {
+    try {
+      const userDocRef = doc(db, "users", user.email);
+      await updateDoc(userDocRef, {
+        wallets: arrayRemove(walletToDelete),
+      });
+      console.log("Deleted wallet:", walletToDelete);
 
-    // Remove records
-    const updatedRecords = records.filter(
-      (record) => record.wallet !== walletToDelete
-    );
+      // Remove record
+      const updatedRecords = records.filter(
+        (record) => record.wallet !== walletToDelete
+      );
+      setRecords(updatedRecords);
 
-    setRecords(updatedRecords);
-    console.log("Deleted wallet:", walletToDelete);
+      // Remove the wallet field from the latest document
+      const recordRef = doc(db, "users", user.email, "records", "latest");
+      await updateDoc(recordRef, {
+        [walletToDelete]: deleteField(),
+      });
+    } catch (error) {
+      console.error("Error deleting wallet: ", error);
+    }
   };
 
   const handleAddRecord = () => {
@@ -45,7 +86,7 @@ const Sidebar = ({ user }) => {
     setRecords(updatedRecords);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
 
     // Save only unique records
@@ -53,12 +94,45 @@ const Sidebar = ({ user }) => {
       acc[curr.wallet] = curr;
       return acc;
     }, {});
-
     const filteredRecords = Object.values(uniqueRecords);
 
+    // Reset records after saving
     setRecords([{ wallet: "", balance: "" }]);
 
     console.log("Saving records:", filteredRecords);
+
+    try {
+      const recordsCollectionRef = collection(
+        db,
+        "users",
+        user.email,
+        "records"
+      );
+
+      // Get the latest record
+      const latestDocRef = doc(recordsCollectionRef, "latest");
+      const latestDocSnap = await getDoc(latestDocRef);
+      let mergedRecords = {};
+
+      if (latestDocSnap.exists()) {
+        mergedRecords = latestDocSnap.data();
+      }
+
+      filteredRecords.forEach((record) => {
+        mergedRecords[record.wallet] = record.balance;
+      });
+
+      const timestamp = new Date().toISOString();
+
+      const newDocRef = doc(recordsCollectionRef, timestamp);
+      await setDoc(newDocRef, { ...mergedRecords, timestamp });
+
+      await setDoc(latestDocRef, mergedRecords);
+
+      console.log("Records saved successfully");
+    } catch (error) {
+      console.error("Error saving records: ", error);
+    }
   };
 
   return (
@@ -67,10 +141,8 @@ const Sidebar = ({ user }) => {
         <h1 className="font-bold">WALLETS</h1>
         <ul className="flex flex-col gap-1">
           {wallets.map((wallet) => (
-            <div className="flex justify-between">
-              <h1 key={wallet} value={wallet}>
-                {wallet}
-              </h1>
+            <div className="flex justify-between" key={wallet}>
+              <h1 value={wallet}>{wallet}</h1>
               <button
                 type="button"
                 onClick={() => handleDeleteWallet(wallet)}
