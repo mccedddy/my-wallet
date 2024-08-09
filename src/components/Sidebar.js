@@ -17,6 +17,9 @@ const Sidebar = ({ user }) => {
   const [wallets, setWallets] = useState([]);
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
 
+  const [showWallets, setShowWallets] = useState(false);
+  const [showRecords, setShowRecords] = useState(false);
+
   // Fetch wallets
   useEffect(() => {
     if (user?.email) {
@@ -137,92 +140,111 @@ const Sidebar = ({ user }) => {
 
   return (
     <div className="h-full w-3/12 flex flex-col bg-red-200 py-2 px-4 gap-2">
-      <form onSubmit={handleAddWallet} className="flex flex-col gap-1">
-        <h1 className="font-bold">WALLETS</h1>
-        <ul className="flex flex-col gap-1">
-          {wallets.map((wallet) => (
-            <div className="flex justify-between" key={wallet}>
-              <h1 value={wallet}>{wallet}</h1>
-              <button
-                type="button"
-                onClick={() => handleDeleteWallet(wallet)}
-                className="bg-red-500 rounded px-1"
-              >
-                +
-              </button>
-            </div>
-          ))}
-        </ul>
-        <div className="flex gap-1">
-          <input
-            type="text"
-            placeholder="Wallet Name"
-            value={walletName}
-            onChange={(e) => setWalletName(e.target.value)}
-            required
-            className="w-full border rounded px-1"
-          />
-          <button type="submit" className="bg-red-500 rounded px-1">
-            +
-          </button>
-        </div>
-      </form>
+      {/* Profile Section */}
+      <h1>{user.email}</h1>
 
-      <form onSubmit={handleSave} className="flex flex-col gap-1">
-        <h1 className="font-bold">RECORD</h1>
-        {records.map((record, index) => (
-          <div key={index} className="flex gap-1 items-center">
-            <select
-              className="border rounded"
-              value={record.wallet}
-              onChange={(e) =>
-                handleRecordChange(index, "wallet", e.target.value)
-              }
-              required
-            >
-              <option value="" disabled>
-                Select
-              </option>
-              {wallets.map((wallet) => (
-                <option key={wallet} value={wallet}>
+      {/* Wallets Section */}
+      <button
+        onClick={() => setShowWallets(!showWallets)}
+        className="text-left font-bold border-b border-black p-1"
+      >
+        WALLETS
+      </button>
+      {showWallets && (
+        <form onSubmit={handleAddWallet} className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1">
+            {wallets.map((wallet) => (
+              <div className="flex justify-between" key={wallet}>
+                <h1 value={wallet} className="pl-1">
                   {wallet}
-                </option>
-              ))}
-            </select>
+                </h1>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteWallet(wallet)}
+                  className="bg-red-500 rounded px-1"
+                >
+                  +
+                </button>
+              </div>
+            ))}
+          </ul>
+          <div className="flex gap-1">
             <input
               type="text"
-              placeholder="Balance"
-              value={record.balance}
-              onChange={(e) =>
-                handleRecordChange(index, "balance", e.target.value)
-              }
+              placeholder="Wallet Name"
+              value={walletName}
+              onChange={(e) => setWalletName(e.target.value)}
               required
               className="w-full border rounded px-1"
             />
-            {records.length > 1 && (
-              <button
-                type="button"
-                onClick={() => handleDeleteRecord(index)}
-                className="bg-red-500 rounded px-1"
-              >
-                +
-              </button>
-            )}
+            <button type="submit" className="bg-red-500 rounded px-1">
+              +
+            </button>
           </div>
-        ))}
-        <div className="flex gap-1">
+        </form>
+      )}
+
+      {/* Records Section */}
+      <button
+        onClick={() => setShowRecords(!showRecords)}
+        className="text-left font-bold border-b border-black p-1"
+      >
+        RECORDS
+      </button>
+      {showRecords && (
+        <form onSubmit={handleSave} className="flex flex-col gap-1">
+          {records.map((record, index) => (
+            <div key={index} className="flex gap-1 items-center">
+              <select
+                className="border rounded"
+                value={record.wallet}
+                onChange={(e) =>
+                  handleRecordChange(index, "wallet", e.target.value)
+                }
+                required
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                {wallets.map((wallet) => (
+                  <option key={wallet} value={wallet}>
+                    {wallet}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="Balance"
+                value={record.balance}
+                onChange={(e) =>
+                  handleRecordChange(index, "balance", e.target.value)
+                }
+                required
+                className="w-full border rounded px-1"
+              />
+              {records.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteRecord(index)}
+                  className="bg-red-500 rounded px-1"
+                >
+                  +
+                </button>
+              )}
+            </div>
+          ))}
           <button
             type="button"
             onClick={handleAddRecord}
-            className="w-5/12 px-1 rounded bg-red-500"
+            className="px-1 rounded bg-red-500"
           >
-            +
+            ADD RECORD
           </button>
           <button type="submit" className="w-full rounded px-1 bg-red-500">
             SAVE
           </button>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 };

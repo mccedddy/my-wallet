@@ -3,8 +3,7 @@ import React from "react";
 const Records = ({ user }) => {
   return (
     <div className="h-screen w-full flex flex-col items-center">
-      <h1>Logged in as: {user.email}</h1>
-      <h1>Records</h1>
+      <h1 className="w-8/12 mt-8 mb-1 font-bold text-xl text-left">RECORDS</h1>
       <table className="w-8/12">
         <thead>
           <tr>
