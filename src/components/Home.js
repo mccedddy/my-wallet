@@ -1,9 +1,12 @@
 import React from "react";
+import Sidebar from "./Sidebar";
+import Records from "./Records";
 
 const Home = ({ user }) => {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center bg-red-100">
-      <h1>Welcome, {user.email}!</h1>
+    <div className="h-screen w-full flex bg-red-100">
+      <Sidebar user={user} />
+      <Records user={user} />
     </div>
   );
 };
