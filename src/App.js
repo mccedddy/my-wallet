@@ -22,7 +22,7 @@ function App() {
       {!user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-screen border border-black">
           <Navbar handleLogOut={logOut} />
           <Home user={user} />
         </div>

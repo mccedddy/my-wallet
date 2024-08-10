@@ -9,9 +9,10 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-const Records = ({ user }) => {
+const Records = ({ user, refresh }) => {
   const [records, setRecords] = useState([]);
   const [walletNames, setWalletNames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Fetch wallet names
   useEffect(() => {
@@ -23,11 +24,12 @@ const Records = ({ user }) => {
           const data = userDocSnap.data();
           setWalletNames(data.wallets || []);
         }
+        setLoading(false);
       };
 
       fetchWalletNames();
     }
-  }, [user]);
+  }, [user, refresh]);
 
   // Fetch records based on wallet names
   useEffect(() => {
@@ -76,42 +78,51 @@ const Records = ({ user }) => {
 
       fetchRecords();
     }
-  }, [user, walletNames]);
+  }, [user, walletNames, refresh]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="h-screen w-full flex flex-col items-center">
-      <h1 className="w-8/12 mt-8 mb-1 font-bold text-xl text-left">RECORDS</h1>
-      <table className="w-8/12 border-collapse">
-        <thead>
-          <tr>
-            <th className="border-b">DATE TIME</th>
-            {walletNames.map((wallet) => (
-              <th key={wallet} className="border-b">
-                {wallet.toUpperCase()}
-              </th>
-            ))}
-            <th className="border-b">TOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((record, index) => (
-            <tr key={index} className="text-center">
-              <td className="border-b">{record.date + " " + record.time}</td>
+    <div className="h-full w-full flex flex-col items-center">
+      {!walletNames.length ? (
+        <p className="mt-6">You have no wallet. Create one.</p>
+      ) : !records.length ? (
+        <p className="mt-6">No records found. Create one.</p>
+      ) : (
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="border-b">DATE TIME</th>
               {walletNames.map((wallet) => (
-                <td key={wallet} className="border-b">
-                  {record.wallets[wallet] || "-"}
-                </td>
+                <th key={wallet} className="border-b">
+                  {wallet.toUpperCase()}
+                </th>
               ))}
-              <td className="border-b">
-                {walletNames.reduce((acc, wallet) => {
-                  const balance = parseFloat(record.wallets[wallet] || 0);
-                  return acc + balance;
-                }, 0)}
-              </td>
+              <th className="border-b">TOTAL</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {records.map((record, index) => (
+              <tr key={index} className="text-center">
+                <td className="border-b">{record.date + " " + record.time}</td>
+                {walletNames.map((wallet) => (
+                  <td key={wallet} className="border-b">
+                    {record.wallets[wallet] || "-"}
+                  </td>
+                ))}
+                <td className="border-b">
+                  {walletNames.reduce((acc, wallet) => {
+                    const balance = parseFloat(record.wallets[wallet] || 0);
+                    return acc + balance;
+                  }, 0)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

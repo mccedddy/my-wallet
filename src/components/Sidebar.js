@@ -12,7 +12,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, onUpdate }) => {
   const [walletName, setWalletName] = useState("");
   const [wallets, setWallets] = useState([]);
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
@@ -43,6 +43,7 @@ const Sidebar = ({ user }) => {
           wallets: arrayUnion(walletName),
         });
         console.log("Added wallet:", walletName);
+        onUpdate();
         setWalletName("");
       } catch (error) {
         console.error("Error adding wallet: ", error);
@@ -57,6 +58,7 @@ const Sidebar = ({ user }) => {
         wallets: arrayRemove(walletToDelete),
       });
       console.log("Deleted wallet:", walletToDelete);
+      onUpdate();
 
       // Remove record
       const updatedRecords = records.filter(
@@ -133,13 +135,14 @@ const Sidebar = ({ user }) => {
       await setDoc(latestDocRef, mergedRecords);
 
       console.log("Records saved successfully");
+      onUpdate();
     } catch (error) {
       console.error("Error saving records: ", error);
     }
   };
 
   return (
-    <div className="h-full w-3/12 flex flex-col bg-red-200 py-2 px-4 gap-2">
+    <div className="w-3/12 flex flex-col bg-red-200 py-2 px-4 gap-2">
       {/* Profile Section */}
       <h1>{user.email}</h1>
 
