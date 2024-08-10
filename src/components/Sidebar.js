@@ -19,6 +19,8 @@ const Sidebar = ({ user, onUpdate }) => {
 
   const [showWallets, setShowWallets] = useState(false);
   const [showRecords, setShowRecords] = useState(false);
+  const [showProfile, setShowProfile] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Fetch wallets
   useEffect(() => {
@@ -142,112 +144,135 @@ const Sidebar = ({ user, onUpdate }) => {
   };
 
   return (
-    <div className="w-3/12 flex flex-col bg-red-200 py-2 px-4 gap-2">
-      {/* Profile Section */}
-      <h1>{user.email}</h1>
-
-      {/* Wallets Section */}
-      <button
-        onClick={() => setShowWallets(!showWallets)}
-        className="text-left font-bold border-b border-black p-1"
+    <div
+      className={`relative h-full flex bg-red-300 transition-all duration-300 ease-in-out
+      ${isVisible ? "w-full md:w-6/12 lg:w-4/12" : "w-5"}`}
+    >
+      <div
+        className={`flex flex-col flex-grow bg-red-300 py-2 px-4 gap-2
+        ${isVisible ? "" : "hidden"}`}
       >
-        WALLETS
-      </button>
-      {showWallets && (
-        <form onSubmit={handleAddWallet} className="flex flex-col gap-1">
-          <ul className="flex flex-col gap-1">
-            {wallets.map((wallet) => (
-              <div className="flex justify-between" key={wallet}>
-                <h1 value={wallet} className="pl-1">
-                  {wallet}
-                </h1>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteWallet(wallet)}
-                  className="bg-red-500 rounded px-1"
-                >
-                  +
-                </button>
-              </div>
-            ))}
-          </ul>
-          <div className="flex gap-1">
-            <input
-              type="text"
-              placeholder="Wallet Name"
-              value={walletName}
-              onChange={(e) => setWalletName(e.target.value)}
-              required
-              className="w-full border rounded px-1"
-            />
-            <button type="submit" className="bg-red-500 rounded px-1">
-              +
-            </button>
-          </div>
-        </form>
-      )}
+        {/* Profile Section */}
+        <button
+          onClick={() => setShowProfile(!showProfile)}
+          className="text-left font-bold border-b border-black p-1"
+        >
+          PROFILE
+        </button>
+        {showProfile && <h1>{user.email}</h1>}
 
-      {/* Records Section */}
-      <button
-        onClick={() => setShowRecords(!showRecords)}
-        className="text-left font-bold border-b border-black p-1"
-      >
-        RECORDS
-      </button>
-      {showRecords && (
-        <form onSubmit={handleSave} className="flex flex-col gap-1">
-          {records.map((record, index) => (
-            <div key={index} className="flex gap-1 items-center">
-              <select
-                className="border rounded"
-                value={record.wallet}
-                onChange={(e) =>
-                  handleRecordChange(index, "wallet", e.target.value)
-                }
-                required
-              >
-                <option value="" disabled>
-                  Select
-                </option>
-                {wallets.map((wallet) => (
-                  <option key={wallet} value={wallet}>
+        {/* Wallets Section */}
+        <button
+          onClick={() => setShowWallets(!showWallets)}
+          className="text-left font-bold border-b border-black p-1"
+        >
+          WALLETS
+        </button>
+        {showWallets && (
+          <form onSubmit={handleAddWallet} className="flex flex-col gap-1">
+            <ul className="flex flex-col gap-1">
+              {wallets.map((wallet) => (
+                <div className="flex justify-between" key={wallet}>
+                  <h1 value={wallet} className="pl-1">
                     {wallet}
-                  </option>
-                ))}
-              </select>
+                  </h1>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteWallet(wallet)}
+                    className="bg-red-500 rounded px-1"
+                  >
+                    +
+                  </button>
+                </div>
+              ))}
+            </ul>
+            <div className="flex gap-1">
               <input
                 type="text"
-                placeholder="Balance"
-                value={record.balance}
-                onChange={(e) =>
-                  handleRecordChange(index, "balance", e.target.value)
-                }
+                placeholder="Wallet Name"
+                value={walletName}
+                onChange={(e) => setWalletName(e.target.value)}
                 required
                 className="w-full border rounded px-1"
               />
-              {records.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => handleDeleteRecord(index)}
-                  className="bg-red-500 rounded px-1"
-                >
-                  +
-                </button>
-              )}
+              <button type="submit" className="bg-red-500 rounded px-1">
+                +
+              </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddRecord}
-            className="px-1 rounded bg-red-500"
-          >
-            ADD RECORD
-          </button>
-          <button type="submit" className="w-full rounded px-1 bg-red-500">
-            SAVE
-          </button>
-        </form>
-      )}
+          </form>
+        )}
+
+        {/* Records Section */}
+        <button
+          onClick={() => setShowRecords(!showRecords)}
+          className="text-left font-bold border-b border-black p-1"
+        >
+          RECORDS
+        </button>
+        {showRecords && (
+          <form onSubmit={handleSave} className="flex flex-col gap-1">
+            {records.map((record, index) => (
+              <div key={index} className="flex gap-1 items-center">
+                <select
+                  className="border rounded"
+                  value={record.wallet}
+                  onChange={(e) =>
+                    handleRecordChange(index, "wallet", e.target.value)
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
+                  {wallets.map((wallet) => (
+                    <option key={wallet} value={wallet}>
+                      {wallet}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="Balance"
+                  value={record.balance}
+                  onChange={(e) =>
+                    handleRecordChange(index, "balance", e.target.value)
+                  }
+                  required
+                  className="w-full border rounded px-1"
+                />
+                {records.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteRecord(index)}
+                    className="bg-red-500 rounded px-1"
+                  >
+                    +
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddRecord}
+              className="px-1 rounded bg-red-500"
+            >
+              ADD RECORD
+            </button>
+            <button type="submit" className="w-full rounded px-1 bg-red-500">
+              SAVE
+            </button>
+          </form>
+        )}
+      </div>
+
+      {/* Show/Hide Button */}
+      <button
+        onClick={() => setIsVisible(!isVisible)}
+        className="h-24 w-5 bg-red-300 absolute top-1/2 transform -translate-y-1/2 translate-2/2 text-sm rounded-r-2xl"
+        style={{ right: "-20px" }}
+      >
+        {">"}
+      </button>
     </div>
   );
 };

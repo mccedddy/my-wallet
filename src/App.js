@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "./firebase/firebaseConfig";
-import { signUp, logIn, logOut } from "./firebase/authService";
+import { signUp, logIn } from "./firebase/authService";
 import { onAuthStateChanged } from "firebase/auth";
 import AuthForm from "./components/AuthForm";
-import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
         <div className="flex flex-col h-screen border border-black">
-          <Navbar handleLogOut={logOut} />
           <Home user={user} />
         </div>
       )}
