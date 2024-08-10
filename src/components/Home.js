@@ -16,7 +16,7 @@ const Home = ({ user }) => {
       <Sidebar user={user} onUpdate={triggerRefresh} />
       <div className="h-full w-full flex flex-col items-center">
         <Navbar handleLogOut={logOut} />
-        <div className="w-10/12 flex flex-col">
+        <div className="w-11/12 flex flex-col">
           <div className="flex my-4 text-center font-bold gap-2">
             <button className="border-b-2 border-black">RECORDS</button>
             <button className="border-black">GRAPH</button>
