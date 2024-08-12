@@ -19,7 +19,9 @@ const Home = ({ user }) => {
         <div className="w-11/12 flex flex-col">
           <div className="flex my-4 text-center font-bold gap-2">
             <button className="border-b-2 border-black">RECORDS</button>
-            <button className="border-black">GRAPH</button>
+            <button className="border-black">G</button>
+            <button className="border-black">W</button>
+            <button className="border-black">S</button>
           </div>
           <Records user={user} refresh={refresh} />
         </div>

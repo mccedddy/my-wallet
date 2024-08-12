@@ -87,41 +87,65 @@ const Records = ({ user, refresh }) => {
   return (
     <div className="h-full w-full flex flex-col items-center">
       {!walletNames.length ? (
-        <p className="mt-6">You have no wallet. Create one.</p>
+        <div className="w-full flex">
+          <p className="pr-1">You have no wallet.</p>
+          <p className="text-red-500 cursor-pointer">Create one</p>.
+        </div>
       ) : !records.length ? (
-        <p className="mt-6">No records found. Create one.</p>
+        <div className="w-full flex">
+          <p className="pr-1">No records found.</p>
+          <p className="text-red-500 cursor-pointer">Create one</p>.
+        </div>
       ) : (
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="border-b">DATE TIME</th>
-              {walletNames.map((wallet) => (
-                <th key={wallet} className="border-b">
-                  {wallet.toUpperCase()}
-                </th>
-              ))}
-              <th className="border-b">TOTAL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((record, index) => (
-              <tr key={index} className="text-center">
-                <td className="border-b">{record.date + " " + record.time}</td>
+        <div className="w-full">
+          <button className="bg-red-500 rounded text-white">ADD RECORD</button>
+          <table className="my-2 w-full text-sm">
+            <thead>
+              <tr>
+                <th className="border-b w-24">DATE</th>
                 {walletNames.map((wallet) => (
-                  <td key={wallet} className="border-b">
-                    {record.wallets[wallet] || "-"}
-                  </td>
+                  <th key={wallet} className="border-b">
+                    {wallet.toUpperCase()}
+                  </th>
                 ))}
-                <td className="border-b">
-                  {walletNames.reduce((acc, wallet) => {
-                    const balance = parseFloat(record.wallets[wallet] || 0);
-                    return acc + balance;
-                  }, 0)}
-                </td>
+                <th className="border-b w-24">TOTAL</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+              <tr className="h-2"></tr>
+            </thead>
+            <tbody>
+              {records.map((record, index) => (
+                <React.Fragment key={index}>
+                  <tr className="text-center">
+                    {/* Upper part: date time, wallet balances, total */}
+                    <td className="border-b">{record.date}</td>
+                    {walletNames.map((wallet) => (
+                      <td key={wallet} className="border-b">
+                        {record.wallets[wallet] || "-"}
+                      </td>
+                    ))}
+                    <td className="border-b" rowSpan="2">
+                      {walletNames.reduce((acc, wallet) => {
+                        const balance = parseFloat(record.wallets[wallet] || 0);
+                        return acc + balance;
+                      }, 0)}
+                    </td>
+                  </tr>
+                  <tr className="text-center">
+                    {/* Lower part: description */}
+                    <td className="border-b text-xs">{record.time}</td>
+                    <td
+                      colSpan={walletNames.length}
+                      className="border-b text-left px-2 text-xs"
+                    >
+                      Description goes here
+                    </td>
+                  </tr>
+                  <tr className="h-2"></tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
