@@ -15,24 +15,24 @@ const Home = ({ user }) => {
     <div className="h-full w-full flex flex-col items-center bg-red-100">
       <Navbar handleLogOut={logOut} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
-        <div className="flex my-4 text-center font-bold gap-2">
+        <div className="flex my-4 text-center gap-3">
           <button
             onClick={() => toPage("records")}
             className={`${page === "records" ? "border-b-2 border-black" : ""}`}
           >
-            {page === "records" ? "RECORDS" : "R"}
+            RECORDS
           </button>
           <button
             onClick={() => toPage("graphs")}
             className={`${page === "graphs" ? "border-b-2 border-black" : ""}`}
           >
-            {page === "graphs" ? "GRAPHS" : "G"}
+            GRAPHS
           </button>
           <button
             onClick={() => toPage("wallets")}
             className={`${page === "wallets" ? "border-b-2 border-black" : ""}`}
           >
-            {page === "wallets" ? "WALLETS" : "W"}
+            WALLETS
           </button>
           <button
             onClick={() => toPage("settings")}
@@ -40,7 +40,7 @@ const Home = ({ user }) => {
               page === "settings" ? "border-b-2 border-black" : ""
             }`}
           >
-            {page === "settings" ? "SETTINGS" : "S"}
+            SETTINGS
           </button>
         </div>
         {page === "records" && <Records user={user} />}
