@@ -14,6 +14,7 @@ const Records = ({ user }) => {
   const [records, setRecords] = useState([]);
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -21,6 +22,7 @@ const Records = ({ user }) => {
   useEffect(() => {
     if (user?.email) {
       const fetchWalletNames = async () => {
+        setLoading(true);
         const userDocRef = doc(db, "users", user.email);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
@@ -38,6 +40,7 @@ const Records = ({ user }) => {
   useEffect(() => {
     if (user?.email && wallets.length > 0) {
       const fetchRecords = async () => {
+        setLoadingRecords(true);
         const recordsCollectionRef = collection(
           db,
           "users",
@@ -78,6 +81,7 @@ const Records = ({ user }) => {
         });
 
         setRecords(fetchedRecords);
+        setLoadingRecords(false);
       };
 
       fetchRecords();
@@ -93,7 +97,11 @@ const Records = ({ user }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <div className="w-6 mt-32 spinner"></div>
+      </div>
+    );
   }
 
   return (
@@ -101,7 +109,14 @@ const Records = ({ user }) => {
       {!wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
-          <p className="text-red-500 cursor-pointer">Create one</p>.
+          <p onClick={toggleModal} className="text-red-500 cursor-pointer">
+            Create one
+          </p>
+          .
+        </div>
+      ) : loadingRecords ? (
+        <div className="flex flex-col justify-center items-center">
+          <div className="w-6 mt-32 spinner"></div>
         </div>
       ) : !records.length ? (
         <div className="w-full flex">
@@ -115,7 +130,7 @@ const Records = ({ user }) => {
         <div className="w-full">
           <button
             onClick={toggleModal}
-            className="bg-red-500 rounded text-white"
+            className="h-6 px-2 text-xs bg-red-500 rounded text-white"
           >
             ADD RECORD
           </button>
@@ -176,6 +191,7 @@ const Records = ({ user }) => {
           wallets={wallets}
           setWallets={setWallets}
           onUpdate={triggerRefresh}
+          type="addRecord"
         />
       )}
     </div>
