@@ -155,25 +155,25 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-customBlack bg-opacity-25 shadow-lg"
       onClick={toggleModal}
     >
       <div
-        className="h-2/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-red-100"
+        className="h-2/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-customWhite"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="h-10 w-full p-3 bg-red-300 flex rounded-t justify-between items-center">
-          <h1 className="">
+        <div className="h-10 w-full p-3 bg-customBlue flex rounded-t justify-between items-center">
+          <h1 className="text-customWhite">
             {type === "addRecord" ? "Add Record" : "Add Wallet"}
           </h1>
           <h1
             onClick={toggleModal}
-            className="cursor-pointer font-bold text-xl"
+            className="cursor-pointer font-bold text-xl text-customWhite"
           >
             ×
           </h1>
         </div>
-        <div className="h-full w-full p-3 bg-red-100 overflow-y-auto custom-scrollbar">
+        <div className="h-full w-full p-3 bg-customWhite overflow-y-auto custom-scrollbar">
           <form
             id="modalForm"
             onSubmit={handleSave}
@@ -184,7 +184,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 {records.map((record, index) => (
                   <div key={index} className="flex gap-1 items-center">
                     <select
-                      className="border rounded w-32"
+                      className="border border-gray-300 rounded w-32 text-customBlack outline-customBlue"
                       value={record.wallet}
                       onChange={(e) =>
                         handleRecordChange(index, "wallet", e.target.value)
@@ -208,13 +208,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleRecordChange(index, "balance", e.target.value)
                       }
                       required
-                      className="w-full border rounded px-1"
+                      className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
                     />
                     {records.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteRecord(index)}
-                        className="h-6 px-2 text-xs bg-red-500 rounded text-white"
+                        className="h-6 px-2 text-xs bg-customBlack-lighter rounded text-white"
                       >
                         -
                       </button>
@@ -224,7 +224,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddRecord}
-                  className="h-6 w-12 px-2 text-xs bg-red-500 rounded text-white"
+                  className="h-6 w-12 px-2 text-xs bg-customBlue rounded text-white"
                 >
                   +
                 </button>
@@ -233,13 +233,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full rounded"
+                    className="w-full border border-gray-300 rounded text-customBlack outline-customBlue"
                   ></input>
                   <input
                     type="time"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full rounded"
+                    className="w-full border border-gray-300 rounded text-customBlack outline-customBlue"
                   ></input>
                 </div>
                 <input
@@ -247,7 +247,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                   placeholder="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full border rounded px-1"
+                  className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
                 />
               </>
             ) : (
@@ -262,13 +262,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleWalletChange(index, e.target.value)
                       }
                       required
-                      className="w-full border rounded px-1"
+                      className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
                     />
                     {newWallets.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteWallet(index)}
-                        className="h-6 px-2 text-xs bg-red-500 rounded text-white"
+                        className="h-6 px-2 text-xs bg-customBlack-lighter rounded text-white"
                       >
                         -
                       </button>
@@ -278,7 +278,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddWallet}
-                  className="h-6 w-12 px-2 text-xs bg-red-500 rounded text-white"
+                  className="h-6 w-12 px-2 text-xs bg-customBlue rounded text-white"
                 >
                   +
                 </button>
@@ -286,11 +286,11 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             )}
           </form>
         </div>
-        <div className="h-10 w-full p-3 bg-red-300 flex rounded-b items-center">
+        <div className="h-10 w-full p-3 bg-customWhite flex rounded-b items-center">
           <button
             type="submit"
             form="modalForm"
-            className="bg-red-500 px-2 text-white rounded"
+            className="bg-customBlue px-2 text-white rounded"
           >
             Save
           </button>

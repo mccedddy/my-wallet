@@ -109,7 +109,7 @@ const Records = ({ user }) => {
       {!wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
-          <p onClick={toggleModal} className="text-red-500 cursor-pointer">
+          <p onClick={toggleModal} className="text-customBlue cursor-pointer">
             Create one
           </p>
           .
@@ -121,17 +121,14 @@ const Records = ({ user }) => {
       ) : !records.length ? (
         <div className="w-full flex">
           <p className="pr-1">No records found.</p>
-          <p onClick={toggleModal} className="text-red-500 cursor-pointer">
+          <p onClick={toggleModal} className="text-customBlue cursor-pointer">
             Create one
           </p>
           .
         </div>
       ) : (
         <div className="w-full">
-          <button
-            onClick={toggleModal}
-            className="h-6 px-2 text-xs bg-red-500 rounded text-white"
-          >
+          <button onClick={toggleModal} className="h-6 px-2 text-xs rounded">
             ADD RECORD
           </button>
           <table className="my-2 w-full text-sm">
