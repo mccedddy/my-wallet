@@ -21,9 +21,7 @@ function App() {
       {!user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
-        <div className="flex flex-col h-screen border border-black">
-          <Home user={user} />
-        </div>
+        <Home user={user} />
       )}
     </div>
   );

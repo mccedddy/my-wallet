@@ -12,7 +12,7 @@ const Home = ({ user }) => {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center bg-red-100">
+    <div className="h-full w-full flex flex-col flex-grow items-center border-black border">
       <Navbar handleLogOut={logOut} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
         <div className="flex my-4 text-center gap-3">

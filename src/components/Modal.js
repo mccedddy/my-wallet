@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -6,6 +6,31 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
   const [description, setDescription] = useState("");
   const [newWallets, setNewWallets] = useState([{ walletName: "" }]);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    const localTime = new Date(now.getTime());
+
+    const defaultDate = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Manila",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(localTime);
+
+    const defaultTime = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Manila",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(localTime);
+
+    setDate(defaultDate);
+    setTime(defaultTime.substring(0, 5));
+  }, []);
 
   const handleRecordChange = (index, field, value) => {
     const updatedRecords = [...records];
@@ -75,7 +100,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
           mergedRecords[record.wallet] = record.balance;
         });
 
-        const timestamp = new Date().toISOString();
+        const timestamp = `${date} ${time}`;
 
         const newDocRef = doc(recordsCollectionRef, timestamp);
         await setDoc(newDocRef, { ...mergedRecords, description, timestamp });
@@ -203,12 +228,26 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 >
                   +
                 </button>
+                <div className="flex mt-2 gap-1">
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full rounded"
+                  ></input>
+                  <input
+                    type="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    className="w-full rounded"
+                  ></input>
+                </div>
                 <input
                   type="text"
                   placeholder="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full mt-2 border rounded px-1"
+                  className="w-full border rounded px-1"
                 />
               </>
             ) : (
@@ -247,13 +286,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             )}
           </form>
         </div>
-        <div className="h-10 w-full p-3 bg-red-100 flex rounded-b items-center">
+        <div className="h-10 w-full p-3 bg-red-300 flex rounded-b items-center">
           <button
             type="submit"
             form="modalForm"
-            className="h-6 px-2 text-xs bg-red-500 rounded text-white"
+            className="bg-red-500 px-2 text-white rounded"
           >
-            SAVE
+            Save
           </button>
         </div>
       </div>
