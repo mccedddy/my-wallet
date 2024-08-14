@@ -82,16 +82,17 @@ const Wallets = ({ user }) => {
       {!wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
-          <p onClick={toggleModal} className="text-customBlue cursor-pointer">
+          <p onClick={toggleModal} className="text-primary cursor-pointer">
             Create one
           </p>
-          .
+          <p>.</p>
+          {/* TODO: onclick = go to wallets, open modal */}
         </div>
       ) : (
         <div className="w-full">
           <button
             onClick={toggleModal}
-            className="h-6 px-2 text-xs bg-customBlue rounded"
+            className="h-6 px-2 text-xs bg-accent rounded"
           >
             ADD WALLET
           </button>
@@ -112,7 +113,7 @@ const Wallets = ({ user }) => {
                     <td>{latestBalances[wallet] || 0}</td>
                     <td
                       onClick={() => handleDeleteWallet(wallet)}
-                      className="cursor-pointer text-customBlack-lighter font-bold"
+                      className="cursor-pointer text-secondary font-bold"
                     >
                       D
                     </td>

@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background: #fafbff;
+  background: #1d1b1d;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -34,10 +34,11 @@ table {
 
 th,
 td {
-  border: 1px solid #5d6e89;
+  /* border: 1px solid #1d1b1d; */
   padding: 2px;
   text-align: center;
-  color: #1e355b;
+  color: #f3e2ec;
+  /* background-color: #242224; */
 }
 
 .spinner {
@@ -45,8 +46,8 @@ td {
   height: 56px;
   border-radius: 50%;
   border: 9px solid;
-  border-color: #dbdcef;
-  border-right-color: #0b60d4;
+  border-color: #f3e2ec;
+  border-right-color: #f0289d;
   animation: spinner-d3wgkg 1s infinite linear;
 }
 
@@ -58,10 +59,10 @@ td {
 
 h1,
 p {
-  color: #1e355b;
+  color: #f3e2ec;
 }
 
 button {
-  color: #fff;
-  background-color: #0b60d4;
+  color: #f3e2ec;
+  background-color: #f0289d;
 }

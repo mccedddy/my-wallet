@@ -155,25 +155,25 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-customBlack bg-opacity-25 shadow-lg"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-30 shadow-lg"
       onClick={toggleModal}
     >
       <div
-        className="h-2/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-customWhite"
+        className="h-2/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-background-light"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="h-10 w-full p-3 bg-customBlue flex rounded-t justify-between items-center">
-          <h1 className="text-customWhite">
+        <div className="h-10 w-full p-3 bg-secondary flex rounded-t justify-between items-center">
+          <h1 className="">
             {type === "addRecord" ? "Add Record" : "Add Wallet"}
           </h1>
           <h1
             onClick={toggleModal}
-            className="cursor-pointer font-bold text-xl text-customWhite"
+            className="cursor-pointer font-bold text-xl"
           >
             ×
           </h1>
         </div>
-        <div className="h-full w-full p-3 bg-customWhite overflow-y-auto custom-scrollbar">
+        <div className="h-full w-full p-3 bg-background-light overflow-y-auto custom-scrollbar">
           <form
             id="modalForm"
             onSubmit={handleSave}
@@ -184,7 +184,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 {records.map((record, index) => (
                   <div key={index} className="flex gap-1 items-center">
                     <select
-                      className="border border-gray-300 rounded w-32 text-customBlack outline-customBlue"
+                      className="rounded w-32 text-text bg-secondary"
                       value={record.wallet}
                       onChange={(e) =>
                         handleRecordChange(index, "wallet", e.target.value)
@@ -208,13 +208,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleRecordChange(index, "balance", e.target.value)
                       }
                       required
-                      className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
+                      className="w-full rounded px-1"
                     />
                     {records.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteRecord(index)}
-                        className="h-6 px-2 text-xs bg-customBlack-lighter rounded text-white"
+                        className="h-6 px-2 text-xs bg-secondary-dark rounded"
                       >
                         -
                       </button>
@@ -224,7 +224,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddRecord}
-                  className="h-6 w-12 px-2 text-xs bg-customBlue rounded text-white"
+                  className="h-6 w-12 px-2 text-xs bg-primary rounded text-background"
                 >
                   +
                 </button>
@@ -233,13 +233,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded text-customBlack outline-customBlue"
+                    className="w-full rounded"
                   ></input>
                   <input
                     type="time"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full border border-gray-300 rounded text-customBlack outline-customBlue"
+                    className="w-full rounded"
                   ></input>
                 </div>
                 <input
@@ -247,7 +247,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                   placeholder="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
+                  className="w-full rounded px-1"
                 />
               </>
             ) : (
@@ -262,13 +262,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleWalletChange(index, e.target.value)
                       }
                       required
-                      className="w-full border border-gray-300 rounded px-1 text-customBlack outline-customBlue"
+                      className="w-full rounded px-1"
                     />
                     {newWallets.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteWallet(index)}
-                        className="h-6 px-2 text-xs bg-customBlack-lighter rounded text-white"
+                        className="h-6 px-2 text-xs bg-secondary-dark rounded"
                       >
                         -
                       </button>
@@ -278,7 +278,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddWallet}
-                  className="h-6 w-12 px-2 text-xs bg-customBlue rounded text-white"
+                  className="h-6 w-12 px-2 text-xs bg-primary text-background rounded"
                 >
                   +
                 </button>
@@ -286,11 +286,11 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             )}
           </form>
         </div>
-        <div className="h-10 w-full p-3 bg-customWhite flex rounded-b items-center">
+        <div className="h-10 w-full p-3 flex rounded-b items-center">
           <button
             type="submit"
             form="modalForm"
-            className="bg-customBlue px-2 text-white rounded"
+            className="bg-accent text-background px-2 rounded"
           >
             Save
           </button>

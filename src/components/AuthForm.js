@@ -27,7 +27,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <div className="w-10/12 md:w-6/12 lg:w-3/12 border border-gray-300 flex flex-col justify-center items-center gap-2 py-4 px-6 rounded-lg bg-customWhite-dark shadow-lg">
+      <div className="w-10/12 md:w-6/12 lg:w-3/12 flex flex-col justify-center items-center gap-2 py-4 px-6 rounded-lg bg-background-light shadow-lg">
         <h1 className="text-2xl mb-2">{isLogin ? "Log In" : "Sign Up"}</h1>
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
           {!isLogin && (
@@ -37,7 +37,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="border border-gray-300 outline-customBlue text-customBlack rounded py-1 px-2"
+              className="text-background rounded py-1 px-2"
             />
           )}
           <input
@@ -46,7 +46,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="border border-gray-300 outline-customBlue text-customBlack rounded py-1 px-2"
+            className="text-background rounded py-1 px-2"
           />
           <input
             type="password"
@@ -54,7 +54,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="border border-gray-300 outline-customBlue text-customBlack rounded py-1 px-2"
+            className="text-background rounded py-1 px-2"
           />
           <button type="submit" className="rounded py-1 px-2 mt-2">
             {isLogin ? "Log In" : "Sign Up"}
@@ -65,7 +65,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             <p className="text-xs">Don't have an account?</p>
             <button
               onClick={toggleForm}
-              className="underline text-xs text-customBlue bg-customWhite"
+              className="underline text-xs text-accent bg-background-light"
             >
               Sign Up
             </button>
@@ -75,7 +75,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             <p className="text-xs">Already have an account?</p>
             <button
               onClick={toggleForm}
-              className="underline text-xs text-customBlue"
+              className="underline text-xs text-accent bg-background-light"
             >
               Log In
             </button>

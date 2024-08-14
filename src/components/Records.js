@@ -109,10 +109,10 @@ const Records = ({ user }) => {
       {!wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
-          <p onClick={toggleModal} className="text-customBlue cursor-pointer">
+          <p onClick={toggleModal} className="text-primary cursor-pointer">
             Create one
           </p>
-          .
+          <p>.</p>
         </div>
       ) : loadingRecords ? (
         <div className="flex flex-col justify-center items-center">
@@ -121,53 +121,85 @@ const Records = ({ user }) => {
       ) : !records.length ? (
         <div className="w-full flex">
           <p className="pr-1">No records found.</p>
-          <p onClick={toggleModal} className="text-customBlue cursor-pointer">
+          <p onClick={toggleModal} className="text-primary cursor-pointer">
             Create one
           </p>
-          .
+          <p>.</p>
         </div>
       ) : (
         <div className="w-full">
-          <button onClick={toggleModal} className="h-6 px-2 text-xs rounded">
+          <button
+            onClick={toggleModal}
+            className="h-6 px-2 text-sm text-text-dark hover:text-text bg-background"
+          >
             ADD RECORD
           </button>
           <table className="my-2 w-full text-sm">
             <thead>
-              <tr>
-                <th className="border-b w-24">DATE</th>
-                {wallets.map((wallet) => (
-                  <th key={wallet} className="border-b">
+              <tr className="h-8">
+                <td className="w-24 rounded-lg border-r-4 border-background bg-primary text-background">
+                  DATE
+                </td>
+                {wallets.map((wallet, index) => (
+                  <td
+                    key={wallet}
+                    className={`bg-secondary ${
+                      index === 0
+                        ? "rounded-l-lg"
+                        : index === wallets.length - 1
+                        ? "rounded-r-lg"
+                        : ""
+                    }`}
+                  >
                     {wallet.toUpperCase()}
-                  </th>
+                  </td>
                 ))}
-                <th className="border-b w-24">TOTAL</th>
+                <td className="w-24 rounded-lg border-l-4 border-background bg-accent text-background">
+                  TOTAL
+                </td>
               </tr>
-              <tr className="h-2"></tr>
+              <tr className="h-3"></tr>
             </thead>
             <tbody>
               {records.map((record, index) => (
                 <React.Fragment key={index}>
-                  <tr className="text-center">
+                  <tr className="h-8 text-center bg-background-light">
                     {/* Upper part: date time, wallet balances, total */}
-                    <td className="border-b">{record.date}</td>
-                    {wallets.map((wallet) => (
-                      <td key={wallet} className="border-b">
+                    <td className="text-text-dark rounded-t-lg border-r-4 border-background">
+                      {record.date}
+                    </td>
+                    {wallets.map((wallet, index) => (
+                      <td
+                        key={wallet}
+                        className={`border-background ${
+                          index === 0
+                            ? "rounded-tl-lg"
+                            : index === wallets.length - 1
+                            ? "rounded-tr-lg"
+                            : ""
+                        }`}
+                      >
                         {record.wallets[wallet] || "-"}
                       </td>
                     ))}
-                    <td className="border-b" rowSpan="2">
+                    <td
+                      className="rounded-lg text-md font-bold border-l-4 border-background"
+                      rowSpan="2"
+                    >
                       {wallets.reduce((acc, wallet) => {
                         const balance = parseFloat(record.wallets[wallet] || 0);
                         return acc + balance;
                       }, 0)}
                     </td>
                   </tr>
-                  <tr className="text-center">
+                  <tr className="h-8 text-center bg-background-light">
                     {/* Lower part: description */}
-                    <td className="border-b text-xs">{record.time}</td>
+                    <td className="text-xs text-text-dark rounded-bl-lg border-r-4 border-background rounded-br-lg">
+                      {record.time}
+                    </td>
                     <td
                       colSpan={wallets.length}
-                      className="border-b text-left px-2 text-xs"
+                      className="text-left text-text-dark px-2 text-xs border-t border-background rounded-b-lg"
                     >
                       {record.description}
                     </td>
