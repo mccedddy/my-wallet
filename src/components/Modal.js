@@ -159,7 +159,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
       onClick={toggleModal}
     >
       <div
-        className="h-2/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-background-light"
+        className="h-3/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-background-light"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-10 w-full p-3 bg-secondary flex rounded-t justify-between items-center">
