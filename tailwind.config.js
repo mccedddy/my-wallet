@@ -3,8 +3,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        text: { DEFAULT: "#f3e2ec", dark: "#8b8288" },
-        background: { DEFAULT: "#1d1b1d", light: "#242224" },
+        text: { DEFAULT: "#e3e2ec", dark: "#8b8288" },
+        background: {
+          DEFAULT: "#1d1b1d",
+          light: "#242224",
+          lighter: "#353335",
+        },
         primary: { DEFAULT: "#8df684", dark: "#2d462a" },
         secondary: { DEFAULT: "#520b9d", dark: "#2d1643" },
         accent: { DEFAULT: "#f0289d", dark: "#9d1b67" },

@@ -168,7 +168,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
           </h1>
           <h1
             onClick={toggleModal}
-            className="cursor-pointer font-bold text-xl"
+            className="cursor-pointer text-text hover:text-text-dark font-bold text-xl"
           >
             ×
           </h1>
@@ -184,7 +184,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 {records.map((record, index) => (
                   <div key={index} className="flex gap-1 items-center">
                     <select
-                      className="rounded w-32 text-text bg-secondary"
+                      className="h-8 rounded w-32 text-text bg-secondary"
                       value={record.wallet}
                       onChange={(e) =>
                         handleRecordChange(index, "wallet", e.target.value)
@@ -208,13 +208,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleRecordChange(index, "balance", e.target.value)
                       }
                       required
-                      className="w-full rounded px-1"
+                      className="w-full h-8 rounded px-2 text-text bg-background-lighter"
                     />
                     {records.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteRecord(index)}
-                        className="h-6 px-2 text-xs bg-secondary-dark rounded"
+                        className="h-8 w-10 px-2 text-xs bg-background-lighter rounded text-text-dark"
                       >
                         -
                       </button>
@@ -224,22 +224,22 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddRecord}
-                  className="h-6 w-12 px-2 text-xs bg-primary rounded text-background"
+                  className="h-8 w-full px-2 my-2 text-xs bg-background-lighter rounded text-text-dark"
                 >
                   +
                 </button>
-                <div className="flex mt-2 gap-1">
+                <div className="flex gap-1">
                   <input
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full rounded"
+                    className="w-full h-8 px-2 rounded text-text bg-background-lighter"
                   ></input>
                   <input
                     type="time"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full rounded"
+                    className="w-full h-8 px-2 rounded text-text bg-background-lighter"
                   ></input>
                 </div>
                 <input
@@ -247,7 +247,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                   placeholder="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full rounded px-1"
+                  className="w-full h-8 rounded px-2 text-text bg-background-lighter"
                 />
               </>
             ) : (
@@ -262,13 +262,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleWalletChange(index, e.target.value)
                       }
                       required
-                      className="w-full rounded px-1"
+                      className="w-full h-8 rounded px-2 text-text bg-background-lighter"
                     />
                     {newWallets.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteWallet(index)}
-                        className="h-6 px-2 text-xs bg-secondary-dark rounded"
+                        className="h-8 w-10 px-2 text-xs bg-background-lighter rounded text-text-dark"
                       >
                         -
                       </button>
@@ -278,7 +278,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddWallet}
-                  className="h-6 w-12 px-2 text-xs bg-primary text-background rounded"
+                  className="h-8 w-full px-2 my-2 text-xs bg-background-lighter text-text-dark rounded"
                 >
                   +
                 </button>

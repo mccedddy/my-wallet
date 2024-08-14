@@ -113,6 +113,7 @@ const Records = ({ user }) => {
             Create one
           </p>
           <p>.</p>
+          {/* TODO: onclick = go to wallets, open modal */}
         </div>
       ) : loadingRecords ? (
         <div className="flex flex-col justify-center items-center">

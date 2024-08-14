@@ -86,38 +86,42 @@ const Wallets = ({ user }) => {
             Create one
           </p>
           <p>.</p>
-          {/* TODO: onclick = go to wallets, open modal */}
         </div>
       ) : (
         <div className="w-full">
           <button
             onClick={toggleModal}
-            className="h-6 px-2 text-xs bg-accent rounded"
+            className="h-6 px-2 text-sm text-text-dark hover:text-text bg-background"
           >
             ADD WALLET
           </button>
           <table className="my-2 w-full text-sm">
             <thead>
-              <tr>
-                <th className="w-24">WALLET NAME</th>
-                <th className="w-24">CURRENT BALANCE</th>
-                <th className="w-2">D</th>
+              <tr className="h-8">
+                <td className="w-5/12 rounded-lg bg-secondary">WALLET NAME</td>
+                <td className="w-5/12 rounded-lg border-x-4 border-background bg-accent text-background">
+                  CURRENT BALANCE
+                </td>
+                <td className="w-1/12 rounded-lg bg-background-light">D</td>
               </tr>
-              <tr className="h-2"></tr>
+              <tr className="h-3"></tr>
             </thead>
             <tbody>
               {wallets.map((wallet, index) => (
                 <React.Fragment key={index}>
-                  <tr className="text-center">
-                    <td>{wallet}</td>
-                    <td>{latestBalances[wallet] || 0}</td>
+                  <tr className="h-10 text-center bg-background-light">
+                    <td className="rounded-lg">{wallet}</td>
+                    <td className="rounded-lg border-x-4 border-background">
+                      {latestBalances[wallet] || 0}
+                    </td>
                     <td
                       onClick={() => handleDeleteWallet(wallet)}
-                      className="cursor-pointer text-secondary font-bold"
+                      className="cursor-pointer text-text-dark font-bold rounded-lg"
                     >
                       D
                     </td>
                   </tr>
+                  <tr className="h-2"></tr>
                 </React.Fragment>
               ))}
             </tbody>
