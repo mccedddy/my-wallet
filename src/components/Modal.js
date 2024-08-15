@@ -25,11 +25,11 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: true,
+      // hour12: true,
     }).format(localTime);
 
     setDate(defaultDate);
-    setTime(defaultTime.substring(0, 5));
+    setTime(defaultTime);
   }, []);
 
   const handleRecordChange = (index, field, value) => {

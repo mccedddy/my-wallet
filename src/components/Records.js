@@ -17,6 +17,9 @@ const Records = ({ user }) => {
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const recordsPerPage = 10;
 
   // Fetch wallet names
   useEffect(() => {
@@ -96,6 +99,18 @@ const Records = ({ user }) => {
     setRefresh(!refresh);
   };
 
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = records.slice(indexOfFirstRecord, indexOfLastRecord);
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center">
@@ -144,7 +159,7 @@ const Records = ({ user }) => {
                 {wallets.map((wallet, index) => (
                   <td
                     key={wallet}
-                    className={`bg-secondary ${
+                    className={`bg-secondary-dark border-r border-background ${
                       index === 0
                         ? "rounded-l-lg"
                         : index === wallets.length - 1
@@ -162,7 +177,7 @@ const Records = ({ user }) => {
               <tr className="h-3"></tr>
             </thead>
             <tbody>
-              {records.map((record, index) => (
+              {currentRecords.map((record, index) => (
                 <React.Fragment key={index}>
                   <tr className="h-8 text-center bg-background-light">
                     {/* Upper part: date time, wallet balances, total */}
@@ -172,7 +187,7 @@ const Records = ({ user }) => {
                     {wallets.map((wallet, index) => (
                       <td
                         key={wallet}
-                        className={`border-background ${
+                        className={`border-background border-r border-background ${
                           index === 0
                             ? "rounded-tl-lg"
                             : index === wallets.length - 1
@@ -210,6 +225,27 @@ const Records = ({ user }) => {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center items-center gap-4 my-4">
+            <button
+              onClick={handlePrevPage}
+              className="w-16 h-6 text-sm bg-secondary rounded disabled:bg-background-light"
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="text-sm text-text">
+              Page {currentPage} of {Math.ceil(records.length / recordsPerPage)}
+            </span>
+            <button
+              onClick={handleNextPage}
+              className="w-16 h-6 text-sm bg-secondary rounded disabled:bg-background-light"
+              disabled={
+                currentPage === Math.ceil(records.length / recordsPerPage)
+              }
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
 
