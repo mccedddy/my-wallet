@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { toastSuccess, toastError } from "../toastUtils";
+import { db } from "../firebase/firebaseConfig";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const AuthForm = ({ handleSignUp, handleLogIn }) => {
   const [email, setEmail] = useState("");
@@ -8,6 +10,13 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
   const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => setIsLogin(!isLogin);
+
+  const checkUsernameExists = async (username) => {
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("username", "==", username))
+    );
+    return !querySnapshot.empty;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,10 +29,17 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
           toastError("Incorrect email or password!");
         } else {
           toastError(`Log In Error: ${error.message || error}`);
+          console.log("Log In Error:", error.message);
         }
       }
     } else {
       try {
+        const usernameExists = await checkUsernameExists(username);
+        if (usernameExists) {
+          toastError("Username is already taken. Please choose another one.");
+          return;
+        }
+
         await handleSignUp(username, email, password);
         toastSuccess("Signed up successfully!");
       } catch (error) {
@@ -33,6 +49,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
           toastError("Password is too weak. Minimum of 6 characters.");
         } else {
           toastError(`Sign Up Error: ${error.message || error}`);
+          console.log("Sign Up Error:", error.message);
         }
       }
     }

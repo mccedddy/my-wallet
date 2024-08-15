@@ -8,6 +8,7 @@ import Wallets from "./Wallets";
 import Settings from "./Settings";
 
 const Home = ({ user }) => {
+  const [refresh, setRefresh] = useState(false);
   const [page, setPage] = useState("records");
   const [username, setUsername] = useState("");
 
@@ -28,7 +29,11 @@ const Home = ({ user }) => {
     };
 
     fetchUsername();
-  }, [user]);
+  }, [user, refresh]);
+
+  const triggerRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   const toPage = (selectedPage) => {
     setPage(selectedPage);
@@ -77,7 +82,12 @@ const Home = ({ user }) => {
         {page === "records" && <Records user={user} />}
         {page === "wallets" && <Wallets user={user} />}
         {page === "settings" && (
-          <Settings user={user} username={username} handleLogOut={logOut} />
+          <Settings
+            user={user}
+            username={username}
+            handleLogOut={logOut}
+            onUpdate={triggerRefresh}
+          />
         )}
       </div>
     </div>
