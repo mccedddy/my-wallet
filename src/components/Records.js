@@ -170,7 +170,7 @@ const Records = ({ user }) => {
                     {wallet.toUpperCase()}
                   </td>
                 ))}
-                <td className="rounded-lg border-l-4 border-background bg-accent text-background">
+                <td className="w-24 rounded-lg border-l-4 border-background bg-accent text-background">
                   TOTAL
                 </td>
               </tr>
