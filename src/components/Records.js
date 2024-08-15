@@ -131,7 +131,7 @@ const Records = ({ user }) => {
         <div className="w-full">
           <button
             onClick={toggleModal}
-            className="h-6 px-2 text-sm text-text-dark hover:text-text bg-background"
+            className="h-6 text-sm text-text-dark hover:text-text bg-background"
           >
             ADD RECORD
           </button>
@@ -155,7 +155,7 @@ const Records = ({ user }) => {
                     {wallet.toUpperCase()}
                   </td>
                 ))}
-                <td className="w-24 rounded-lg border-l-4 border-background bg-accent text-background">
+                <td className="rounded-lg border-l-4 border-background bg-accent text-background">
                   TOTAL
                 </td>
               </tr>

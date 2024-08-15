@@ -91,7 +91,7 @@ const Wallets = ({ user }) => {
         <div className="w-full">
           <button
             onClick={toggleModal}
-            className="h-6 px-2 text-sm text-text-dark hover:text-text bg-background"
+            className="h-6 text-sm text-text-dark hover:text-text bg-background"
           >
             ADD WALLET
           </button>

@@ -286,13 +286,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             )}
           </form>
         </div>
-        <div className="h-10 w-full p-3 flex rounded-b items-center">
+        <div className="h-10 w-full px-3 py-7 flex rounded-b items-center">
           <button
             type="submit"
             form="modalForm"
-            className="bg-accent text-background px-2 rounded"
+            className="h-8 bg-accent text-background px-4 rounded"
           >
-            Save
+            SAVE
           </button>
         </div>
       </div>
