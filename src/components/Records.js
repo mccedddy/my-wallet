@@ -231,7 +231,7 @@ const Records = ({ user }) => {
               className="w-16 h-6 text-sm bg-secondary rounded disabled:bg-background-light"
               disabled={currentPage === 1}
             >
-              Previous
+              Prev
             </button>
             <span className="text-sm text-text">
               Page {currentPage} of {Math.ceil(records.length / recordsPerPage)}

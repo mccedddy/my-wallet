@@ -3,6 +3,7 @@ import { logOut } from "../firebase/authService";
 import Navbar from "./Navbar";
 import Records from "./Records";
 import Wallets from "./Wallets";
+import Settings from "./Settings";
 
 const Home = ({ user }) => {
   const [page, setPage] = useState("records");
@@ -53,6 +54,7 @@ const Home = ({ user }) => {
         </div>
         {page === "records" && <Records user={user} />}
         {page === "wallets" && <Wallets user={user} />}
+        {page === "settings" && <Settings user={user} handleLogOut={logOut} />}
       </div>
     </div>
   );
