@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { logOut } from "../firebase/authService";
+import { db } from "../firebase/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 import Navbar from "./Navbar";
 import Records from "./Records";
 import Wallets from "./Wallets";
@@ -7,6 +9,26 @@ import Settings from "./Settings";
 
 const Home = ({ user }) => {
   const [page, setPage] = useState("records");
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (user?.email) {
+        const userDocRef = doc(db, "users", user.email);
+        const userDocSnap = await getDoc(userDocRef);
+
+        console.log(userDocSnap);
+
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+          console.log(data);
+          setUsername(data.username || "Guest");
+        }
+      }
+    };
+
+    fetchUsername();
+  }, [user]);
 
   const toPage = (selectedPage) => {
     setPage(selectedPage);
@@ -14,7 +36,7 @@ const Home = ({ user }) => {
 
   return (
     <div className="h-full w-full flex flex-col flex-grow items-center">
-      <Navbar handleLogOut={logOut} />
+      <Navbar username={username} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
         <div className=" flex mt-4 mb-2 text-center border-b-2 border-background-light gap-5">
           <button
@@ -54,7 +76,9 @@ const Home = ({ user }) => {
         </div>
         {page === "records" && <Records user={user} />}
         {page === "wallets" && <Wallets user={user} />}
-        {page === "settings" && <Settings user={user} handleLogOut={logOut} />}
+        {page === "settings" && (
+          <Settings user={user} username={username} handleLogOut={logOut} />
+        )}
       </div>
     </div>
   );
