@@ -6,7 +6,7 @@ const Navbar = ({ handleLogOut }) => {
       <h1>My Wallet</h1>
       <button
         onClick={handleLogOut}
-        className="text-xs underline bg-background"
+        className="px-2 py-1 text-xs rounded bg-secondary"
       >
         Log Out
       </button>

@@ -159,7 +159,7 @@ const Records = ({ user }) => {
                 {wallets.map((wallet, index) => (
                   <td
                     key={wallet}
-                    className={`bg-secondary-dark border-r border-background ${
+                    className={`bg-secondary border-r border-background ${
                       index === 0
                         ? "rounded-l-lg"
                         : index === wallets.length - 1
@@ -181,7 +181,7 @@ const Records = ({ user }) => {
                 <React.Fragment key={index}>
                   <tr className="h-8 text-center bg-background-light">
                     {/* Upper part: date time, wallet balances, total */}
-                    <td className="text-text-dark rounded-t-lg border-r-4 border-background">
+                    <td className="text-text-dark text-xs pt-2 rounded-t-lg border-r-4 border-background">
                       {record.date}
                     </td>
                     {wallets.map((wallet, index) => (
@@ -210,7 +210,7 @@ const Records = ({ user }) => {
                   </tr>
                   <tr className="h-8 text-center bg-background-light">
                     {/* Lower part: description */}
-                    <td className="text-xs text-text-dark rounded-bl-lg border-r-4 border-background rounded-br-lg">
+                    <td className="text-xs text-text-dark pb-2 rounded-bl-lg border-r-4 border-background rounded-br-lg">
                       {record.time}
                     </td>
                     <td
