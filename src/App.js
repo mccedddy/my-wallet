@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { auth } from "./firebase/firebaseConfig";
 import { signUp, logIn } from "./firebase/authService";
 import { onAuthStateChanged } from "firebase/auth";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AuthForm from "./components/AuthForm";
 import Home from "./components/Home";
+import "./CustomToast.css";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -18,6 +21,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer />
       {!user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (

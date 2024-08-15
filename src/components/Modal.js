@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
+import { toastSuccess, toastError } from "../toastUtils";
 
 const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
@@ -66,18 +67,14 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
     e.preventDefault();
 
     if (type === "addRecord") {
-      // Save only unique records
       const uniqueRecords = records.reduce((acc, curr) => {
         acc[curr.wallet] = curr;
         return acc;
       }, {});
       const filteredRecords = Object.values(uniqueRecords);
 
-      // Reset records and description after saving
       setRecords([{ wallet: "", balance: "" }]);
       setDescription("");
-
-      console.log("Saving records:", filteredRecords);
 
       try {
         const recordsCollectionRef = collection(
@@ -106,12 +103,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
         await setDoc(newDocRef, { ...mergedRecords, description, timestamp });
 
         await setDoc(latestDocRef, mergedRecords);
-
-        console.log("Records saved successfully");
+        console.log("Record saved successfully");
+        toastSuccess("Record saved successfully");
         onUpdate();
         toggleModal();
       } catch (error) {
-        console.error("Error saving records: ", error);
+        console.error("Error saving record: ", error);
+        toastError(`Error saving record: ${error}`);
       }
     } else if (type === "addWallet") {
       // Save wallets
@@ -123,8 +121,6 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
 
       // Reset wallets after saving
       setNewWallets([{ walletName: "" }]);
-
-      console.log("Saving wallets:", filteredWallets);
 
       try {
         const userDocRef = doc(db, "users", user.email);
@@ -144,11 +140,14 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
           );
 
           setWallets(updatedWallets);
+          console.log("Wallet created successfully");
+          toastSuccess("Wallet created successfully");
           onUpdate();
           toggleModal();
         }
       } catch (error) {
-        console.error("Error saving wallets: ", error);
+        console.error("Error saving wallet: ", error);
+        toastError(`Error saving wallet: ${error}`);
       }
     }
   };

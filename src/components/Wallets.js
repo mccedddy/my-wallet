@@ -8,6 +8,7 @@ import {
   deleteField,
 } from "firebase/firestore";
 import Modal from "./Modal";
+import { toastSuccess, toastError } from "../toastUtils";
 
 const Wallets = ({ user }) => {
   const [wallets, setWallets] = useState([]);
@@ -55,9 +56,12 @@ const Wallets = ({ user }) => {
         [walletToDelete]: deleteField(),
       });
 
+      console.log(`"${walletToDelete}" wallet deleted successfully`);
+      toastSuccess(`'${walletToDelete}' wallet deleted successfully`);
       triggerRefresh();
     } catch (error) {
       console.error("Error deleting wallet: ", error);
+      toastError(`Error deleting wallet: ${error}`);
     }
   };
 
