@@ -144,12 +144,21 @@ const Records = ({ user }) => {
         </div>
       ) : (
         <div className="w-full">
-          <button
-            onClick={toggleModal}
-            className="h-6 text-sm text-text-dark hover:text-text bg-background"
-          >
-            ADD RECORD
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={toggleModal}
+              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+            >
+              ADD RECORD
+            </button>
+            <button
+              onClick={toggleModal}
+              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+            >
+              DELETE RECORD
+            </button>
+            {/* TODO: Delete record */}
+          </div>
           <table className="my-2 w-full text-sm">
             <thead>
               <tr className="h-8">

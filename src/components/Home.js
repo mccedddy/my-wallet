@@ -80,6 +80,7 @@ const Home = ({ user }) => {
           </button>
         </div>
         {page === "records" && <Records user={user} />}
+        {/* TODO: {page === "graphs" && <Graphs user={user} />} */}
         {page === "wallets" && <Wallets user={user} />}
         {page === "settings" && (
           <Settings

@@ -93,12 +93,21 @@ const Wallets = ({ user }) => {
         </div>
       ) : (
         <div className="w-full">
-          <button
-            onClick={toggleModal}
-            className="h-6 text-sm text-text-dark hover:text-text bg-background"
-          >
-            ADD WALLET
-          </button>
+          <diV className="flex gap-4">
+            <button
+              onClick={toggleModal}
+              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+            >
+              ADD WALLET
+            </button>
+            <button
+              onClick={toggleModal}
+              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+            >
+              DELETE WALLET
+            </button>
+            {/* TODO: Delete Wallet */}
+          </diV>
           <table className="my-2 w-full text-sm">
             <thead>
               <tr className="h-8">
