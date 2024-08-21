@@ -3,6 +3,7 @@ import { db } from "../firebase/firebaseConfig";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { toastSuccess, toastError } from "../toastUtils";
 import trashIcon from "../assets/icons/trash.svg";
+import addIcon from "../assets/icons/add.svg";
 
 const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
@@ -224,9 +225,9 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddRecord}
-                  className="h-8 w-full px-2 my-2 text-xs bg-background-lighter rounded text-text-dark"
+                  className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter rounded text-text-dark"
                 >
-                  +
+                  <img src={addIcon} alt="trash" className="h-6 w-6" />
                 </button>
                 <div className="flex gap-1">
                   <input
@@ -278,9 +279,9 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                 <button
                   type="button"
                   onClick={handleAddWallet}
-                  className="h-8 w-full px-2 my-2 text-xs bg-background-lighter text-text-dark rounded"
+                  className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter text-text-dark rounded"
                 >
-                  +
+                  <img src={addIcon} alt="trash" className="h-6 w-6" />
                 </button>
               </>
             )}
