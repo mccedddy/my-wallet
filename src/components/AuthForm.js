@@ -68,7 +68,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="text-text bg-background-lighter rounded py-1 px-2"
+              className="text-text bg-background-lighter outline-none rounded py-1 px-2"
             />
           )}
           <input
@@ -77,7 +77,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="text-text bg-background-lighter rounded py-1 px-2"
+            className="text-text bg-background-lighter outline-none rounded py-1 px-2"
           />
           <input
             type="password"
@@ -85,7 +85,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="text-text bg-background-lighter rounded py-1 px-2"
+            className="text-text bg-background-lighter outline-none rounded py-1 px-2"
           />
           <button
             type="submit"

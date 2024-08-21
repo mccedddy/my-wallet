@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { toastSuccess, toastError } from "../toastUtils";
+import trashIcon from "../assets/icons/trash.svg";
 
 const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
@@ -207,15 +208,15 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleRecordChange(index, "balance", e.target.value)
                       }
                       required
-                      className="w-full h-8 rounded px-2 text-text bg-background-lighter"
+                      className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
                     />
                     {records.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteRecord(index)}
-                        className="h-8 w-10 px-2 text-xs bg-background-lighter rounded text-text-dark"
+                        className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
                       >
-                        -
+                        <img src={trashIcon} alt="trash" className="h-4 w-4" />
                       </button>
                     )}
                   </div>
@@ -232,13 +233,13 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full h-8 px-2 rounded text-text bg-background-lighter"
+                    className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
                   ></input>
                   <input
                     type="time"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full h-8 px-2 rounded text-text bg-background-lighter"
+                    className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
                   ></input>
                 </div>
                 <input
@@ -246,7 +247,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                   placeholder="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full h-8 rounded px-2 text-text bg-background-lighter"
+                  className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
                 />
               </>
             ) : (
@@ -261,15 +262,15 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
                         handleWalletChange(index, e.target.value)
                       }
                       required
-                      className="w-full h-8 rounded px-2 text-text bg-background-lighter"
+                      className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
                     />
                     {newWallets.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleDeleteWallet(index)}
-                        className="h-8 w-10 px-2 text-xs bg-background-lighter rounded text-text-dark"
+                        className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
                       >
-                        -
+                        <img src={trashIcon} alt="trash" className="h-4 w-4" />
                       </button>
                     )}
                   </div>
@@ -285,7 +286,7 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             )}
           </form>
         </div>
-        <div className="h-10 w-full px-3 py-7 flex rounded-b items-center">
+        <div className="h-10 w-full px-3 py-7 flex justify-between rounded-b items-center">
           <button
             type="submit"
             form="modalForm"
