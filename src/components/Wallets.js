@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import Modal from "./Modal";
 import { toastSuccess, toastError } from "../toastUtils";
+import trashIcon from "../assets/icons/trash.svg";
 
 const Wallets = ({ user }) => {
   const [wallets, setWallets] = useState([]);
@@ -129,9 +130,13 @@ const Wallets = ({ user }) => {
                     </td>
                     <td
                       onClick={() => handleDeleteWallet(wallet)}
-                      className="cursor-pointer text-text-dark font-bold rounded-lg"
+                      className="align-center cursor-pointer text-text-dark justify-center py-3 font-bold rounded-lg"
                     >
-                      D
+                      <img
+                        src={trashIcon}
+                        alt="trash"
+                        className="h-4 w-full flex justify-center"
+                      />
                     </td>
                   </tr>
                   <tr className="h-2"></tr>

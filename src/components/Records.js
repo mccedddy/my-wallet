@@ -9,6 +9,9 @@ import {
   orderBy,
 } from "firebase/firestore";
 import Modal from "./Modal";
+import upIcon from "../assets/icons/up.svg";
+import midIcon from "../assets/icons/mid.svg";
+import downIcon from "../assets/icons/down.svg";
 
 const Records = ({ user }) => {
   const [records, setRecords] = useState([]);
@@ -204,17 +207,31 @@ const Records = ({ user }) => {
                             : ""
                         }`}
                       >
-                        {record.wallets[wallet] || "-"}
+                        <div className="flex justify-center items-center gap-1">
+                          {/* <img src={upIcon} alt="up" className="w-5 h-5" />
+                          <img src={midIcon} alt="up" className="w-5 h-5" />
+                          <img src={downIcon} alt="up" className="w-5 h-5" /> */}
+                          <h1>₱</h1>
+                          {record.wallets[wallet] || "-"}
+                        </div>
                       </td>
                     ))}
                     <td
-                      className="rounded-lg text-md font-bold border-l-4 border-background"
+                      className="rounded-lg text-md border-l-4 border-background"
                       rowSpan="2"
                     >
-                      {wallets.reduce((acc, wallet) => {
-                        const balance = parseFloat(record.wallets[wallet] || 0);
-                        return acc + balance;
-                      }, 0)}
+                      <div className="flex justify-center items-center gap-1 ">
+                        {/* <img src={upIcon} alt="up" className="w-5 h-5" />
+                        <img src={midIcon} alt="up" className="w-5 h-5" />
+                        <img src={downIcon} alt="up" className="w-5 h-5" /> */}
+                        <h1>₱</h1>
+                        {wallets.reduce((acc, wallet) => {
+                          const balance = parseFloat(
+                            record.wallets[wallet] || 0
+                          );
+                          return acc + balance;
+                        }, 0)}
+                      </div>
                     </td>
                   </tr>
                   <tr className="h-8 text-center bg-background-light">
