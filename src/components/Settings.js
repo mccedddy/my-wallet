@@ -5,6 +5,7 @@ import {
   getAuth,
   reauthenticateWithCredential,
   EmailAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import {
   collection,
@@ -21,8 +22,11 @@ import {
 const Settings = ({ user, username, handleLogOut, onUpdate }) => {
   const [newUsername, setNewUsername] = useState(username);
   const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
   const [openClearData, setOpenClearData] = useState(false);
-  const [isClearingData, setIsClearingData] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   useEffect(() => {
     setNewUsername(username);
@@ -98,16 +102,53 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
     }
   };
 
+  const handleChangePassword = async () => {
+    if (newPassword1 !== newPassword2) {
+      toastError("Passwords do not match.");
+      return;
+    }
+
+    if (!currentPassword || !newPassword1 || !newPassword2) {
+      toastError("Please fill out all password fields.");
+      return;
+    }
+
+    const auth = getAuth();
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+
+    try {
+      // Reauthenticate the user
+      await reauthenticateWithCredential(auth.currentUser, credential);
+
+      // Update password
+      await updatePassword(auth.currentUser, newPassword1);
+
+      toastSuccess("Password updated successfully");
+      setCurrentPassword("");
+      setNewPassword1("");
+      setNewPassword2("");
+      setOpenChangePassword(false);
+    } catch (error) {
+      if (error.code === "auth/invalid-credential") {
+        toastError("Incorrect current password");
+      } else if (error.code === "auth/weak-password") {
+        toastError("Password should be at least 6 characters");
+      } else {
+        toastError(`Error changing password: ${error.message || error}`);
+      }
+    }
+  };
+
   const showSave =
     newUsername && newUsername.trim() !== "" && newUsername !== username;
 
   return (
     <div className="h-full w-full flex flex-col items-center">
       <div className="w-full flex flex-col gap-2 text-sm">
-        <form
-          onSubmit={handleChangeUsername}
-          className="p-4 flex flex-col gap-2 bg-background-light rounded-lg"
-        >
+        <div className="p-4 flex flex-col gap-2 bg-background-light rounded-lg">
           <h1 className="text-lg text-text-dark">ACCOUNT</h1>
           <div className="flex items-center gap-2">
             <h1 className="w-24 text-text-dark">Username:</h1>
@@ -119,6 +160,14 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
               className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
             />
           </div>
+          {showSave && (
+            <button
+              onClick={handleChangeUsername}
+              className="h-8 w-36 my-1 bg-accent text-background px-4 rounded"
+            >
+              SAVE CHANGES
+            </button>
+          )}
           <div className="flex items-center gap-2">
             <h1 className="w-24 text-text-dark">Email:</h1>
             <input
@@ -129,21 +178,72 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
               readOnly
             />
           </div>
-          {showSave && (
+          {openChangePassword ? (
+            <>
+              <div className="flex items-center mt-1 gap-2">
+                <h1 className="w-44 text-text-dark">Current Password:</h1>
+                <input
+                  type="password"
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <h1 className="w-44 text-text-dark">New Password:</h1>
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword1}
+                  onChange={(e) => setNewPassword1(e.target.value)}
+                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <h1 className="w-44 text-text-dark">Confirm New Password:</h1>
+                <input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  value={newPassword2}
+                  onChange={(e) => setNewPassword2(e.target.value)}
+                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                />
+              </div>
+              <div className="w-80 flex gap-2 my-1">
+                <button
+                  onClick={handleChangePassword}
+                  className="h-8 w-full bg-accent text-background px-4 rounded"
+                >
+                  CONFIRM
+                </button>
+                <button
+                  onClick={() => {
+                    setOpenChangePassword(false);
+                  }}
+                  className="h-8 w-full bg-secondary px-4 rounded"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </>
+          ) : (
             <button
-              type="submit"
-              className="h-8 w-36 mt-2 bg-accent text-background px-4 rounded"
+              onClick={() => {
+                setOpenChangePassword(true);
+              }}
+              className="h-6 flex text-sm text-text-dark hover:text-text bg-background-light"
             >
-              SAVE CHANGES
+              CHANGE PASSWORD
             </button>
           )}
           <button
             onClick={handleLogOut}
-            className="h-8 w-24 mt-2 bg-secondary px-4 rounded"
+            className="h-8 w-24 bg-secondary px-4 rounded"
           >
             LOG OUT
           </button>
-        </form>
+        </div>
 
         <div className="p-4 flex flex-col gap-2 bg-background-light rounded-lg">
           <h1 className="text-lg text-text-dark">DATA</h1>
