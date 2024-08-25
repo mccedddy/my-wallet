@@ -48,17 +48,21 @@ const Wallets = ({ user }) => {
       await updateDoc(userDocRef, {
         wallets: arrayRemove(walletToDelete),
       });
-      console.log("Deleted wallet:", walletToDelete);
       triggerRefresh();
 
       // Remove the wallet field from the latest document
-      const recordRef = doc(db, "users", user.email, "records", "latest");
-      await updateDoc(recordRef, {
-        [walletToDelete]: deleteField(),
-      });
+      try {
+        const recordRef = doc(db, "users", user.email, "records", "latest");
+        await updateDoc(recordRef, {
+          [walletToDelete]: deleteField(),
+        });
+        toastSuccess(
+          `'${walletToDelete}' wallet and records deleted successfully`
+        );
+      } catch (error) {
+        toastSuccess(`'${walletToDelete}' wallet deleted successfully`);
+      }
 
-      console.log(`"${walletToDelete}" wallet deleted successfully`);
-      toastSuccess(`'${walletToDelete}' wallet deleted successfully`);
       triggerRefresh();
     } catch (error) {
       console.error("Error deleting wallet: ", error);

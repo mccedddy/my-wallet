@@ -9,11 +9,11 @@ import {
   orderBy,
 } from "firebase/firestore";
 import Modal from "./Modal";
-import upIcon from "../assets/icons/up.svg";
-import midIcon from "../assets/icons/mid.svg";
-import downIcon from "../assets/icons/down.svg";
+// import upIcon from "../assets/icons/up.svg";
+// import midIcon from "../assets/icons/mid.svg";
+// import downIcon from "../assets/icons/down.svg";
 
-const Records = ({ user }) => {
+const Records = ({ user, openCreateWallet }) => {
   const [records, setRecords] = useState([]);
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -127,11 +127,10 @@ const Records = ({ user }) => {
       {!wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
-          <p onClick={toggleModal} className="text-primary cursor-pointer">
+          <p onClick={openCreateWallet} className="text-primary cursor-pointer">
             Create one
           </p>
           <p>.</p>
-          {/* TODO: onclick = go to wallets, open modal */}
         </div>
       ) : loadingRecords ? (
         <div className="flex flex-col justify-center items-center">

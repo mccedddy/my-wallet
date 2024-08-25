@@ -35,6 +35,10 @@ const Home = ({ user }) => {
     setRefresh(!refresh);
   };
 
+  const openCreateWallet = () => {
+    setPage("wallets");
+  };
+
   const toPage = (selectedPage) => {
     setPage(selectedPage);
   };
@@ -79,7 +83,9 @@ const Home = ({ user }) => {
             SETTINGS
           </button>
         </div>
-        {page === "records" && <Records user={user} />}
+        {page === "records" && (
+          <Records user={user} openCreateWallet={openCreateWallet} />
+        )}
         {/* TODO: {page === "graphs" && <Graphs user={user} />} */}
         {page === "wallets" && <Wallets user={user} />}
         {page === "settings" && (
