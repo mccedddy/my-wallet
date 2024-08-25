@@ -7,8 +7,10 @@ import {
   getDocs,
   query,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import Modal from "./Modal";
+import { toastSuccess, toastError } from "../toastUtils";
 import trashRedIcon from "../assets/icons/trashRed.svg";
 // import upIcon from "../assets/icons/up.svg";
 // import midIcon from "../assets/icons/mid.svg";
@@ -65,26 +67,25 @@ const Records = ({ user, openCreateWallet }) => {
         const fetchedRecords = [];
 
         snapshot.forEach((doc) => {
-          if (doc.id !== "latest") {
-            const data = doc.data();
-            const { timestamp, description, ...walletBalances } = data;
+          const data = doc.data();
+          const { timestamp, description, id, ...walletBalances } = data;
 
-            const hasRelevantWallets = Object.keys(walletBalances).some(
-              (wallet) => wallets.includes(wallet)
-            );
+          const hasRelevantWallets = Object.keys(walletBalances).some(
+            (wallet) => wallets.includes(wallet)
+          );
 
-            if (hasRelevantWallets) {
-              fetchedRecords.push({
-                date: new Date(timestamp).toLocaleDateString(),
-                time: new Date(timestamp).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true,
-                }),
-                wallets: walletBalances,
-                description: description,
-              });
-            }
+          if (hasRelevantWallets) {
+            fetchedRecords.push({
+              id: id,
+              date: new Date(timestamp).toLocaleDateString(),
+              time: new Date(timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              wallets: walletBalances,
+              description: description,
+            });
           }
         });
 
@@ -96,7 +97,22 @@ const Records = ({ user, openCreateWallet }) => {
     }
   }, [user, wallets, refresh]);
 
-  const handleDeleteRecord = () => {};
+  const handleDeleteRecord = async (recordId) => {
+    try {
+      const recordDocRef = doc(
+        db,
+        "users",
+        user.email,
+        "records",
+        recordId.toString()
+      );
+      await deleteDoc(recordDocRef);
+      triggerRefresh();
+      toastSuccess("Deleted record successfully");
+    } catch (error) {
+      toastError(`Error deleting record: ${error}`);
+    }
+  };
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -244,7 +260,7 @@ const Records = ({ user, openCreateWallet }) => {
                       </div>
                     </td>
                     <td
-                      onClick={handleDeleteRecord}
+                      onClick={() => handleDeleteRecord(record.id)}
                       className={`align-center cursor-pointer bg-background text-text-dark justify-center items-center py-2 font-bold rounded-lg ${
                         showDelete ? "" : "hidden"
                       }`}
