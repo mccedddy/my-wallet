@@ -9,6 +9,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import Modal from "./Modal";
+import trashRedIcon from "../assets/icons/trashRed.svg";
 // import upIcon from "../assets/icons/up.svg";
 // import midIcon from "../assets/icons/mid.svg";
 // import downIcon from "../assets/icons/down.svg";
@@ -19,6 +20,7 @@ const Records = ({ user, openCreateWallet }) => {
   const [loading, setLoading] = useState(true);
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -94,8 +96,14 @@ const Records = ({ user, openCreateWallet }) => {
     }
   }, [user, wallets, refresh]);
 
+  const handleDeleteRecord = () => {};
+
   const toggleModal = () => {
     setShowModal(!showModal);
+  };
+
+  const toggleShowDelete = () => {
+    setShowDelete(!showDelete);
   };
 
   const triggerRefresh = () => {
@@ -154,12 +162,11 @@ const Records = ({ user, openCreateWallet }) => {
               ADD RECORD
             </button>
             <button
-              onClick={toggleModal}
+              onClick={toggleShowDelete}
               className="h-6 text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE RECORD
             </button>
-            {/* TODO: Delete record */}
           </div>
           <table className="my-2 w-full text-sm">
             <thead>
@@ -184,6 +191,9 @@ const Records = ({ user, openCreateWallet }) => {
                 <td className="w-24 rounded-lg border-l-4 border-background bg-accent text-background">
                   TOTAL
                 </td>
+                <td
+                  className={`w-12 bg-background ${showDelete ? "" : "hidden"}`}
+                ></td>
               </tr>
               <tr className="h-3"></tr>
             </thead>
@@ -212,7 +222,7 @@ const Records = ({ user, openCreateWallet }) => {
                           <img src={midIcon} alt="up" className="w-5 h-5" />
                           <img src={downIcon} alt="up" className="w-5 h-5" /> */}
                           <h1>₱</h1>
-                          {record.wallets[wallet] || "-"}
+                          {record.wallets[wallet] || "0"}
                         </div>
                       </td>
                     ))}
@@ -232,6 +242,19 @@ const Records = ({ user, openCreateWallet }) => {
                           return acc + balance;
                         }, 0)}
                       </div>
+                    </td>
+                    <td
+                      onClick={handleDeleteRecord}
+                      className={`align-center cursor-pointer bg-background text-text-dark justify-center items-center py-2 font-bold rounded-lg ${
+                        showDelete ? "" : "hidden"
+                      }`}
+                      rowSpan={2}
+                    >
+                      <img
+                        src={trashRedIcon}
+                        alt="trash"
+                        className="h-5 w-full flex justify-center"
+                      />
                     </td>
                   </tr>
                   <tr className="h-8 text-center bg-background-light">

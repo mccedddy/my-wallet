@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
-import { collection, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 import { toastSuccess, toastError } from "../toastUtils";
 import trashIcon from "../assets/icons/trash.svg";
 import addIcon from "../assets/icons/add.svg";
@@ -85,32 +94,42 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
           user.email,
           "records"
         );
+        const timestamp = `${date} ${time}`;
 
-        // Get the latest record
-        const latestDocRef = doc(recordsCollectionRef, "latest");
-        const latestDocSnap = await getDoc(latestDocRef);
+        // Query to get the latest document to set id and merge
+        const q = query(recordsCollectionRef, orderBy("id", "desc"), limit(1));
+        const querySnapshot = await getDocs(q);
         let mergedRecords = {};
 
-        if (latestDocSnap.exists()) {
-          mergedRecords = latestDocSnap.data();
+        let id = 1;
+        if (!querySnapshot.empty) {
+          const latestDoc = querySnapshot.docs[0];
+          const data = latestDoc.data();
+          mergedRecords = data;
+
+          if (data.id) {
+            id = data.id + 1;
+          }
         }
 
         filteredRecords.forEach((record) => {
           mergedRecords[record.wallet] = record.balance;
         });
 
-        const timestamp = `${date} ${time}`;
+        // Create a new document with the records
+        const newDocRef = doc(recordsCollectionRef, id.toString());
+        await setDoc(newDocRef, {
+          ...mergedRecords,
+          id,
+          description,
+          timestamp,
+        });
 
-        const newDocRef = doc(recordsCollectionRef, timestamp);
-        await setDoc(newDocRef, { ...mergedRecords, description, timestamp });
-
-        await setDoc(latestDocRef, mergedRecords);
-        console.log("Record saved successfully");
         toastSuccess("Record saved successfully");
         onUpdate();
         toggleModal();
       } catch (error) {
-        console.error("Error saving record: ", error);
+        console.log(error);
         toastError(`Error saving record: ${error}`);
       }
     } else if (type === "addWallet") {
@@ -142,13 +161,11 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
           );
 
           setWallets(updatedWallets);
-          console.log("Wallet created successfully");
           toastSuccess("Wallet created successfully");
           onUpdate();
           toggleModal();
         }
       } catch (error) {
-        console.error("Error saving wallet: ", error);
         toastError(`Error saving wallet: ${error}`);
       }
     }
