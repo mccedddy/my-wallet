@@ -64,7 +64,7 @@ const Graphs = ({ user }) => {
 
         const recordsQuery = query(
           recordsCollectionRef,
-          orderBy("timestamp", "desc")
+          orderBy("timestamp", "asc")
         );
         const snapshot = await getDocs(recordsQuery);
 
@@ -143,8 +143,16 @@ const Graphs = ({ user }) => {
 
   const chartOptions = {
     scales: {
+      x: {
+        ticks: {
+          color: "#e3e2ec",
+        },
+      },
       y: {
         beginAtZero: true,
+        ticks: {
+          color: "#e3e2ec",
+        },
       },
     },
     plugins: {
@@ -170,9 +178,7 @@ const Graphs = ({ user }) => {
       {/* TODO: date filter */}
       {records.length > 0 && wallets.length > 0 ? (
         <div className="w-full flex flex-col items-center p-4 pt-2 mb-4 rounded-lg bg-background-light">
-          <h1 className="m-1 text-text-dark text-lg">
-            WALLET BALANCES OVER TIME
-          </h1>
+          <h1 className="m-1 text-lg">WALLET BALANCES OVER TIME</h1>
           <Line data={chartData} options={chartOptions} />
         </div>
       ) : loadingRecords ? (
@@ -180,9 +186,7 @@ const Graphs = ({ user }) => {
           <div className="w-6 mt-32 spinner"></div>
         </div>
       ) : (
-        <p className="m-1 text-text-dark text-sm">
-          No data available to display.
-        </p>
+        <p className="pr-1 text-left w-full">No data available to display.</p>
       )}
     </div>
   );
