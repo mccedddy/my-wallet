@@ -206,6 +206,7 @@ const Records = ({ user, openCreateWallet }) => {
                             : ""
                         }`}
                       >
+                        {/* TODO: Fix layout when wallet is only 1 */}
                         <div className="flex justify-center items-center gap-1">
                           {/* <img src={upIcon} alt="up" className="w-5 h-5" />
                           <img src={midIcon} alt="up" className="w-5 h-5" />
