@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import Modal from "./Modal";
 import { toastSuccess, toastError } from "../toastUtils";
-import trashIcon from "../assets/icons/trash.svg";
+import trashRedIcon from "../assets/icons/trashRed.svg";
 
 const Wallets = ({ user }) => {
   const [wallets, setWallets] = useState([]);
@@ -17,6 +17,7 @@ const Wallets = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   // Fetch wallet names and latest balances
   useEffect(() => {
@@ -74,6 +75,10 @@ const Wallets = ({ user }) => {
     setShowModal(!showModal);
   };
 
+  const toggleShowDelete = () => {
+    setShowDelete(!showDelete);
+  };
+
   const triggerRefresh = () => {
     setRefresh(!refresh);
   };
@@ -106,21 +111,22 @@ const Wallets = ({ user }) => {
               ADD WALLET
             </button>
             <button
-              onClick={toggleModal}
+              onClick={toggleShowDelete}
               className="h-6 text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE WALLET
             </button>
-            {/* TODO: Delete Wallet */}
           </diV>
           <table className="my-2 w-full text-sm">
             <thead>
               <tr className="h-8">
-                <td className="w-5/12 rounded-lg bg-secondary">WALLET NAME</td>
-                <td className="w-5/12 rounded-lg border-x-4 border-background bg-accent text-background">
+                <td className="w-1/2 rounded-lg bg-secondary">WALLET NAME</td>
+                <td className="rounded-lg border-x-4 border-background bg-accent text-background">
                   CURRENT BALANCE
                 </td>
-                <td className="w-1/12 rounded-lg bg-background-light">D</td>
+                <td
+                  className={`w-8 rounded-lg ${showDelete ? "" : "hidden"}`}
+                ></td>
               </tr>
               <tr className="h-3"></tr>
             </thead>
@@ -134,10 +140,12 @@ const Wallets = ({ user }) => {
                     </td>
                     <td
                       onClick={() => handleDeleteWallet(wallet)}
-                      className="align-center cursor-pointer text-text-dark justify-center py-3 font-bold rounded-lg"
+                      className={`align-center cursor-pointer bg-background text-text-dark justify-center py-2 font-bold rounded-lg ${
+                        showDelete ? "" : "hidden"
+                      }`}
                     >
                       <img
-                        src={trashIcon}
+                        src={trashRedIcon}
                         alt="trash"
                         className="h-4 w-full flex justify-center"
                       />
