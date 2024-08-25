@@ -4,6 +4,7 @@ import { db } from "../firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import Navbar from "./Navbar";
 import Records from "./Records";
+import Graphs from "./Graphs";
 import Wallets from "./Wallets";
 import Settings from "./Settings";
 
@@ -86,7 +87,7 @@ const Home = ({ user }) => {
         {page === "records" && (
           <Records user={user} openCreateWallet={openCreateWallet} />
         )}
-        {/* TODO: {page === "graphs" && <Graphs user={user} />} */}
+        {page === "graphs" && <Graphs user={user} />}
         {page === "wallets" && <Wallets user={user} />}
         {page === "settings" && (
           <Settings
