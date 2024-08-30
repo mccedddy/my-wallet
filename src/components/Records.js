@@ -25,6 +25,7 @@ const Records = ({ user, openCreateWallet }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [hoveredRecord, setHoveredRecord] = useState(null);
 
   const recordsPerPage = 10;
 
@@ -114,6 +115,26 @@ const Records = ({ user, openCreateWallet }) => {
     }
   };
 
+  // Month display
+  const getMonthColor = (dateString) => {
+    const month = new Date(dateString).getMonth();
+    const monthColors = [
+      "bg-red-500 border-red-500", // Jan
+      "bg-orange-500 border-orange-500", // Feb
+      "bg-yellow-500 border-yellow-500", // Mar
+      "bg-green-500 border-green-500", // Apr
+      "bg-teal-500 border-teal-500", // May
+      "bg-blue-500 border-blue-500", // Jun
+      "bg-indigo-500 border-indigo-500", // Jul
+      "bg-purple-500 border-purple-500", // Aug
+      "bg-pink-500 border-pink-500", // Sep
+      "bg-red-700 border-red-700", // Oct
+      "bg-orange-700 border-orange-700", // Nov
+      "bg-yellow-700 border-yellow-700", // Dec
+    ];
+    return monthColors[month];
+  };
+
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -187,7 +208,7 @@ const Records = ({ user, openCreateWallet }) => {
           <table className="my-2 w-full text-sm bg-background-light rounded-xl">
             <thead>
               <tr className="h-10">
-                <td className="w-24">DATE</td>
+                <td className="w-16">DATE</td>
                 {wallets.map((wallet, index) => (
                   <td key={wallet} className="">
                     {wallet.toUpperCase()}
@@ -205,25 +226,40 @@ const Records = ({ user, openCreateWallet }) => {
             <tbody>
               {currentRecords.map((record, index) => (
                 <React.Fragment key={index}>
-                  <tr className="h-8 text-center">
+                  <tr
+                    className="h-8 text-center"
+                    onMouseEnter={() => setHoveredRecord(index)}
+                    onMouseLeave={() => setHoveredRecord(null)}
+                  >
                     {/* Upper part: date time, wallet balances, total */}
-                    <td className="text-text-dark text-xs">{record.date}</td>
-                    {wallets.map((wallet, index) => (
+                    <td className="text-xs" rowSpan={2}>
+                      <div
+                        className={`w-12 flex flex-col m-1 pt-0 border-2 border-t-0 ${getMonthColor(
+                          record.date
+                        )} rounded items-center justify-center relative`}
+                      >
+                        <h1 className="text-xs">
+                          {new Date(record.date).toLocaleString("default", {
+                            month: "short",
+                          })}
+                        </h1>
+                        <div className="w-full rounded bg-text">
+                          <h1 className="text-lg text-background">
+                            {new Date(record.date).getDate()}
+                          </h1>
+                        </div>
+                      </div>
+                    </td>
+                    {wallets.map((wallet) => (
                       <td key={wallet} className="">
                         <div className="flex justify-center items-center gap-1">
-                          {/* <img src={upIcon} alt="up" className="w-5 h-5" />
-                          <img src={midIcon} alt="up" className="w-5 h-5" />
-                          <img src={downIcon} alt="up" className="w-5 h-5" /> */}
                           <h1>₱</h1>
                           {record.wallets[wallet] || "0"}
                         </div>
                       </td>
                     ))}
                     <td className="text-md" rowSpan="2">
-                      <div className="flex justify-center items-center gap-1 ">
-                        {/* <img src={upIcon} alt="up" className="w-5 h-5" />
-                        <img src={midIcon} alt="up" className="w-5 h-5" />
-                        <img src={downIcon} alt="up" className="w-5 h-5" /> */}
+                      <div className="flex justify-center items-center gap-1">
                         <h1>₱</h1>
                         {wallets.reduce((acc, wallet) => {
                           const balance = parseFloat(
@@ -249,12 +285,13 @@ const Records = ({ user, openCreateWallet }) => {
                   </tr>
                   <tr className="h-8 text-center">
                     {/* Lower part: description */}
-                    <td className="text-xs text-text-dark">{record.time}</td>
                     <td
                       colSpan={wallets.length}
                       className="text-left text-text-dark px-2 text-xs"
                     >
-                      {record.description}
+                      {hoveredRecord === index
+                        ? `${record.date} | ${record.time}`
+                        : record.description}
                     </td>
                   </tr>
                   <tr className="border-b-2 border-background"></tr>

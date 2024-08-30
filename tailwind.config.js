@@ -9,7 +9,7 @@ module.exports = {
           light: "#242224",
           lighter: "#353335",
         },
-        primary: { DEFAULT: "#8df684", dark: "#2d462a" },
+        primary: { DEFAULT: "#8df684", dark: "#3e9b2a" },
         secondary: { DEFAULT: "#520b9d", dark: "#2d1643" },
         accent: { DEFAULT: "#f0289d", dark: "#9d1b67" },
       },
