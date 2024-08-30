@@ -224,79 +224,126 @@ const Records = ({ user, openCreateWallet }) => {
               <tr className="border-t-2 border-background"></tr>
             </thead>
             <tbody>
-              {currentRecords.map((record, index) => (
-                <React.Fragment key={index}>
-                  <tr
-                    className="h-8 text-center"
-                    onMouseEnter={() => setHoveredRecord(index)}
-                    onMouseLeave={() => setHoveredRecord(null)}
-                  >
-                    {/* Upper part: date time, wallet balances, total */}
-                    <td className="text-xs" rowSpan={2}>
-                      <div
-                        className={`w-12 flex flex-col m-1 pt-0 border-2 border-t-0 ${getMonthColor(
-                          record.date
-                        )} rounded items-center justify-center relative`}
-                      >
-                        <h1 className="text-xs">
-                          {new Date(record.date).toLocaleString("default", {
-                            month: "short",
-                          })}
-                        </h1>
-                        <div className="w-full rounded bg-text">
-                          <h1 className="text-lg text-background">
-                            {new Date(record.date).getDate()}
+              {currentRecords.map((record, index) => {
+                const previousRecord = records[index + 1] || {};
+
+                const renderWalletBalance = (current, previous) => {
+                  const isIncrease = current > previous;
+                  const isSame = current === previous;
+                  const value = current || "0";
+                  const colorClass = isIncrease
+                    ? "text-primary"
+                    : isSame
+                    ? ""
+                    : "text-accent";
+
+                  return (
+                    <div
+                      className={`flex justify-center items-center gap-1 ${colorClass}`}
+                    >
+                      <h1 className={colorClass}>₱</h1>
+                      {value}
+                    </div>
+                  );
+                };
+
+                // Helper function to calculate and render total balance
+                const renderTotalBalance = () => {
+                  const currentTotal = wallets.reduce(
+                    (acc, wallet) =>
+                      acc + parseFloat(record.wallets[wallet] || 0),
+                    0
+                  );
+                  const previousTotal = wallets.reduce(
+                    (acc, wallet) =>
+                      acc + parseFloat(previousRecord.wallets[wallet] || 0),
+                    0
+                  );
+
+                  const isIncrease = currentTotal > previousTotal;
+                  const isSame = currentTotal === previousTotal;
+                  const colorClass = isIncrease
+                    ? "text-primary"
+                    : isSame
+                    ? ""
+                    : "text-accent";
+
+                  return (
+                    <div
+                      className={`flex justify-center items-center gap-1 ${colorClass}`}
+                    >
+                      <h1 className={colorClass}>₱</h1>
+                      {currentTotal}
+                    </div>
+                  );
+                };
+
+                return (
+                  <React.Fragment key={index}>
+                    <tr
+                      className="h-8 text-center"
+                      onMouseEnter={() => setHoveredRecord(index)}
+                      onMouseLeave={() => setHoveredRecord(null)}
+                    >
+                      {/* Upper part: date time, wallet balances, total */}
+                      <td className="text-xs" rowSpan={2}>
+                        <div
+                          className={`w-12 flex flex-col m-1 pt-0 border-2 border-t-0 ${getMonthColor(
+                            record.date
+                          )} rounded items-center justify-center relative`}
+                        >
+                          <h1 className="text-xs">
+                            {new Date(record.date).toLocaleString("default", {
+                              month: "short",
+                            })}
                           </h1>
-                        </div>
-                      </div>
-                    </td>
-                    {wallets.map((wallet) => (
-                      <td key={wallet} className="">
-                        <div className="flex justify-center items-center gap-1">
-                          <h1>₱</h1>
-                          {record.wallets[wallet] || "0"}
+                          <div className="w-full rounded bg-text">
+                            <h1 className="text-lg text-background">
+                              {new Date(record.date).getDate()}
+                            </h1>
+                          </div>
                         </div>
                       </td>
-                    ))}
-                    <td className="text-md" rowSpan="2">
-                      <div className="flex justify-center items-center gap-1">
-                        <h1>₱</h1>
-                        {wallets.reduce((acc, wallet) => {
-                          const balance = parseFloat(
-                            record.wallets[wallet] || 0
-                          );
-                          return acc + balance;
-                        }, 0)}
-                      </div>
-                    </td>
-                    <td
-                      onClick={() => handleDeleteRecord(record.id)}
-                      className={`align-center cursor-pointer bg-background-light text-text-dark justify-center items-center py-2 font-bold ${
-                        showDelete ? "" : "hidden"
-                      }`}
-                      rowSpan={2}
-                    >
-                      <img
-                        src={trashRedIcon}
-                        alt="trash"
-                        className="h-5 w-full flex justify-center"
-                      />
-                    </td>
-                  </tr>
-                  <tr className="h-8 text-center">
-                    {/* Lower part: description */}
-                    <td
-                      colSpan={wallets.length}
-                      className="text-left text-text-dark px-2 text-xs"
-                    >
-                      {hoveredRecord === index
-                        ? `${record.date} | ${record.time}`
-                        : record.description}
-                    </td>
-                  </tr>
-                  <tr className="border-b-2 border-background"></tr>
-                </React.Fragment>
-              ))}
+                      {wallets.map((wallet) => (
+                        <td key={wallet}>
+                          {renderWalletBalance(
+                            record.wallets[wallet],
+                            previousRecord.wallets[wallet]
+                          )}
+                        </td>
+                      ))}
+                      <td className="text-md" rowSpan="2">
+                        {renderTotalBalance()}
+                      </td>
+                      <td
+                        onClick={() => handleDeleteRecord(record.id)}
+                        className={`align-center cursor-pointer bg-background-light text-text-dark justify-center items-center py-2 font-bold ${
+                          showDelete ? "" : "hidden"
+                        }`}
+                        rowSpan={2}
+                      >
+                        <img
+                          src={trashRedIcon}
+                          alt="trash"
+                          className="h-5 w-full flex justify-center"
+                        />
+                      </td>
+                    </tr>
+                    <tr className="h-8 text-center">
+                      {/* Lower part: description */}
+                      <td
+                        colSpan={wallets.length}
+                        className="text-left text-text-dark px-2 text-xs"
+                      >
+                        {hoveredRecord === index
+                          ? `${record.date} | ${record.time}`
+                          : record.description}
+                      </td>
+                    </tr>
+                    <tr className="border-b-2 border-background"></tr>
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
           <div className="flex justify-center items-center gap-4 my-4">
