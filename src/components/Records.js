@@ -135,6 +135,40 @@ const Records = ({ user, openCreateWallet }) => {
     return monthColors[month];
   };
 
+  // Record colors
+  const getRecordColor = (current, previous) => {
+    const isIncrease = current > previous;
+    const isSame = current === previous;
+    const colorClass = isIncrease
+      ? "text-primary"
+      : isSame
+      ? ""
+      : "text-accent";
+
+    return colorClass;
+  };
+
+  const getTotalColor = (current, previous) => {
+    const currentTotal = wallets.reduce(
+      (acc, wallet) => acc + parseFloat(current.wallets[wallet] || 0),
+      0
+    );
+    const previousTotal = wallets.reduce(
+      (acc, wallet) => acc + parseFloat(previous.wallets[wallet] || 0),
+      0
+    );
+
+    const isIncrease = currentTotal > previousTotal;
+    const isSame = currentTotal === previousTotal;
+    const colorClass = isIncrease
+      ? "text-primary"
+      : isSame
+      ? ""
+      : "text-accent";
+
+    return colorClass;
+  };
+
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -227,57 +261,6 @@ const Records = ({ user, openCreateWallet }) => {
               {currentRecords.map((record, index) => {
                 const previousRecord = records[index + 1] || {};
 
-                const renderWalletBalance = (current, previous) => {
-                  const isIncrease = current > previous;
-                  const isSame = current === previous;
-                  const value = current || "0";
-                  const colorClass = isIncrease
-                    ? "text-primary"
-                    : isSame
-                    ? ""
-                    : "text-accent";
-
-                  return (
-                    <div
-                      className={`flex justify-center items-center gap-1 ${colorClass}`}
-                    >
-                      <h1 className={colorClass}>₱</h1>
-                      {value}
-                    </div>
-                  );
-                };
-
-                // Helper function to calculate and render total balance
-                const renderTotalBalance = () => {
-                  const currentTotal = wallets.reduce(
-                    (acc, wallet) =>
-                      acc + parseFloat(record.wallets[wallet] || 0),
-                    0
-                  );
-                  const previousTotal = wallets.reduce(
-                    (acc, wallet) =>
-                      acc + parseFloat(previousRecord.wallets[wallet] || 0),
-                    0
-                  );
-
-                  const isIncrease = currentTotal > previousTotal;
-                  const isSame = currentTotal === previousTotal;
-                  const colorClass = isIncrease
-                    ? "text-primary"
-                    : isSame
-                    ? ""
-                    : "text-accent";
-
-                  return (
-                    <div
-                      className={`flex justify-center items-center gap-1 ${colorClass}`}
-                    >
-                      <h1 className={colorClass}>₱</h1>
-                      {currentTotal}
-                    </div>
-                  );
-                };
-
                 return (
                   <React.Fragment key={index}>
                     <tr
@@ -306,14 +289,40 @@ const Records = ({ user, openCreateWallet }) => {
                       </td>
                       {wallets.map((wallet) => (
                         <td key={wallet}>
-                          {renderWalletBalance(
-                            record.wallets[wallet],
-                            previousRecord.wallets[wallet]
-                          )}
+                          <div
+                            className={`flex justify-center items-center gap-1 ${getRecordColor(
+                              record.wallets[wallet],
+                              previousRecord.wallets[wallet]
+                            )}`}
+                          >
+                            <h1
+                              className={getRecordColor(
+                                record.wallets[wallet],
+                                previousRecord.wallets[wallet]
+                              )}
+                            >
+                              ₱
+                            </h1>
+                            {record.wallets[wallet]}
+                          </div>
                         </td>
                       ))}
                       <td className="text-md" rowSpan="2">
-                        {renderTotalBalance()}
+                        <div
+                          className={`flex justify-center items-center gap-1 ${getTotalColor(
+                            record,
+                            previousRecord
+                          )}`}
+                        >
+                          <h1 className={getTotalColor(record, previousRecord)}>
+                            ₱
+                          </h1>
+                          {wallets.reduce(
+                            (acc, wallet) =>
+                              acc + parseFloat(record.wallets[wallet] || 0),
+                            0
+                          )}
+                        </div>
                       </td>
                       <td
                         onClick={() => handleDeleteRecord(record.id)}
