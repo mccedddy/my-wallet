@@ -108,7 +108,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
               <p className="text-xs">Don't have an account?</p>
               <button
                 onClick={toggleForm}
-                className="underline text-xs text-accent bg-background-light"
+                className="underline text-xs text-accent bg-background-light outline-none"
               >
                 Sign Up
               </button>

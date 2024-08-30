@@ -184,55 +184,32 @@ const Records = ({ user, openCreateWallet }) => {
               DELETE RECORD
             </button>
           </div>
-          <table className="my-2 w-full text-sm">
+          <table className="my-2 w-full text-sm bg-background-light rounded-xl">
             <thead>
-              <tr className="h-8">
-                <td className="w-24 rounded-lg border-r-4 border-background bg-primary text-background">
-                  DATE
-                </td>
+              <tr className="h-10">
+                <td className="w-24">DATE</td>
                 {wallets.map((wallet, index) => (
-                  <td
-                    key={wallet}
-                    className={`bg-secondary border-r border-background ${
-                      index === 0
-                        ? "rounded-l-lg"
-                        : index === wallets.length - 1
-                        ? "rounded-r-lg"
-                        : ""
-                    }`}
-                  >
+                  <td key={wallet} className="">
                     {wallet.toUpperCase()}
                   </td>
                 ))}
-                <td className="w-24 rounded-lg border-l-4 border-background bg-accent text-background">
-                  TOTAL
-                </td>
+                <td className="w-24">TOTAL</td>
                 <td
-                  className={`w-12 bg-background ${showDelete ? "" : "hidden"}`}
+                  className={`w-12 bg-background-light rounded-xl ${
+                    showDelete ? "" : "hidden"
+                  }`}
                 ></td>
               </tr>
-              <tr className="h-3"></tr>
+              <tr className="border-t-2 border-background"></tr>
             </thead>
             <tbody>
               {currentRecords.map((record, index) => (
                 <React.Fragment key={index}>
-                  <tr className="h-8 text-center bg-background-light">
+                  <tr className="h-8 text-center">
                     {/* Upper part: date time, wallet balances, total */}
-                    <td className="text-text-dark text-xs pt-2 rounded-t-lg border-r-4 border-background">
-                      {record.date}
-                    </td>
+                    <td className="text-text-dark text-xs">{record.date}</td>
                     {wallets.map((wallet, index) => (
-                      <td
-                        key={wallet}
-                        className={`border-background border-r border-background ${
-                          index === 0
-                            ? "rounded-tl-lg"
-                            : index === wallets.length - 1
-                            ? "rounded-tr-lg"
-                            : ""
-                        }`}
-                      >
-                        {/* TODO: Fix layout when wallet is only 1 */}
+                      <td key={wallet} className="">
                         <div className="flex justify-center items-center gap-1">
                           {/* <img src={upIcon} alt="up" className="w-5 h-5" />
                           <img src={midIcon} alt="up" className="w-5 h-5" />
@@ -242,10 +219,7 @@ const Records = ({ user, openCreateWallet }) => {
                         </div>
                       </td>
                     ))}
-                    <td
-                      className="rounded-lg text-md border-l-4 border-background"
-                      rowSpan="2"
-                    >
+                    <td className="text-md" rowSpan="2">
                       <div className="flex justify-center items-center gap-1 ">
                         {/* <img src={upIcon} alt="up" className="w-5 h-5" />
                         <img src={midIcon} alt="up" className="w-5 h-5" />
@@ -261,7 +235,7 @@ const Records = ({ user, openCreateWallet }) => {
                     </td>
                     <td
                       onClick={() => handleDeleteRecord(record.id)}
-                      className={`align-center cursor-pointer bg-background text-text-dark justify-center items-center py-2 font-bold rounded-lg ${
+                      className={`align-center cursor-pointer bg-background-light text-text-dark justify-center items-center py-2 font-bold ${
                         showDelete ? "" : "hidden"
                       }`}
                       rowSpan={2}
@@ -273,19 +247,17 @@ const Records = ({ user, openCreateWallet }) => {
                       />
                     </td>
                   </tr>
-                  <tr className="h-8 text-center bg-background-light">
+                  <tr className="h-8 text-center">
                     {/* Lower part: description */}
-                    <td className="text-xs text-text-dark pb-2 rounded-bl-lg border-r-4 border-background rounded-br-lg">
-                      {record.time}
-                    </td>
+                    <td className="text-xs text-text-dark">{record.time}</td>
                     <td
                       colSpan={wallets.length}
-                      className="text-left text-text-dark px-2 text-xs border-t border-background rounded-b-lg"
+                      className="text-left text-text-dark px-2 text-xs"
                     >
                       {record.description}
                     </td>
                   </tr>
-                  <tr className="h-2"></tr>
+                  <tr className="border-b-2 border-background"></tr>
                 </React.Fragment>
               ))}
             </tbody>
