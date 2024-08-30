@@ -7,7 +7,6 @@ import {
   getDocs,
   query,
   orderBy,
-  where,
   limit,
 } from "firebase/firestore";
 import { Line } from "react-chartjs-2";
@@ -35,13 +34,7 @@ const Graphs = ({ user }) => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingRecords, setLoadingRecords] = useState(true);
-
-  const [filterType, setFilterType] = useState("Records"); // 'Records' or 'Date'
   const [recordLimit, setRecordLimit] = useState("5");
-  const [dateRange, setDateRange] = useState({
-    from: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-    to: new Date(),
-  });
 
   // Fetch wallet names
   useEffect(() => {
@@ -72,24 +65,12 @@ const Graphs = ({ user }) => {
           "records"
         );
 
-        // Filtering by Date
-        if (filterType === "Date") {
-          recordsQuery = query(
-            recordsCollectionRef,
-            where("timestamp", ">=", dateRange.from.getTime()),
-            where("timestamp", "<=", dateRange.to.getTime()),
-            orderBy("timestamp", "asc")
-          );
-          console.log("From", dateRange.from.getTime());
-          console.log("To", dateRange.to.getTime());
-        } else {
-          recordsQuery = query(
-            recordsCollectionRef,
-            orderBy("timestamp", "desc")
-          );
-          if (recordLimit !== "ALL") {
-            recordsQuery = query(recordsQuery, limit(parseInt(recordLimit)));
-          }
+        recordsQuery = query(
+          recordsCollectionRef,
+          orderBy("timestamp", "desc")
+        );
+        if (recordLimit !== "ALL") {
+          recordsQuery = query(recordsQuery, limit(parseInt(recordLimit)));
         }
 
         const snapshot = await getDocs(recordsQuery);
@@ -127,7 +108,7 @@ const Graphs = ({ user }) => {
           }
         });
 
-        if (filterType === "Records" && fetchedRecords.length > 0) {
+        if (fetchedRecords.length > 0) {
           fetchedRecords.reverse();
         }
 
@@ -139,7 +120,7 @@ const Graphs = ({ user }) => {
     } else {
       setLoading(false);
     }
-  }, [user, wallets, filterType, recordLimit, dateRange]);
+  }, [user, wallets, recordLimit]);
 
   // Colors
   const colorPalette = [
@@ -228,60 +209,19 @@ const Graphs = ({ user }) => {
         <div className="w-full flex flex-col items-center p-4 pt-2 mb-4 rounded-lg bg-background-light">
           <h1 className="m-1 text-lg">WALLET BALANCES OVER TIME</h1>
           <div className="flex flex-wrap gap-2 w-full m-2">
-            <h1>Filter By:</h1>
+            <h1>Show:</h1>
             <select
               className="rounded w-22 text-text-dark bg-background outline-none"
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
+              value={recordLimit}
+              onChange={(e) => setRecordLimit(e.target.value)}
             >
-              <option value="Records">Records</option>
-              <option value="Records">Date</option>
-              {/* TODO: fix date filter */}
+              <option value="ALL">ALL</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </select>
-
-            {filterType === "Records" && (
-              <>
-                <h1>Show:</h1>
-                <select
-                  className="rounded w-22 text-text-dark bg-background outline-none"
-                  value={recordLimit}
-                  onChange={(e) => setRecordLimit(e.target.value)}
-                >
-                  <option value="ALL">ALL</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-              </>
-            )}
-
-            {filterType === "Date" && (
-              <div className="flex gap-2">
-                <h1>From:</h1>
-                <input
-                  type="date"
-                  className="rounded w-18 text-text-dark bg-background outline-none"
-                  value={dateRange.from.toISOString().split("T")[0]}
-                  onChange={(e) =>
-                    setDateRange({
-                      ...dateRange,
-                      from: new Date(e.target.value),
-                    })
-                  }
-                />
-                <h1>To:</h1>
-                <input
-                  type="date"
-                  className="rounded w-18 text-text-dark bg-background outline-none"
-                  value={dateRange.to.toISOString().split("T")[0]}
-                  onChange={(e) =>
-                    setDateRange({ ...dateRange, to: new Date(e.target.value) })
-                  }
-                />
-              </div>
-            )}
           </div>
           <Line data={chartData} options={chartOptions} />
         </div>
