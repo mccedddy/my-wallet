@@ -57,16 +57,20 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col gap-16 lg:gap-0 lg:flex-row justify-center items-center">
-      <div className="w-full h-1/6 lg:h-3/6 flex flex-col items-center justify-center">
-        <img src={WalletIcon} alt="wallet" className="h-full lg:h-5/6" />
-        <h1 className="text-3xl">MY WALLET</h1>
-        <h1 className="text-text-dark mt-4">
-          Track your wallets, visualize your growth.
-        </h1>
+    <div className="h-screen w-screen flex flex-col gap-16 lg:flex-row justify-center items-center">
+      <div className=" h-1/6 flex flex-col items-center justify-center">
+        <div className="h-full flex justify-center items-center gap-2">
+          <img src={WalletIcon} alt="wallet" className="h-full w-36 h-36" />
+          <div className="flex flex-col justify-center items-start">
+            <h1 className="text-3xl">My Wallet</h1>
+            <h1 className="text-text-dark mt-4 text-sm">
+              Track your wallets, visualize your growth.
+            </h1>
+          </div>
+        </div>
       </div>
-      <div className="w-full h-3/6 flex flex-col items-center justify-center">
-        <div className="w-10/12 md:w-6/12 mb-24 lg:m-0 flex flex-col justify-center items-center gap-2 py-4 px-6 rounded-lg bg-background-light shadow-lg">
+      <div className="w-full lg:w-1/3 h-3/6 flex flex-col items-center justify-center">
+        <div className="w-10/12 lg:m-0 flex flex-col justify-center items-center gap-2 p-6 rounded-lg bg-background-light shadow-lg">
           <h1 className="text-2xl mb-2">{isLogin ? "Log In" : "Sign Up"}</h1>
 
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
