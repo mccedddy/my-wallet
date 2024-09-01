@@ -263,17 +263,15 @@ const Records = ({ user, openCreateWallet }) => {
 
                 return (
                   <React.Fragment key={index}>
-                    <tr
-                      className="h-8 text-center"
-                      onMouseEnter={() => setHoveredRecord(index)}
-                      onMouseLeave={() => setHoveredRecord(null)}
-                    >
+                    <tr className="h-8 text-center">
                       {/* Upper part: date time, wallet balances, total */}
                       <td className="text-xs" rowSpan={2}>
                         <div
                           className={`w-12 flex flex-col m-1 pt-0 border-2 border-t-0 ${getMonthColor(
                             record.date
                           )} rounded items-center justify-center relative`}
+                          onMouseEnter={() => setHoveredRecord(index)}
+                          onMouseLeave={() => setHoveredRecord(null)}
                         >
                           <h1 className="text-xs">
                             {new Date(record.date).toLocaleString("default", {
