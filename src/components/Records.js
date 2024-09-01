@@ -239,7 +239,7 @@ const Records = ({ user, openCreateWallet }) => {
               DELETE RECORD
             </button>
           </div>
-          <table className="my-2 w-full text-sm bg-background-light rounded-xl">
+          <table className="my-2 w-full text-sm bg-background-light rounded-lg">
             <thead>
               <tr className="h-10">
                 <td className="w-16">DATE</td>
@@ -250,7 +250,7 @@ const Records = ({ user, openCreateWallet }) => {
                 ))}
                 <td className="w-24">TOTAL</td>
                 <td
-                  className={`w-12 bg-background-light rounded-xl ${
+                  className={`w-12 bg-background-light rounded-lg ${
                     showDelete ? "" : "hidden"
                   }`}
                 ></td>
@@ -305,7 +305,7 @@ const Records = ({ user, openCreateWallet }) => {
                           </div>
                         </td>
                       ))}
-                      <td className="text-md" rowSpan="2">
+                      <td className="text-md">
                         <div
                           className={`flex justify-center items-center gap-1 ${getTotalColor(
                             record,

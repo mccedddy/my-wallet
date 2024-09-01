@@ -6,10 +6,16 @@ import {
   updateDoc,
   arrayRemove,
   deleteField,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  collection,
 } from "firebase/firestore";
 import Modal from "./Modal";
 import { toastSuccess, toastError } from "../toastUtils";
 import trashRedIcon from "../assets/icons/trashRed.svg";
+import WalletIcon from "../assets/icons/wallet.svg";
 
 const Wallets = ({ user }) => {
   const [wallets, setWallets] = useState([]);
@@ -19,24 +25,46 @@ const Wallets = ({ user }) => {
   const [refresh, setRefresh] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  // Fetch wallet names and latest balances
+  // Fetch wallet names and the latest record
   useEffect(() => {
     if (user?.email) {
       const fetchWalletData = async () => {
-        const userDocRef = doc(db, "users", user.email);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          setWallets(data.wallets || []);
-        }
+        try {
+          const userDocRef = doc(db, "users", user.email);
+          const userDocSnap = await getDoc(userDocRef);
 
-        const latestDocRef = doc(db, "users", user.email, "records", "latest");
-        const latestDocSnap = await getDoc(latestDocRef);
-        if (latestDocSnap.exists()) {
-          setLatestBalances(latestDocSnap.data());
-        }
+          if (userDocSnap.exists()) {
+            const data = userDocSnap.data();
+            setWallets(data.wallets || []);
+          }
 
-        setLoading(false);
+          // Fetch the latest record
+          const recordsCollectionRef = collection(
+            db,
+            "users",
+            user.email,
+            "records"
+          );
+          const latestRecordQuery = query(
+            recordsCollectionRef,
+            orderBy("timestamp", "desc"),
+            limit(1)
+          );
+          const snapshot = await getDocs(latestRecordQuery);
+
+          if (!snapshot.empty) {
+            const latestRecordData = snapshot.docs[0].data();
+            const { timestamp, description, id, ...walletBalances } =
+              latestRecordData;
+
+            setLatestBalances(walletBalances);
+          }
+
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching wallet data: ", error);
+          setLoading(false);
+        }
       };
 
       fetchWalletData();
@@ -103,7 +131,7 @@ const Wallets = ({ user }) => {
         </div>
       ) : (
         <div className="w-full">
-          <diV className="flex gap-4">
+          <div className="flex gap-4">
             <button
               onClick={toggleModal}
               className="h-6 text-sm text-text-dark hover:text-text bg-background"
@@ -116,46 +144,37 @@ const Wallets = ({ user }) => {
             >
               DELETE WALLET
             </button>
-          </diV>
-          <table className="my-2 w-full text-sm">
-            <thead>
-              <tr className="h-8">
-                <td className="w-1/2 rounded-lg bg-secondary">WALLET NAME</td>
-                <td className="rounded-lg border-x-4 border-background bg-accent text-background">
-                  CURRENT BALANCE
-                </td>
-                <td
-                  className={`w-8 rounded-lg ${showDelete ? "" : "hidden"}`}
-                ></td>
-              </tr>
-              <tr className="h-3"></tr>
-            </thead>
-            <tbody>
-              {wallets.map((wallet, index) => (
-                <React.Fragment key={index}>
-                  <tr className="h-10 text-center bg-background-light">
-                    <td className="rounded-lg">{wallet}</td>
-                    <td className="rounded-lg border-x-4 border-background">
-                      {latestBalances[wallet] || 0}
-                    </td>
-                    <td
-                      onClick={() => handleDeleteWallet(wallet)}
-                      className={`align-center cursor-pointer bg-background text-text-dark justify-center py-2 font-bold rounded-lg ${
-                        showDelete ? "" : "hidden"
-                      }`}
-                    >
-                      <img
-                        src={trashRedIcon}
-                        alt="trash"
-                        className="h-4 w-full flex justify-center"
-                      />
-                    </td>
-                  </tr>
-                  <tr className="h-2"></tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+          </div>
+          <div className="w-full my-2 flex flex-col gap-2">
+            {wallets.map((wallet, index) => (
+              <div
+                className="h-16 p-4 w-full flex justify-between items-center text-center bg-background-light rounded-lg"
+                key={index}
+              >
+                <div className="flex gap-4 items-center justify-center">
+                  <img src={WalletIcon} alt="wallet" className="h-8 w-8" />
+                  <div className="flex flex-col items-start">
+                    <h1 className="">{wallet}</h1>
+                    <h1 className="text-xs text-text-dark">
+                      Current Balance: ₱ {latestBalances[wallet] || 0}
+                    </h1>
+                  </div>
+                </div>
+                <div
+                  onClick={() => handleDeleteWallet(wallet)}
+                  className={`align-center cursor-pointer bg-background-light text-text-dark justify-center py-2 font-bold rounded-lg ${
+                    showDelete ? "" : "hidden"
+                  }`}
+                >
+                  <img
+                    src={trashRedIcon}
+                    alt="trash"
+                    className="h-5 w-full flex justify-center"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
