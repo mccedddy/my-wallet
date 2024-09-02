@@ -3,6 +3,7 @@ import { toastSuccess, toastError } from "../toastUtils";
 import { db } from "../firebase/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import WalletIcon from "../assets/icons/wallet.svg";
+import LineBG from "../assets/icons/line.svg";
 
 const AuthForm = ({ handleSignUp, handleLogIn }) => {
   const [email, setEmail] = useState("");
@@ -57,7 +58,18 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col gap-16 lg:flex-row justify-center items-center">
+    <div className="h-dvh w-screen flex flex-col gap-16 lg:flex-row justify-center items-center bg-animated">
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+      <img src={LineBG} alt="line" className="line" />
+
       <div className=" h-1/6 flex flex-col items-center justify-center">
         <div className="h-full flex justify-center items-center gap-2">
           <img src={WalletIcon} alt="wallet" className="h-full w-36 h-36" />
@@ -69,7 +81,7 @@ const AuthForm = ({ handleSignUp, handleLogIn }) => {
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-1/3 h-3/6 flex flex-col items-center justify-center">
+      <div className="w-full md:w-2/3 lg:w-96 h-3/6 flex flex-col items-center justify-center">
         <div className="w-10/12 lg:m-0 flex flex-col justify-center items-center gap-2 p-6 rounded-lg bg-background-light shadow-lg">
           <h1 className="text-2xl mb-2">{isLogin ? "Log In" : "Sign Up"}</h1>
 

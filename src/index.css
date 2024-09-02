@@ -66,3 +66,94 @@ button {
   color: #f3e2ec;
   background-color: #f0289d;
 }
+
+.bg-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.line {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.15;
+}
+/* Keyframe for lines moving diagonally to the upper right */
+@keyframes moveToUpperRight {
+  0% {
+    transform: translate(-120%, 120%) rotate(45deg);
+  }
+  100% {
+    transform: translate(120%, -120%) rotate(45deg);
+  }
+}
+
+/* Keyframe for lines moving diagonally to the lower left */
+@keyframes moveToLowerLeft {
+  0% {
+    transform: translate(120%, -120%) rotate(45deg);
+  }
+  100% {
+    transform: translate(-120%, 120%) rotate(45deg);
+  }
+}
+
+/* Randomize starting positions for 10 lines */
+.line:nth-child(1) {
+  top: -50%; /* Randomized starting point */
+  left: -50%;
+  animation: moveToUpperRight 15s linear infinite;
+}
+
+.line:nth-child(2) {
+  top: -40%; /* Randomized starting point */
+  left: -40%;
+  animation: moveToLowerLeft 18s linear infinite;
+}
+
+.line:nth-child(3) {
+  top: -30%; /* Randomized starting point */
+  left: -30%;
+  animation: moveToUpperRight 20s linear infinite;
+}
+
+.line:nth-child(4) {
+  top: -20%; /* Randomized starting point */
+  left: -20%;
+  animation: moveToLowerLeft 22s linear infinite;
+}
+
+.line:nth-child(5) {
+  top: -10%; /* Randomized starting point */
+  left: -10%;
+  animation: moveToUpperRight 25s linear infinite;
+}
+
+.line:nth-child(6) {
+  top: 10%; /* Randomized starting point */
+  left: 10%;
+  animation: moveToLowerLeft 17s linear infinite;
+}
+
+.line:nth-child(7) {
+  top: 20%; /* Randomized starting point */
+  left: 20%;
+  animation: moveToUpperRight 19s linear infinite;
+}
+
+.line:nth-child(8) {
+  top: 30%; /* Randomized starting point */
+  left: 30%;
+  animation: moveToLowerLeft 21s linear infinite;
+}
+
+.line:nth-child(9) {
+  top: 40%; /* Randomized starting point */
+  left: 40%;
+  animation: moveToUpperRight 23s linear infinite;
+}
+
+.line:nth-child(10) {
+  top: 50%; /* Randomized starting point */
+  left: 50%;
+  animation: moveToLowerLeft 26s linear infinite;
+}
