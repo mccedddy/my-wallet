@@ -135,19 +135,7 @@ const Records = ({ user, openCreateWallet }) => {
     return monthColors[month];
   };
 
-  // Record colors
-  const getRecordColor = (current, previous) => {
-    const isIncrease = current > previous;
-    const isSame = current === previous;
-    const colorClass = isIncrease
-      ? "text-primary"
-      : isSame
-      ? ""
-      : "text-accent";
-
-    return colorClass;
-  };
-
+  // Total colors
   const getTotalColor = (current, previous) => {
     const currentTotal = wallets.reduce(
       (acc, wallet) => acc + parseFloat(current.wallets[wallet] || 0),
@@ -287,20 +275,8 @@ const Records = ({ user, openCreateWallet }) => {
                       </td>
                       {wallets.map((wallet) => (
                         <td key={wallet}>
-                          <div
-                            className={`flex justify-center items-center gap-1 ${getRecordColor(
-                              record.wallets[wallet],
-                              previousRecord.wallets[wallet]
-                            )}`}
-                          >
-                            <h1
-                              className={getRecordColor(
-                                record.wallets[wallet],
-                                previousRecord.wallets[wallet]
-                              )}
-                            >
-                              ₱
-                            </h1>
+                          <div className="flex justify-center items-center gap-1">
+                            <h1>₱</h1>
                             {record.wallets[wallet]}
                           </div>
                         </td>
