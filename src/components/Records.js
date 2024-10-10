@@ -198,17 +198,23 @@ const Records = ({ user, openCreateWallet }) => {
             </thead>
             <tbody>
               {currentRecords.map((record, index) => {
-                const previousRecord = records[index + 1] || {};
+                const globalIndex = (currentPage - 1) * recordsPerPage + index;
+                const previousRecord = records[globalIndex + 1] || {};
 
-                const currentTotal = wallets.reduce(
-                  (acc, wallet) =>
-                    acc + parseFloat(record.wallets[wallet] || 0),
-                  0
-                );
-                const previousTotal = wallets.reduce(
-                  (acc, wallet) =>
-                    acc + parseFloat(previousRecord.wallets?.[wallet] || 0),
-                  0
+                const currentTotal = wallets.reduce((acc, wallet) => {
+                  const balance = parseFloat(record.wallets[wallet] || 0);
+                  return acc + balance;
+                }, 0);
+
+                const previousTotal = wallets.reduce((acc, wallet) => {
+                  const prevBalance = parseFloat(
+                    previousRecord.wallets?.[wallet] || 0
+                  );
+                  return acc + prevBalance;
+                }, 0);
+
+                console.log(
+                  `C${record.id}-${currentTotal} | P${previousRecord.id}-${previousTotal}`
                 );
 
                 const totalDiff = currentTotal - previousTotal;
