@@ -213,10 +213,6 @@ const Records = ({ user, openCreateWallet }) => {
                   return acc + prevBalance;
                 }, 0);
 
-                console.log(
-                  `C${record.id}-${currentTotal} | P${previousRecord.id}-${previousTotal}`
-                );
-
                 const totalDiff = currentTotal - previousTotal;
                 const totalDiffText =
                   totalDiff > 0

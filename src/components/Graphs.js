@@ -80,7 +80,6 @@ const Graphs = ({ user }) => {
         snapshot.forEach((doc) => {
           const data = doc.data();
           const { timestamp, description, id, ...walletBalances } = data;
-          console.log(timestamp);
 
           const hasRelevantWallets = Object.keys(walletBalances).some(
             (wallet) => wallets.includes(wallet)

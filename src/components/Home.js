@@ -19,11 +19,8 @@ const Home = ({ user }) => {
         const userDocRef = doc(db, "users", user.email);
         const userDocSnap = await getDoc(userDocRef);
 
-        console.log(userDocSnap);
-
         if (userDocSnap.exists()) {
           const data = userDocSnap.data();
-          console.log(data);
           setUsername(data.username || "Guest");
         }
       }
