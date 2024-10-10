@@ -10,11 +10,9 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import Modal from "./Modal";
+import DateIcon from "./DateIcon";
 import { toastSuccess, toastError } from "../toastUtils";
 import trashRedIcon from "../assets/icons/trashRed.svg";
-// import upIcon from "../assets/icons/up.svg";
-// import midIcon from "../assets/icons/mid.svg";
-// import downIcon from "../assets/icons/down.svg";
 
 const Records = ({ user, openCreateWallet }) => {
   const [records, setRecords] = useState([]);
@@ -115,48 +113,6 @@ const Records = ({ user, openCreateWallet }) => {
     }
   };
 
-  // Month display
-  const getMonthColor = (dateString) => {
-    const month = new Date(dateString).getMonth();
-    const monthColors = [
-      "bg-red-500 border-red-500", // Jan
-      "bg-orange-500 border-orange-500", // Feb
-      "bg-yellow-500 border-yellow-500", // Mar
-      "bg-green-500 border-green-500", // Apr
-      "bg-teal-500 border-teal-500", // May
-      "bg-blue-500 border-blue-500", // Jun
-      "bg-indigo-500 border-indigo-500", // Jul
-      "bg-purple-500 border-purple-500", // Aug
-      "bg-pink-500 border-pink-500", // Sep
-      "bg-red-700 border-red-700", // Oct
-      "bg-orange-700 border-orange-700", // Nov
-      "bg-yellow-700 border-yellow-700", // Dec
-    ];
-    return monthColors[month];
-  };
-
-  // Total colors
-  const getTotalColor = (current, previous) => {
-    const currentTotal = wallets.reduce(
-      (acc, wallet) => acc + parseFloat(current.wallets[wallet] || 0),
-      0
-    );
-    const previousTotal = wallets.reduce(
-      (acc, wallet) => acc + parseFloat(previous.wallets[wallet] || 0),
-      0
-    );
-
-    const isIncrease = currentTotal > previousTotal;
-    const isSame = currentTotal === previousTotal;
-    const colorClass = isIncrease
-      ? "text-primary"
-      : isSame
-      ? ""
-      : "text-accent";
-
-    return colorClass;
-  };
-
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -232,9 +188,7 @@ const Records = ({ user, openCreateWallet }) => {
               <tr className="h-10">
                 <td className="w-16">DATE</td>
                 {wallets.map((wallet, index) => (
-                  <td key={wallet} className="">
-                    {wallet.toUpperCase()}
-                  </td>
+                  <td key={wallet}>{wallet.toUpperCase()}</td>
                 ))}
                 <td className="w-24">TOTAL</td>
                 <td
@@ -249,29 +203,42 @@ const Records = ({ user, openCreateWallet }) => {
               {currentRecords.map((record, index) => {
                 const previousRecord = records[index + 1] || {};
 
+                const currentTotal = wallets.reduce(
+                  (acc, wallet) =>
+                    acc + parseFloat(record.wallets[wallet] || 0),
+                  0
+                );
+                const previousTotal = wallets.reduce(
+                  (acc, wallet) =>
+                    acc + parseFloat(previousRecord.wallets?.[wallet] || 0),
+                  0
+                );
+
+                const totalDiff = currentTotal - previousTotal;
+                const totalDiffText =
+                  totalDiff > 0
+                    ? `(+${totalDiff.toFixed(0)})`
+                    : totalDiff < 0
+                    ? `(${totalDiff.toFixed(0)})`
+                    : "(+0)";
+
+                const totalDiffColor =
+                  totalDiff > 0
+                    ? "text-primary"
+                    : totalDiff < 0
+                    ? "text-accent"
+                    : "text-text-dark";
+
                 return (
                   <React.Fragment key={index}>
                     <tr className="h-8 text-center">
-                      {/* Upper part: date time, wallet balances, total */}
+                      {/* Upper part: date, wallet balances, total */}
                       <td className="text-xs" rowSpan={2}>
-                        <div
-                          className={`w-12 flex flex-col m-1 pt-0 border-2 border-t-0 ${getMonthColor(
-                            record.date
-                          )} rounded items-center justify-center relative`}
-                          onMouseEnter={() => setHoveredRecord(index)}
-                          onMouseLeave={() => setHoveredRecord(null)}
-                        >
-                          <h1 className="text-xs">
-                            {new Date(record.date).toLocaleString("default", {
-                              month: "short",
-                            })}
-                          </h1>
-                          <div className="w-full rounded bg-text">
-                            <h1 className="text-lg text-background">
-                              {new Date(record.date).getDate()}
-                            </h1>
-                          </div>
-                        </div>
+                        <DateIcon
+                          date={record.date}
+                          index={index}
+                          setHoveredRecord={setHoveredRecord}
+                        />
                       </td>
                       {wallets.map((wallet) => (
                         <td key={wallet}>
@@ -282,20 +249,9 @@ const Records = ({ user, openCreateWallet }) => {
                         </td>
                       ))}
                       <td className="text-md">
-                        <div
-                          className={`flex justify-center items-center gap-1 ${getTotalColor(
-                            record,
-                            previousRecord
-                          )}`}
-                        >
-                          <h1 className={getTotalColor(record, previousRecord)}>
-                            ₱
-                          </h1>
-                          {wallets.reduce(
-                            (acc, wallet) =>
-                              acc + parseFloat(record.wallets[wallet] || 0),
-                            0
-                          )}
+                        <div className="flex justify-center items-center gap-1">
+                          <h1>₱</h1>
+                          {currentTotal.toFixed(0)}
                         </div>
                       </td>
                       <td
@@ -313,7 +269,7 @@ const Records = ({ user, openCreateWallet }) => {
                       </td>
                     </tr>
                     <tr className="h-8 text-center">
-                      {/* Lower part: description */}
+                      {/* Lower part: description and change*/}
                       <td
                         colSpan={wallets.length}
                         className="text-left text-text-dark px-2 text-xs"
@@ -321,6 +277,11 @@ const Records = ({ user, openCreateWallet }) => {
                         {hoveredRecord === index
                           ? `${record.date} | ${record.time}`
                           : record.description}
+                      </td>
+                      <td>
+                        <span className={`text-xs ${totalDiffColor}`}>
+                          {totalDiffText}
+                        </span>
                       </td>
                     </tr>
                     <tr className="border-b-2 border-background"></tr>
@@ -337,23 +298,19 @@ const Records = ({ user, openCreateWallet }) => {
             >
               Prev
             </button>
-            <span className="text-sm text-text">
-              Page {currentPage} of {Math.ceil(records.length / recordsPerPage)}
-            </span>
+            <span className="text-sm text-text">{`Page ${currentPage} of ${Math.ceil(
+              records.length / recordsPerPage
+            )}`}</span>
             <button
               onClick={handleNextPage}
               className="w-16 h-6 text-sm bg-secondary rounded disabled:bg-background-light"
-              disabled={
-                currentPage === Math.ceil(records.length / recordsPerPage)
-              }
+              disabled={indexOfLastRecord >= records.length}
             >
               Next
             </button>
           </div>
         </div>
       )}
-
-      {/* Modal */}
       {showModal && (
         <Modal
           user={user}
