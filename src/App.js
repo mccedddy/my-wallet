@@ -6,14 +6,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthForm from "./components/AuthForm";
 import Home from "./components/Home";
+import Loader from "./components/Loader";
 import "./CustomToast.css";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoadingUser(false);
     });
 
     return () => unsubscribe();
@@ -22,7 +25,9 @@ function App() {
   return (
     <div className="App">
       <ToastContainer />
-      {!user ? (
+      {loadingUser ? (
+        <Loader initial={true} />
+      ) : !user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
         <Home user={user} />

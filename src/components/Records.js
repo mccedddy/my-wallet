@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import Modal from "./Modal";
 import DateIcon from "./DateIcon";
+import Loader from "./Loader";
 import { toastSuccess, toastError } from "../toastUtils";
 import trashRedIcon from "../assets/icons/trashRed.svg";
 
@@ -138,11 +139,7 @@ const Records = ({ user, openCreateWallet }) => {
   const currentRecords = records.slice(indexOfFirstRecord, indexOfLastRecord);
 
   if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center">
-        <div className="w-6 mt-32 spinner"></div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
