@@ -169,18 +169,18 @@ const Records = ({ user, openCreateWallet }) => {
           <div className="flex gap-4">
             <button
               onClick={toggleModal}
-              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               ADD RECORD
             </button>
             <button
               onClick={toggleShowDelete}
-              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE RECORD
             </button>
           </div>
-          <table className="my-2 w-full text-sm bg-background-light rounded-lg">
+          <table className="my-2 w-full text-xs sm:text-sm bg-background-light rounded-lg">
             <thead>
               <tr className="h-10">
                 <td className="w-16">DATE</td>

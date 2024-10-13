@@ -157,7 +157,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
               placeholder="Username"
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+              className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
             />
           </div>
           {showSave && (
@@ -174,7 +174,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
               type="text"
               placeholder="Email"
               value={user.email}
-              className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+              className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
               readOnly
             />
           </div>
@@ -187,7 +187,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
                   placeholder="Current Password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                  className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -197,7 +197,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
                   placeholder="New Password"
                   value={newPassword1}
                   onChange={(e) => setNewPassword1(e.target.value)}
-                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                  className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -207,10 +207,10 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
                   placeholder="Confirm New Password"
                   value={newPassword2}
                   onChange={(e) => setNewPassword2(e.target.value)}
-                  className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                  className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
                 />
               </div>
-              <div className="w-80 flex gap-2 my-1">
+              <div className="w-full sm:w-80 flex gap-2 my-1">
                 <button
                   onClick={handleChangePassword}
                   className="h-8 w-full bg-accent text-background px-4 rounded"
@@ -255,9 +255,9 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-80 h-8 rounded px-2 text-text bg-background-lighter"
+                className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
               />
-              <div className="w-80 flex gap-2">
+              <div className="w-full sm:w-80 flex gap-2">
                 <button
                   onClick={handleClearData}
                   className="h-8 w-full bg-red-900 px-4 rounded"

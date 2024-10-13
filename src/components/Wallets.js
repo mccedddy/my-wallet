@@ -134,13 +134,13 @@ const Wallets = ({ user }) => {
           <div className="flex gap-4">
             <button
               onClick={toggleModal}
-              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               ADD WALLET
             </button>
             <button
               onClick={toggleShowDelete}
-              className="h-6 text-sm text-text-dark hover:text-text bg-background"
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE WALLET
             </button>
