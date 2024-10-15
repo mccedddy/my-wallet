@@ -243,7 +243,9 @@ const Records = ({ user, openCreateWallet }) => {
                         <td key={wallet}>
                           <div className="flex justify-center items-center gap-1">
                             <h1>₱</h1>
-                            {record.wallets[wallet]}
+                            {record.wallets[wallet]
+                              ? record.wallets[wallet]
+                              : "0"}
                           </div>
                         </td>
                       ))}
