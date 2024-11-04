@@ -14,8 +14,9 @@ import {
 } from "firebase/firestore";
 import Modal from "./Modal";
 import { toastSuccess, toastError } from "../toastUtils";
-import trashRedIcon from "../assets/icons/trashRed.svg";
+import DeleteIcon from "../assets/icons/trashRed.svg";
 import WalletIcon from "../assets/icons/wallet.svg";
+import EditIcon from "../assets/icons/pencil.svg";
 
 const Wallets = ({ user }) => {
   const [wallets, setWallets] = useState([]);
@@ -23,7 +24,7 @@ const Wallets = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [modify, setModify] = useState(null);
 
   // Fetch wallet names and the latest record
   useEffect(() => {
@@ -71,6 +72,36 @@ const Wallets = ({ user }) => {
     }
   }, [user, refresh]);
 
+  const handleEditWallet = async (walletToEdit) => {
+    toastSuccess(`Edit wallet: ${walletToEdit}`);
+
+    // try {
+    //   const userDocRef = doc(db, "users", user.email);
+    //   await updateDoc(userDocRef, {
+    //     wallets: arrayRemove(walletToEdit),
+    //   });
+    //   triggerRefresh();
+
+    //   // Remove the wallet field from the latest document
+    //   try {
+    //     const recordRef = doc(db, "users", user.email, "records", "latest");
+    //     await updateDoc(recordRef, {
+    //       [walletToEdit]: deleteField(),
+    //     });
+    //     toastSuccess(
+    //       `'${walletToEdit}' wallet and records deleted successfully`
+    //     );
+    //   } catch (error) {
+    //     toastSuccess(`'${walletToEdit}' wallet deleted successfully`);
+    //   }
+
+    //   triggerRefresh();
+    // } catch (error) {
+    //   console.error("Error deleting wallet: ", error);
+    //   toastError(`Error deleting wallet: ${error}`);
+    // }
+  };
+
   const handleDeleteWallet = async (walletToDelete) => {
     try {
       const userDocRef = doc(db, "users", user.email);
@@ -103,8 +134,8 @@ const Wallets = ({ user }) => {
     setShowModal(!showModal);
   };
 
-  const toggleShowDelete = () => {
-    setShowDelete(!showDelete);
+  const toggleModify = (type) => {
+    type === modify ? setModify(null) : setModify(type);
   };
 
   const triggerRefresh = () => {
@@ -139,7 +170,13 @@ const Wallets = ({ user }) => {
               ADD WALLET
             </button>
             <button
-              onClick={toggleShowDelete}
+              onClick={() => toggleModify("edit")}
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
+            >
+              EDIT WALLET
+            </button>
+            <button
+              onClick={() => toggleModify("delete")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE WALLET
@@ -161,14 +198,18 @@ const Wallets = ({ user }) => {
                   </div>
                 </div>
                 <div
-                  onClick={() => handleDeleteWallet(wallet)}
+                  onClick={() =>
+                    modify === "edit"
+                      ? handleEditWallet(wallet)
+                      : handleDeleteWallet(wallet)
+                  }
                   className={`align-center cursor-pointer bg-background-light text-text-dark justify-center py-2 font-bold rounded-lg ${
-                    showDelete ? "" : "hidden"
+                    modify ? "" : "hidden"
                   }`}
                 >
                   <img
-                    src={trashRedIcon}
-                    alt="trash"
+                    src={modify === "edit" ? EditIcon : DeleteIcon}
+                    alt="modify"
                     className="h-5 w-full flex justify-center"
                   />
                 </div>

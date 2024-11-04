@@ -171,6 +171,217 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
     }
   };
 
+  const renderAddRecord = () => {
+    return (
+      <>
+        {records.map((record, index) => (
+          <div key={index} className="flex gap-1 items-center">
+            <select
+              className="h-8 rounded w-32 text-text bg-secondary"
+              value={record.wallet}
+              onChange={(e) =>
+                handleRecordChange(index, "wallet", e.target.value)
+              }
+              required
+            >
+              <option value="" disabled>
+                Select
+              </option>
+              {wallets.map((wallet) => (
+                <option key={wallet} value={wallet}>
+                  {wallet}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Balance"
+              value={record.balance}
+              onChange={(e) =>
+                handleRecordChange(index, "balance", e.target.value)
+              }
+              required
+              className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+            />
+            {records.length > 1 && (
+              <button
+                type="button"
+                onClick={() => handleDeleteRecord(index)}
+                className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
+              >
+                <img src={trashIcon} alt="trash" className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={handleAddRecord}
+          className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter rounded text-text-dark"
+        >
+          <img src={addIcon} alt="trash" className="h-6 w-6" />
+        </button>
+        <div className="flex gap-1">
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
+          ></input>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
+          ></input>
+        </div>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+        />
+      </>
+    );
+  };
+
+  const renderEditRecord = () => {
+    return (
+      <>
+        {records.map((record, index) => (
+          <div key={index} className="flex gap-1 items-center">
+            <select
+              className="h-8 rounded w-32 text-text bg-secondary"
+              value={record.wallet}
+              onChange={(e) =>
+                handleRecordChange(index, "wallet", e.target.value)
+              }
+              required
+            >
+              <option value="" disabled>
+                Select
+              </option>
+              {wallets.map((wallet) => (
+                <option key={wallet} value={wallet}>
+                  {wallet}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Balance"
+              value={record.balance}
+              onChange={(e) =>
+                handleRecordChange(index, "balance", e.target.value)
+              }
+              required
+              className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+            />
+            {records.length > 1 && (
+              <button
+                type="button"
+                onClick={() => handleDeleteRecord(index)}
+                className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
+              >
+                <img src={trashIcon} alt="trash" className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={handleAddRecord}
+          className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter rounded text-text-dark"
+        >
+          <img src={addIcon} alt="trash" className="h-6 w-6" />
+        </button>
+        <div className="flex gap-1">
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
+          ></input>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
+          ></input>
+        </div>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+        />
+      </>
+    );
+  };
+
+  const renderAddWallet = () => {
+    return (
+      <>
+        {newWallets.map((wallet, index) => (
+          <div key={index} className="flex gap-1 items-center">
+            <input
+              type="text"
+              placeholder="Wallet Name"
+              value={wallet.walletName}
+              onChange={(e) => handleWalletChange(index, e.target.value)}
+              required
+              className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+            />
+            {newWallets.length > 1 && (
+              <button
+                type="button"
+                onClick={() => handleDeleteWallet(index)}
+                className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
+              >
+                <img src={trashIcon} alt="trash" className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={handleAddWallet}
+          className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter text-text-dark rounded"
+        >
+          <img src={addIcon} alt="add" className="h-6 w-6" />
+        </button>
+      </>
+    );
+  };
+
+  const renderEditWallet = () => {
+    <>
+      {newWallets.map((wallet, index) => (
+        <div key={index} className="flex gap-1 items-center">
+          <input
+            type="text"
+            placeholder="Wallet Name"
+            value={wallet.walletName}
+            onChange={(e) => handleWalletChange(index, e.target.value)}
+            required
+            className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
+          />
+          {newWallets.length > 1 && (
+            <button
+              type="button"
+              onClick={() => handleDeleteWallet(index)}
+              className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
+            >
+              <img src={trashIcon} alt="add" className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      ))}
+    </>;
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-30 shadow-lg"
@@ -182,7 +393,10 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
       >
         <div className="h-10 w-full p-3 bg-secondary flex rounded-t justify-between items-center">
           <h1 className="">
-            {type === "addRecord" ? "Add Record" : "Add Wallet"}
+            {type === "addRecord" && "Add Record"}
+            {type === "editRecord" && "Edit Record"}
+            {type === "addWallet" && "Add Wallet"}
+            {type === "editWallet" && "Edit Wallet"}
           </h1>
           <h1
             onClick={toggleModal}
@@ -197,111 +411,10 @@ const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
             onSubmit={handleSave}
             className="flex flex-col gap-1"
           >
-            {type === "addRecord" ? (
-              <>
-                {records.map((record, index) => (
-                  <div key={index} className="flex gap-1 items-center">
-                    <select
-                      className="h-8 rounded w-32 text-text bg-secondary"
-                      value={record.wallet}
-                      onChange={(e) =>
-                        handleRecordChange(index, "wallet", e.target.value)
-                      }
-                      required
-                    >
-                      <option value="" disabled>
-                        Select
-                      </option>
-                      {wallets.map((wallet) => (
-                        <option key={wallet} value={wallet}>
-                          {wallet}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="text"
-                      placeholder="Balance"
-                      value={record.balance}
-                      onChange={(e) =>
-                        handleRecordChange(index, "balance", e.target.value)
-                      }
-                      required
-                      className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
-                    />
-                    {records.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteRecord(index)}
-                        className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
-                      >
-                        <img src={trashIcon} alt="trash" className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={handleAddRecord}
-                  className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter rounded text-text-dark"
-                >
-                  <img src={addIcon} alt="trash" className="h-6 w-6" />
-                </button>
-                <div className="flex gap-1">
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
-                  ></input>
-                  <input
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="w-full h-8 px-2 rounded text-text outline-none bg-background-lighter"
-                  ></input>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
-                />
-              </>
-            ) : (
-              <>
-                {newWallets.map((wallet, index) => (
-                  <div key={index} className="flex gap-1 items-center">
-                    <input
-                      type="text"
-                      placeholder="Wallet Name"
-                      value={wallet.walletName}
-                      onChange={(e) =>
-                        handleWalletChange(index, e.target.value)
-                      }
-                      required
-                      className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
-                    />
-                    {newWallets.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteWallet(index)}
-                        className="h-8 w-10 p-2 text-xs bg-background-lighter flex justify-center rounded text-text-dark"
-                      >
-                        <img src={trashIcon} alt="trash" className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={handleAddWallet}
-                  className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter text-text-dark rounded"
-                >
-                  <img src={addIcon} alt="trash" className="h-6 w-6" />
-                </button>
-              </>
-            )}
+            {type === "addRecord" && renderAddRecord()}
+            {type === "editRecord" && renderEditRecord()}
+            {type === "addWallet" && renderAddWallet()}
+            {type === "editWallet" && renderEditWallet()}
           </form>
         </div>
         <div className="h-10 w-full px-3 py-7 flex justify-between rounded-b items-center">

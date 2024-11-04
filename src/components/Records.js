@@ -13,7 +13,8 @@ import Modal from "./Modal";
 import DateIcon from "./DateIcon";
 import Loader from "./Loader";
 import { toastSuccess, toastError } from "../toastUtils";
-import trashRedIcon from "../assets/icons/trashRed.svg";
+import DeleteIcon from "../assets/icons/trashRed.svg";
+import EditIcon from "../assets/icons/pencil.svg";
 
 const Records = ({ user, openCreateWallet }) => {
   const [records, setRecords] = useState([]);
@@ -21,10 +22,10 @@ const Records = ({ user, openCreateWallet }) => {
   const [loading, setLoading] = useState(true);
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredRecord, setHoveredRecord] = useState(null);
+  const [modify, setModify] = useState(null);
 
   const recordsPerPage = 10;
 
@@ -114,12 +115,14 @@ const Records = ({ user, openCreateWallet }) => {
     }
   };
 
+  const handleEditRecord = async (recordId) => {};
+
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  const toggleShowDelete = () => {
-    setShowDelete(!showDelete);
+  const toggleModify = (type) => {
+    type === modify ? setModify(null) : setModify(type);
   };
 
   const triggerRefresh = () => {
@@ -174,7 +177,13 @@ const Records = ({ user, openCreateWallet }) => {
               ADD RECORD
             </button>
             <button
-              onClick={toggleShowDelete}
+              onClick={() => toggleModify("edit")}
+              className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
+            >
+              EDIT RECORD
+            </button>
+            <button
+              onClick={() => toggleModify("delete")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               DELETE RECORD
@@ -190,7 +199,7 @@ const Records = ({ user, openCreateWallet }) => {
                 <td className="w-24">TOTAL</td>
                 <td
                   className={`w-12 bg-background-light rounded-lg ${
-                    showDelete ? "" : "hidden"
+                    modify ? "" : "hidden"
                   }`}
                 ></td>
               </tr>
@@ -256,14 +265,18 @@ const Records = ({ user, openCreateWallet }) => {
                         </div>
                       </td>
                       <td
-                        onClick={() => handleDeleteRecord(record.id)}
+                        onClick={() =>
+                          modify === "edit"
+                            ? handleEditRecord(record.id)
+                            : handleDeleteRecord(record.id)
+                        }
                         className={`align-center cursor-pointer bg-background-light text-text-dark justify-center items-center py-2 font-bold ${
-                          showDelete ? "" : "hidden"
+                          modify ? "" : "hidden"
                         }`}
                         rowSpan={2}
                       >
                         <img
-                          src={trashRedIcon}
+                          src={modify === "edit" ? EditIcon : DeleteIcon}
                           alt="trash"
                           className="h-5 w-full flex justify-center"
                         />
