@@ -286,10 +286,10 @@ const Records = ({ user, openCreateWallet }) => {
             </div>
 
             {/* Total table */}
-            <table className="w-24 text-center">
+            <table className="w-8 text-center">
               <thead>
                 <tr>
-                  <th className="h-10 bg-background-light rounded px-4">
+                  <th className="h-10 bg-background-light rounded px-3">
                     TOTAL
                   </th>
                 </tr>
@@ -333,7 +333,7 @@ const Records = ({ user, openCreateWallet }) => {
                   return (
                     <>
                       <tr key={index}>
-                        <td className="h-16 bg-background-light rounded px-4">
+                        <td className="h-16 bg-background-light rounded">
                           <div className="flex flex-col items-center gap-1">
                             <p className="text-nowrap">
                               ₱ {currentTotal.toFixed(0)}
