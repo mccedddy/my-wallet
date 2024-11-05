@@ -41,6 +41,15 @@ td {
   /* background-color: #242224; */
 }
 
+/* Custom class to hide scrollbar */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
 .spinner {
   width: 56px;
   height: 56px;
