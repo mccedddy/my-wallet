@@ -190,9 +190,9 @@ const Records = ({ user, openCreateWallet }) => {
             </button>
           </div>
 
-          <div className="w-full flex justify-center items-start mt-2">
+          <div className="w-full flex justify-center items-start mt-2 text-sm">
             {/* Date table */}
-            <table className="w-16 text-center">
+            <table className="w-8 text-center">
               <thead>
                 <tr>
                   <th className="h-10 bg-background-light rounded px-2">
@@ -207,7 +207,7 @@ const Records = ({ user, openCreateWallet }) => {
                 {currentRecords.map((record, index) => (
                   <>
                     <tr key={index}>
-                      <td className="h-16 bg-background-light rounded px-2">
+                      <td className="w-12 h-16 bg-background-light rounded">
                         <DateIcon
                           date={record.date}
                           index={index}
@@ -231,7 +231,7 @@ const Records = ({ user, openCreateWallet }) => {
                     {wallets.map((wallet, index) => (
                       <th
                         key={wallet}
-                        className={`h-10 min-w-20 bg-background-light px-4 ${
+                        className={`h-10 min-w-16 bg-background-light px-4 ${
                           index === 0
                             ? `rounded-l`
                             : index === wallets.length - 1
@@ -254,7 +254,7 @@ const Records = ({ user, openCreateWallet }) => {
                         {wallets.map((wallet, index) => (
                           <td
                             key={wallet}
-                            className={`h-8 min-w-24 bg-background-light px-4 text-center ${
+                            className={`h-8 min-w-16 bg-background-light px-4 text-center ${
                               index === 0
                                 ? `rounded-tl`
                                 : index === wallets.length - 1
@@ -269,7 +269,7 @@ const Records = ({ user, openCreateWallet }) => {
                       <tr>
                         <td
                           colSpan={wallets.length}
-                          className="h-8 bg-background-light rounded-b px-4 text-left text-sm text-text-dark"
+                          className="h-8 bg-background-light rounded-b px-4 text-left text-xs text-text-dark"
                         >
                           {hoveredRecord === index
                             ? `${record.date} | ${record.time}`
@@ -334,7 +334,7 @@ const Records = ({ user, openCreateWallet }) => {
                     <>
                       <tr key={index}>
                         <td className="h-16 bg-background-light rounded px-4">
-                          <div className="flex flex-col items-center text-lg">
+                          <div className="flex flex-col items-center gap-1">
                             <p className="text-nowrap">
                               ₱ {currentTotal.toFixed(0)}
                             </p>
