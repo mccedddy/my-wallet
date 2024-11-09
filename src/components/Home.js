@@ -45,7 +45,7 @@ const Home = () => {
     };
 
     fetchUserData();
-  }, [user, refresh]);
+  }, [user, refresh, dispatch]);
 
   const triggerRefresh = () => {
     setRefresh(!refresh);
@@ -135,16 +135,11 @@ const Home = () => {
         {page === "records" && (
           <Records user={user} openCreateWallet={openCreateWallet} />
         )}
-        {page === "graphs" && <Graphs user={user} />}
-        {page === "wallets" && <Wallets user={user} />}
-        {/* {page === "owed" && <Owed user={user} />} */}
+        {page === "graphs" && <Graphs />}
+        {page === "wallets" && <Wallets />}
+        {/* {page === "owed" && <Owed />} */}
         {page === "settings" && (
-          <Settings
-            user={user}
-            username={userName}
-            handleLogOut={logOut}
-            onUpdate={triggerRefresh}
-          />
+          <Settings handleLogOut={logOut} onUpdate={triggerRefresh} />
         )}
       </div>
     </div>

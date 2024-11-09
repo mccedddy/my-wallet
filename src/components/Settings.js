@@ -18,9 +18,15 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserName } from "../reducers/userSlice";
 
-const Settings = ({ user, username, handleLogOut, onUpdate }) => {
-  const [newUsername, setNewUsername] = useState(username);
+const Settings = ({ username, handleLogOut, onUpdate }) => {
+  const user = useSelector((state) => state.user.value);
+  const userName = useSelector((state) => state.user.name);
+
+  const dispatch = useDispatch();
+
   const [password, setPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
@@ -29,8 +35,8 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
 
   useEffect(() => {
-    setNewUsername(username);
-  }, [username]);
+    dispatch(setUserName(userName));
+  }, [userName, dispatch]);
 
   const checkUsernameExists = async (username) => {
     const querySnapshot = await getDocs(
@@ -43,7 +49,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
     e.preventDefault();
 
     try {
-      const usernameExists = await checkUsernameExists(newUsername);
+      const usernameExists = await checkUsernameExists(userName);
       if (usernameExists) {
         toastError("Username is already taken. Please choose another one.");
         return;
@@ -53,9 +59,9 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
       const userDocSnap = await getDoc(userDocRef);
 
       if (userDocSnap.exists()) {
-        await setDoc(userDocRef, { username: newUsername }, { merge: true });
+        await setDoc(userDocRef, { username: userName }, { merge: true });
       }
-      toastSuccess(`Changed username to ${newUsername}`);
+      toastSuccess(`Changed username to ${userName}`);
       onUpdate();
     } catch (error) {
       console.log("Error changing username:", error);
@@ -142,8 +148,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
     }
   };
 
-  const showSave =
-    newUsername && newUsername.trim() !== "" && newUsername !== username;
+  const showSave = userName && userName.trim() !== "" && userName !== username;
 
   return (
     <div className="h-full w-full flex flex-col items-center">
@@ -155,8 +160,8 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
             <input
               type="text"
               placeholder="Username"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
+              value={userName}
+              onChange={(e) => dispatch(setUserName(e.target.value))}
               className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
             />
           </div>

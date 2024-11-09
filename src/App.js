@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { auth } from "./firebase/firebaseConfig";
 import { signUp, logIn } from "./firebase/authService";
 import { onAuthStateChanged } from "firebase/auth";
@@ -19,11 +19,12 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       dispatch(setUser(currentUser));
+      console.log(currentUser);
       dispatch(setLoading(false));
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="App">

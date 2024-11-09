@@ -19,6 +19,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useSelector } from "react-redux";
 
 ChartJS.register(
   LineElement,
@@ -29,7 +30,9 @@ ChartJS.register(
   Legend
 );
 
-const Graphs = ({ user }) => {
+const Graphs = () => {
+  const user = useSelector((state) => state.user.value);
+
   const [wallets, setWallets] = useState([]);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);

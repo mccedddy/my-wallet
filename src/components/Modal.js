@@ -13,8 +13,11 @@ import {
 import { toastSuccess, toastError } from "../toastUtils";
 import trashIcon from "../assets/icons/trash.svg";
 import addIcon from "../assets/icons/add.svg";
+import { useSelector } from "react-redux";
 
-const Modal = ({ user, toggleModal, wallets, setWallets, onUpdate, type }) => {
+const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
+  const user = useSelector((state) => state.user.value);
+
   const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
   const [description, setDescription] = useState("");
   const [newWallets, setNewWallets] = useState([{ walletName: "" }]);

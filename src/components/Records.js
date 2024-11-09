@@ -15,8 +15,11 @@ import Loader from "./Loader";
 import { toastSuccess, toastError } from "../toastUtils";
 import DeleteIcon from "../assets/icons/trashRed.svg";
 import EditIcon from "../assets/icons/pencil.svg";
+import { useSelector } from "react-redux";
 
-const Records = ({ user, openCreateWallet }) => {
+const Records = ({ openCreateWallet }) => {
+  const user = useSelector((state) => state.user.value);
+
   const [records, setRecords] = useState([]);
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
