@@ -1,14 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase/firebaseConfig";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-} from "firebase/firestore";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -32,97 +22,46 @@ ChartJS.register(
 
 const Graphs = () => {
   const user = useSelector((state) => state.user.value);
+  const wallets = useSelector((state) => state.wallet.wallets);
+  const records = useSelector((state) => state.wallet.records);
 
-  const [wallets, setWallets] = useState([]);
-  const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredRecords, setFilteredRecords] = useState([]);
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [recordLimit, setRecordLimit] = useState("5");
 
-  // Fetch wallet names
   useEffect(() => {
-    if (user?.email) {
-      const fetchWalletNames = async () => {
-        setLoading(true);
-        const userDocRef = doc(db, "users", user.email);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          setWallets(data.wallets || []);
-        }
-        setLoading(false);
-      };
-      fetchWalletNames();
-    }
-  }, [user]);
-
-  // Fetch records based on wallet names and filters
-  useEffect(() => {
-    if (user?.email && wallets.length > 0) {
-      const fetchRecords = async () => {
-        let recordsQuery;
-        const recordsCollectionRef = collection(
-          db,
-          "users",
-          user.email,
-          "records"
-        );
-
-        recordsQuery = query(
-          recordsCollectionRef,
-          orderBy("timestamp", "desc")
-        );
-        if (recordLimit !== "ALL") {
-          recordsQuery = query(recordsQuery, limit(parseInt(recordLimit)));
-        }
-
-        const snapshot = await getDocs(recordsQuery);
-
-        let fetchedRecords = [];
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const { timestamp, description, id, ...walletBalances } = data;
-
-          const hasRelevantWallets = Object.keys(walletBalances).some(
-            (wallet) => wallets.includes(wallet)
+    const filterRecords = () => {
+      let filtered = records
+        .filter((record) => {
+          // Check if the record has relevant wallets
+          return Object.keys(record.wallets).some((wallet) =>
+            wallets.includes(wallet)
           );
+        })
+        .map((record) => {
+          // Calculate the total balance for relevant wallets
+          const totalBalance = wallets.reduce((acc, wallet) => {
+            const balance = parseFloat(record.wallets[wallet] || 0);
+            return acc + balance;
+          }, 0);
 
-          if (hasRelevantWallets) {
-            // Calculate total
-            const totalBalance = wallets.reduce((acc, wallet) => {
-              const balance = parseFloat(walletBalances[wallet] || 0);
-              return acc + balance;
-            }, 0);
+          return {
+            ...record,
+            total: totalBalance,
+          };
+        })
+        .reverse();
 
-            fetchedRecords.push({
-              id: id,
-              date: new Date(timestamp).toLocaleDateString(),
-              time: new Date(timestamp).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              }),
-              wallets: walletBalances,
-              total: totalBalance,
-              description: description,
-            });
-          }
-        });
+      if (recordLimit !== "ALL") {
+        filtered = filtered.slice(-parseInt(recordLimit));
+      }
 
-        if (fetchedRecords.length > 0) {
-          fetchedRecords.reverse();
-        }
+      setFilteredRecords(filtered);
+      setLoadingRecords(false);
+    };
 
-        setRecords(fetchedRecords);
-        setLoadingRecords(false);
-      };
-
-      fetchRecords();
-    } else {
-      setLoading(false);
-    }
-  }, [user, wallets, recordLimit]);
+    filterRecords();
+  }, [user, wallets, records, recordLimit]);
 
   // Colors
   const colorPalette = [
@@ -153,18 +92,18 @@ const Graphs = () => {
 
   // Graph data
   const chartData = {
-    labels: records.map((record) => record.date),
+    labels: filteredRecords.map((record) => record.date),
     datasets: [
       ...wallets.map((wallet) => ({
         label: wallet,
-        data: records.map((record) => record.wallets[wallet] || 0),
+        data: filteredRecords.map((record) => record.wallets[wallet] || 0),
         borderColor: getRandomColor(),
         fill: false,
         borderWidth: 2,
       })),
       {
         label: "Total",
-        data: records.map((record) => record.total || 0),
+        data: filteredRecords.map((record) => record.total || 0),
         borderColor: "#8b8288",
         fill: false,
         borderDash: [2, 2],
@@ -197,17 +136,9 @@ const Graphs = () => {
     responsive: true,
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center">
-        <div className="w-6 mt-32 spinner"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-full w-full flex flex-col items-center">
-      {records.length > 0 && wallets.length > 0 ? (
+      {filteredRecords.length > 0 && wallets.length > 0 ? (
         <div className="w-full flex flex-col items-center p-4 pt-2 mb-4 rounded-lg bg-background-light">
           <h1 className="m-1 text-lg">WALLET BALANCES OVER TIME</h1>
           <div className="flex flex-wrap gap-2 w-full m-2">
