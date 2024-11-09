@@ -15,13 +15,16 @@ import Loader from "./Loader";
 import { toastSuccess, toastError } from "../toastUtils";
 import DeleteIcon from "../assets/icons/trashRed.svg";
 import EditIcon from "../assets/icons/pencil.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setWallets, setRecords } from "../reducers/walletSlice";
 
 const Records = ({ openCreateWallet }) => {
   const user = useSelector((state) => state.user.value);
+  const wallets = useSelector((state) => state.wallet.wallets);
+  const records = useSelector((state) => state.wallet.records);
 
-  const [records, setRecords] = useState([]);
-  const [wallets, setWallets] = useState([]);
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -41,14 +44,14 @@ const Records = ({ openCreateWallet }) => {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const data = userDocSnap.data();
-          setWallets(data.wallets || []);
+          dispatch(setWallets(data.wallets || []));
         }
         setLoading(false);
       };
 
       fetchWalletNames();
     }
-  }, [user, refresh]);
+  }, [user, refresh, dispatch]);
 
   // Fetch records based on wallet names
   useEffect(() => {
@@ -93,13 +96,13 @@ const Records = ({ openCreateWallet }) => {
           }
         });
 
-        setRecords(fetchedRecords);
+        dispatch(setRecords(fetchedRecords));
         setLoadingRecords(false);
       };
 
       fetchRecords();
     }
-  }, [user, wallets, refresh]);
+  }, [user, wallets, refresh, dispatch]);
 
   const handleDeleteRecord = async (recordId) => {
     try {

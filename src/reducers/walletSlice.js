@@ -1,16 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const walletSlice = createSlice({
-  name: "wallets",
+  name: "wallet",
   initialState: {
-    value: null,
+    wallets: [],
+    records: [],
   },
   reducers: {
     setWallets: (state, action) => {
-      state.value = action.payload;
+      state.wallets = action.payload;
+    },
+    setRecords: (state, action) => {
+      state.records = action.payload;
     },
   },
 });
 
-export const { setWallets } = walletSlice.actions;
+export const { setWallets, setRecords } = walletSlice.actions;
 export default walletSlice.reducer;
