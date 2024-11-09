@@ -28,7 +28,6 @@ const Records = ({ openCreateWallet }) => {
   const [loading, setLoading] = useState(true);
   const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredRecord, setHoveredRecord] = useState(null);
   const [modify, setModify] = useState(null);
@@ -51,7 +50,7 @@ const Records = ({ openCreateWallet }) => {
 
       fetchWalletNames();
     }
-  }, [user, refresh, dispatch]);
+  }, [user, dispatch]);
 
   // Fetch records based on wallet names
   useEffect(() => {
@@ -102,7 +101,7 @@ const Records = ({ openCreateWallet }) => {
 
       fetchRecords();
     }
-  }, [user, wallets, refresh, dispatch]);
+  }, [user, wallets, dispatch]);
 
   const handleDeleteRecord = async (recordId) => {
     try {
@@ -114,7 +113,6 @@ const Records = ({ openCreateWallet }) => {
         recordId.toString()
       );
       await deleteDoc(recordDocRef);
-      triggerRefresh();
       toastSuccess("Deleted record successfully");
     } catch (error) {
       toastError(`Error deleting record: ${error}`);
@@ -129,10 +127,6 @@ const Records = ({ openCreateWallet }) => {
 
   const toggleModify = (type) => {
     type === modify ? setModify(null) : setModify(type);
-  };
-
-  const triggerRefresh = () => {
-    setRefresh(!refresh);
   };
 
   const handleNextPage = () => {
@@ -425,16 +419,7 @@ const Records = ({ openCreateWallet }) => {
       )}
 
       {/* Add record modal */}
-      {showModal && (
-        <Modal
-          user={user}
-          toggleModal={toggleModal}
-          wallets={wallets}
-          setWallets={setWallets}
-          onUpdate={triggerRefresh}
-          type="addRecord"
-        />
-      )}
+      {showModal && <Modal toggleModal={toggleModal} type="addRecord" />}
     </div>
   );
 };

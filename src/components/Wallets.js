@@ -178,14 +178,7 @@ const Wallets = () => {
       )}
 
       {/* Modal */}
-      {showModal && (
-        <Modal
-          user={user}
-          toggleModal={toggleModal}
-          wallets={wallets}
-          type="addWallet"
-        />
-      )}
+      {showModal && <Modal toggleModal={toggleModal} type="addWallet" />}
     </div>
   );
 };

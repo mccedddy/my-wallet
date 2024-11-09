@@ -15,10 +15,11 @@ import trashIcon from "../assets/icons/trash.svg";
 import addIcon from "../assets/icons/add.svg";
 import { useSelector } from "react-redux";
 
-const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
+const Modal = ({ toggleModal, type }) => {
   const user = useSelector((state) => state.user.value);
+  const wallets = useSelector((state) => state.wallet.wallets);
 
-  const [records, setRecords] = useState([{ wallet: "", balance: "" }]);
+  const [newRecords, setNewRecords] = useState([{ wallet: "", balance: "" }]);
   const [description, setDescription] = useState("");
   const [newWallets, setNewWallets] = useState([{ walletName: "" }]);
   const [date, setDate] = useState("");
@@ -48,9 +49,9 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
   }, []);
 
   const handleRecordChange = (index, field, value) => {
-    const updatedRecords = [...records];
+    const updatedRecords = [...newRecords];
     updatedRecords[index][field] = value;
-    setRecords(updatedRecords);
+    setNewRecords(updatedRecords);
   };
 
   const handleWalletChange = (index, value) => {
@@ -60,7 +61,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
   };
 
   const handleAddRecord = () => {
-    setRecords([...records, { wallet: "", balance: "" }]);
+    setNewRecords([...newRecords, { wallet: "", balance: "" }]);
   };
 
   const handleAddWallet = () => {
@@ -68,8 +69,8 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
   };
 
   const handleDeleteRecord = (index) => {
-    const updatedRecords = records.filter((_, i) => i !== index);
-    setRecords(updatedRecords);
+    const updatedRecords = newRecords.filter((_, i) => i !== index);
+    setNewRecords(updatedRecords);
   };
 
   const handleDeleteWallet = (index) => {
@@ -81,13 +82,13 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
     e.preventDefault();
 
     if (type === "addRecord") {
-      const uniqueRecords = records.reduce((acc, curr) => {
+      const uniqueRecords = newRecords.reduce((acc, curr) => {
         acc[curr.wallet] = curr;
         return acc;
       }, {});
       const filteredRecords = Object.values(uniqueRecords);
 
-      setRecords([{ wallet: "", balance: "" }]);
+      setNewRecords([{ wallet: "", balance: "" }]);
       setDescription("");
 
       try {
@@ -129,7 +130,6 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
         });
 
         toastSuccess("Record saved successfully");
-        onUpdate();
         toggleModal();
       } catch (error) {
         console.log(error);
@@ -163,9 +163,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
             { merge: true }
           );
 
-          setWallets(updatedWallets);
           toastSuccess("Wallet created successfully");
-          onUpdate();
           toggleModal();
         }
       } catch (error) {
@@ -177,7 +175,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
   const renderAddRecord = () => {
     return (
       <>
-        {records.map((record, index) => (
+        {newRecords.map((record, index) => (
           <div key={index} className="flex gap-1 items-center">
             <select
               className="h-8 rounded w-32 text-text bg-secondary"
@@ -206,7 +204,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
               required
               className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
             />
-            {records.length > 1 && (
+            {newRecords.length > 1 && (
               <button
                 type="button"
                 onClick={() => handleDeleteRecord(index)}
@@ -252,7 +250,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
   const renderEditRecord = () => {
     return (
       <>
-        {records.map((record, index) => (
+        {newRecords.map((record, index) => (
           <div key={index} className="flex gap-1 items-center">
             <select
               className="h-8 rounded w-32 text-text bg-secondary"
@@ -281,7 +279,7 @@ const Modal = ({ toggleModal, wallets, setWallets, onUpdate, type }) => {
               required
               className="w-full h-8 rounded px-2 text-text outline-none bg-background-lighter"
             />
-            {records.length > 1 && (
+            {newRecords.length > 1 && (
               <button
                 type="button"
                 onClick={() => handleDeleteRecord(index)}
