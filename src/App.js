@@ -8,14 +8,18 @@ import AuthForm from "./components/AuthForm";
 import Home from "./components/Home";
 import Loader from "./components/Loader";
 import "./CustomToast.css";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "./reducers/userSlice";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
   const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      dispatch(setUser(currentUser));
       setLoadingUser(false);
     });
 
@@ -30,7 +34,7 @@ function App() {
       ) : !user ? (
         <AuthForm handleSignUp={signUp} handleLogIn={logIn} />
       ) : (
-        <Home user={user} />
+        <Home />
       )}
     </div>
   );

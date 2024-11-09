@@ -17,8 +17,11 @@ import GraphIcon from "../assets/icons/graph.svg";
 import GraphIconDark from "../assets/icons/graphDark.svg";
 import OwedIcon from "../assets/icons/owed.svg";
 import OwedIconDark from "../assets/icons/owedDark.svg";
+import { useSelector } from "react-redux";
 
-const Home = ({ user }) => {
+const Home = () => {
+  const user = useSelector((state) => state.user.value);
+
   const [refresh, setRefresh] = useState(false);
   const [page, setPage] = useState("records");
   const [username, setUsername] = useState("");
