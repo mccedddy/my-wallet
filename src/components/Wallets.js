@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
 import {
   doc,
-  getDoc,
   updateDoc,
   arrayRemove,
   deleteField,
@@ -21,88 +20,51 @@ import { useSelector } from "react-redux";
 
 const Wallets = () => {
   const user = useSelector((state) => state.user.value);
+  const wallets = useSelector((state) => state.wallet.wallets);
 
-  const [wallets, setWallets] = useState([]);
   const [latestBalances, setLatestBalances] = useState({});
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const [modify, setModify] = useState(null);
 
-  // Fetch wallet names and the latest record
+  // Fetch latest balances
   useEffect(() => {
-    if (user?.email) {
-      const fetchWalletData = async () => {
-        try {
-          const userDocRef = doc(db, "users", user.email);
-          const userDocSnap = await getDoc(userDocRef);
+    const fetchLatestRecord = async () => {
+      try {
+        const recordsCollectionRef = collection(
+          db,
+          "users",
+          user.email,
+          "records"
+        );
+        const latestRecordQuery = query(
+          recordsCollectionRef,
+          orderBy("timestamp", "desc"),
+          limit(1)
+        );
+        const snapshot = await getDocs(latestRecordQuery);
 
-          if (userDocSnap.exists()) {
-            const data = userDocSnap.data();
-            setWallets(data.wallets || []);
-          }
+        if (!snapshot.empty) {
+          const latestRecordData = snapshot.docs[0].data();
+          const { timestamp, description, id, ...walletBalances } =
+            latestRecordData;
 
-          // Fetch the latest record
-          const recordsCollectionRef = collection(
-            db,
-            "users",
-            user.email,
-            "records"
-          );
-          const latestRecordQuery = query(
-            recordsCollectionRef,
-            orderBy("timestamp", "desc"),
-            limit(1)
-          );
-          const snapshot = await getDocs(latestRecordQuery);
-
-          if (!snapshot.empty) {
-            const latestRecordData = snapshot.docs[0].data();
-            const { timestamp, description, id, ...walletBalances } =
-              latestRecordData;
-
-            setLatestBalances(walletBalances);
-          }
-
-          setLoading(false);
-        } catch (error) {
-          console.error("Error fetching wallet data: ", error);
-          setLoading(false);
+          setLatestBalances(walletBalances);
         }
-      };
 
-      fetchWalletData();
-    }
-  }, [user, refresh]);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching wallet data: ", error);
+        setLoading(false);
+      }
+    };
+
+    fetchLatestRecord();
+  }, [user]);
 
   const handleEditWallet = async (walletToEdit) => {
     toastSuccess(`Edit wallet: ${walletToEdit}`);
-
-    // try {
-    //   const userDocRef = doc(db, "users", user.email);
-    //   await updateDoc(userDocRef, {
-    //     wallets: arrayRemove(walletToEdit),
-    //   });
-    //   triggerRefresh();
-
-    //   // Remove the wallet field from the latest document
-    //   try {
-    //     const recordRef = doc(db, "users", user.email, "records", "latest");
-    //     await updateDoc(recordRef, {
-    //       [walletToEdit]: deleteField(),
-    //     });
-    //     toastSuccess(
-    //       `'${walletToEdit}' wallet and records deleted successfully`
-    //     );
-    //   } catch (error) {
-    //     toastSuccess(`'${walletToEdit}' wallet deleted successfully`);
-    //   }
-
-    //   triggerRefresh();
-    // } catch (error) {
-    //   console.error("Error deleting wallet: ", error);
-    //   toastError(`Error deleting wallet: ${error}`);
-    // }
+    // TODO
   };
 
   const handleDeleteWallet = async (walletToDelete) => {
@@ -111,7 +73,6 @@ const Wallets = () => {
       await updateDoc(userDocRef, {
         wallets: arrayRemove(walletToDelete),
       });
-      triggerRefresh();
 
       // Remove the wallet field from the latest document
       try {
@@ -125,8 +86,6 @@ const Wallets = () => {
       } catch (error) {
         toastSuccess(`'${walletToDelete}' wallet deleted successfully`);
       }
-
-      triggerRefresh();
     } catch (error) {
       console.error("Error deleting wallet: ", error);
       toastError(`Error deleting wallet: ${error}`);
@@ -139,10 +98,6 @@ const Wallets = () => {
 
   const toggleModify = (type) => {
     type === modify ? setModify(null) : setModify(type);
-  };
-
-  const triggerRefresh = () => {
-    setRefresh(!refresh);
   };
 
   if (loading) {
@@ -228,8 +183,6 @@ const Wallets = () => {
           user={user}
           toggleModal={toggleModal}
           wallets={wallets}
-          setWallets={setWallets}
-          onUpdate={triggerRefresh}
           type="addWallet"
         />
       )}

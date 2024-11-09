@@ -7,6 +7,7 @@ import {
   EmailAuthProvider,
   updatePassword,
 } from "firebase/auth";
+import { logOut } from "../firebase/authService";
 import {
   collection,
   query,
@@ -21,7 +22,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { setUserName } from "../reducers/userSlice";
 
-const Settings = ({ handleLogOut, onUpdate }) => {
+const Settings = () => {
   const user = useSelector((state) => state.user.value);
   const userName = useSelector((state) => state.user.name);
 
@@ -64,7 +65,6 @@ const Settings = ({ handleLogOut, onUpdate }) => {
       }
       toastSuccess(`Changed username to ${newUserName}`);
       dispatch(setUserName(newUserName));
-      onUpdate();
     } catch (error) {
       console.log("Error changing username:", error);
     }
@@ -246,7 +246,7 @@ const Settings = ({ handleLogOut, onUpdate }) => {
             </button>
           )}
           <button
-            onClick={handleLogOut}
+            onClick={logOut}
             className="h-8 w-24 bg-secondary px-4 rounded"
           >
             LOG OUT

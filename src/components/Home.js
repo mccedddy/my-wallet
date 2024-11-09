@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { logOut } from "../firebase/authService";
-import { db } from "../firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import Records from "./Records";
 import Graphs from "./Graphs";
@@ -17,39 +14,13 @@ import GraphIcon from "../assets/icons/graph.svg";
 import GraphIconDark from "../assets/icons/graphDark.svg";
 import OwedIcon from "../assets/icons/owed.svg";
 import OwedIconDark from "../assets/icons/owedDark.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserName, setUserEmail } from "../reducers/userSlice";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const user = useSelector((state) => state.user.value);
   const userName = useSelector((state) => state.user.name);
 
-  const dispatch = useDispatch();
-
-  const [refresh, setRefresh] = useState(false);
   const [page, setPage] = useState("records");
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (user?.email) {
-        dispatch(setUserEmail(user.email));
-
-        const userDocRef = doc(db, "users", user.email);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          dispatch(setUserName(data.username || "Guest"));
-        }
-      }
-    };
-
-    fetchUserData();
-  }, [user, refresh, dispatch]);
-
-  const triggerRefresh = () => {
-    setRefresh(!refresh);
-  };
 
   const openCreateWallet = () => {
     setPage("wallets");
@@ -138,9 +109,7 @@ const Home = () => {
         {page === "graphs" && <Graphs />}
         {page === "wallets" && <Wallets />}
         {/* {page === "owed" && <Owed />} */}
-        {page === "settings" && (
-          <Settings handleLogOut={logOut} onUpdate={triggerRefresh} />
-        )}
+        {page === "settings" && <Settings />}
       </div>
     </div>
   );
