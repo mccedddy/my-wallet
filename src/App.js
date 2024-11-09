@@ -9,18 +9,17 @@ import Home from "./components/Home";
 import Loader from "./components/Loader";
 import "./CustomToast.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "./reducers/userSlice";
+import { setUser, setLoading } from "./reducers/userSlice";
 
 function App() {
   const user = useSelector((state) => state.user.value);
+  const loadingUser = useSelector((state) => state.user.loading);
   const dispatch = useDispatch();
-
-  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       dispatch(setUser(currentUser));
-      setLoadingUser(false);
+      dispatch(setLoading(false));
     });
 
     return () => unsubscribe();

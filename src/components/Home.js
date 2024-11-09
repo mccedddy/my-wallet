@@ -17,29 +17,34 @@ import GraphIcon from "../assets/icons/graph.svg";
 import GraphIconDark from "../assets/icons/graphDark.svg";
 import OwedIcon from "../assets/icons/owed.svg";
 import OwedIconDark from "../assets/icons/owedDark.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserName, setUserEmail } from "../reducers/userSlice";
 
 const Home = () => {
   const user = useSelector((state) => state.user.value);
+  const userName = useSelector((state) => state.user.name);
+
+  const dispatch = useDispatch();
 
   const [refresh, setRefresh] = useState(false);
   const [page, setPage] = useState("records");
-  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserData = async () => {
       if (user?.email) {
+        dispatch(setUserEmail(user.email));
+
         const userDocRef = doc(db, "users", user.email);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
           const data = userDocSnap.data();
-          setUsername(data.username || "Guest");
+          dispatch(setUserName(data.username || "Guest"));
         }
       }
     };
 
-    fetchUsername();
+    fetchUserData();
   }, [user, refresh]);
 
   const triggerRefresh = () => {
@@ -56,7 +61,7 @@ const Home = () => {
 
   return (
     <div className="h-full w-full flex flex-col flex-grow items-center">
-      <Navbar username={username} />
+      <Navbar username={userName} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
         <div className="flex mt-4 mb-2 text-center border-b-2 border-background-light gap-5">
           <button
@@ -136,7 +141,7 @@ const Home = () => {
         {page === "settings" && (
           <Settings
             user={user}
-            username={username}
+            username={userName}
             handleLogOut={logOut}
             onUpdate={triggerRefresh}
           />
