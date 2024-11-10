@@ -13,11 +13,14 @@ import {
 import { toastSuccess, toastError } from "../toastUtils";
 import trashIcon from "../assets/icons/trash.svg";
 import addIcon from "../assets/icons/add.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleReRender } from "../reducers/walletSlice";
 
 const Modal = ({ toggleModal, type }) => {
   const user = useSelector((state) => state.user.value);
   const wallets = useSelector((state) => state.wallet.wallets);
+
+  const dispatch = useDispatch();
 
   const [newRecords, setNewRecords] = useState([{ wallet: "", balance: "" }]);
   const [description, setDescription] = useState("");
@@ -131,6 +134,7 @@ const Modal = ({ toggleModal, type }) => {
 
         toastSuccess("Record saved successfully");
         toggleModal();
+        dispatch(toggleReRender());
       } catch (error) {
         console.log(error);
         toastError(`Error saving record: ${error}`);
@@ -165,6 +169,7 @@ const Modal = ({ toggleModal, type }) => {
 
           toastSuccess("Wallet created successfully");
           toggleModal();
+          dispatch(toggleReRender());
         }
       } catch (error) {
         toastError(`Error saving wallet: ${error}`);

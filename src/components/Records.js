@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { db } from "../firebase/firebaseConfig";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  orderBy,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import Modal from "./Modal";
 import DateIcon from "./DateIcon";
 import Loader from "./Loader";
@@ -16,92 +8,23 @@ import { toastSuccess, toastError } from "../toastUtils";
 import DeleteIcon from "../assets/icons/trashRed.svg";
 import EditIcon from "../assets/icons/pencil.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { setWallets, setRecords } from "../reducers/walletSlice";
+import { toggleReRender } from "../reducers/walletSlice";
 
 const Records = ({ openCreateWallet }) => {
   const user = useSelector((state) => state.user.value);
   const wallets = useSelector((state) => state.wallet.wallets);
   const records = useSelector((state) => state.wallet.records);
+  const loadingWallets = useSelector((state) => state.wallet.loadingWallets);
+  const loadingRecords = useSelector((state) => state.wallet.loadingRecords);
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(true);
-  const [loadingRecords, setLoadingRecords] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredRecord, setHoveredRecord] = useState(null);
   const [modify, setModify] = useState(null);
 
   const recordsPerPage = 10;
-
-  // Fetch wallet names
-  useEffect(() => {
-    if (user?.email) {
-      const fetchWalletNames = async () => {
-        setLoading(true);
-        const userDocRef = doc(db, "users", user.email);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          dispatch(setWallets(data.wallets || []));
-        }
-        setLoading(false);
-      };
-
-      fetchWalletNames();
-    }
-  }, [user, dispatch]);
-
-  // Fetch records based on wallet names
-  useEffect(() => {
-    if (user?.email && wallets.length > 0) {
-      const fetchRecords = async () => {
-        setLoadingRecords(true);
-        const recordsCollectionRef = collection(
-          db,
-          "users",
-          user.email,
-          "records"
-        );
-
-        const recordsQuery = query(
-          recordsCollectionRef,
-          orderBy("timestamp", "desc")
-        );
-        const snapshot = await getDocs(recordsQuery);
-
-        const fetchedRecords = [];
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const { timestamp, description, id, ...walletBalances } = data;
-
-          const hasRelevantWallets = Object.keys(walletBalances).some(
-            (wallet) => wallets.includes(wallet)
-          );
-
-          if (hasRelevantWallets) {
-            fetchedRecords.push({
-              id: id,
-              date: new Date(timestamp).toLocaleDateString(),
-              time: new Date(timestamp).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              }),
-              wallets: walletBalances,
-              description: description,
-            });
-          }
-        });
-
-        dispatch(setRecords(fetchedRecords));
-        setLoadingRecords(false);
-      };
-
-      fetchRecords();
-    }
-  }, [user, wallets, dispatch]);
 
   const handleDeleteRecord = async (recordId) => {
     try {
@@ -114,6 +37,7 @@ const Records = ({ openCreateWallet }) => {
       );
       await deleteDoc(recordDocRef);
       toastSuccess("Deleted record successfully");
+      dispatch(toggleReRender());
     } catch (error) {
       toastError(`Error deleting record: ${error}`);
     }
@@ -141,13 +65,11 @@ const Records = ({ openCreateWallet }) => {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = records.slice(indexOfFirstRecord, indexOfLastRecord);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <div className="h-full w-full flex flex-col items-center">
-      {!wallets.length ? (
+      {loadingWallets ? (
+        <Loader />
+      ) : !wallets.length ? (
         <div className="w-full flex">
           <p className="pr-1">You have no wallet.</p>
           <p onClick={openCreateWallet} className="text-primary cursor-pointer">
@@ -156,9 +78,7 @@ const Records = ({ openCreateWallet }) => {
           <p>.</p>
         </div>
       ) : loadingRecords ? (
-        <div className="flex flex-col justify-center items-center">
-          <div className="w-6 mt-32 spinner"></div>
-        </div>
+        <Loader />
       ) : !records.length ? (
         <div className="w-full flex">
           <p className="pr-1">No records found.</p>

@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase/firebaseConfig";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import Navbar from "./Navbar";
 import Records from "./Records";
 import Graphs from "./Graphs";
@@ -14,13 +23,93 @@ import GraphIcon from "../assets/icons/graph.svg";
 import GraphIconDark from "../assets/icons/graphDark.svg";
 import OwedIcon from "../assets/icons/owed.svg";
 import OwedIconDark from "../assets/icons/owedDark.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setWallets,
+  setRecords,
+  setLoadingWallets,
+  setLoadingRecords,
+} from "../reducers/walletSlice";
 
 const Home = () => {
   const user = useSelector((state) => state.user.value);
-  const userName = useSelector((state) => state.user.name);
+  const wallets = useSelector((state) => state.wallet.wallets);
+  const reRender = useSelector((state) => state.wallet.reRender);
+
+  const dispatch = useDispatch();
 
   const [page, setPage] = useState("records");
+
+  // Fetch wallets
+  useEffect(() => {
+    const fetchWalletNames = async () => {
+      console.log("fetching wallets");
+      dispatch(setLoadingWallets(true));
+
+      const userDocRef = doc(db, "users", user.email);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const data = userDocSnap.data();
+        dispatch(setWallets(data.wallets || []));
+      }
+
+      dispatch(setLoadingWallets(false));
+    };
+
+    fetchWalletNames();
+  }, [user, reRender, dispatch]);
+
+  // Fetch records
+  useEffect(() => {
+    if (wallets.length > 0) {
+      console.log("fetching records");
+      const fetchRecords = async () => {
+        dispatch(setLoadingRecords(true));
+
+        const recordsCollectionRef = collection(
+          db,
+          "users",
+          user.email,
+          "records"
+        );
+
+        const recordsQuery = query(
+          recordsCollectionRef,
+          orderBy("timestamp", "desc")
+        );
+        const snapshot = await getDocs(recordsQuery);
+
+        const fetchedRecords = [];
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const { timestamp, description, id, ...walletBalances } = data;
+
+          const hasRelevantWallets = Object.keys(walletBalances).some(
+            (wallet) => wallets.includes(wallet)
+          );
+
+          if (hasRelevantWallets) {
+            fetchedRecords.push({
+              id: id,
+              date: new Date(timestamp).toLocaleDateString(),
+              time: new Date(timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              wallets: walletBalances,
+              description: description,
+            });
+          }
+        });
+
+        dispatch(setRecords(fetchedRecords));
+        dispatch(setLoadingRecords(false));
+      };
+      fetchRecords();
+    }
+  }, [user, wallets, dispatch]);
 
   const openCreateWallet = () => {
     setPage("wallets");
@@ -32,7 +121,7 @@ const Home = () => {
 
   return (
     <div className="h-full w-full flex flex-col flex-grow items-center">
-      <Navbar username={userName} />
+      <Navbar username={user.name} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
         <div className="flex mt-4 mb-2 text-center border-b-2 border-background-light gap-5">
           <button

@@ -16,11 +16,14 @@ import { toastSuccess, toastError } from "../toastUtils";
 import DeleteIcon from "../assets/icons/trashRed.svg";
 import WalletIcon from "../assets/icons/wallet.svg";
 import EditIcon from "../assets/icons/pencil.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleReRender } from "../reducers/walletSlice";
 
 const Wallets = () => {
   const user = useSelector((state) => state.user.value);
   const wallets = useSelector((state) => state.wallet.wallets);
+
+  const dispatch = useDispatch();
 
   const [latestBalances, setLatestBalances] = useState({});
   const [loading, setLoading] = useState(true);
@@ -86,6 +89,8 @@ const Wallets = () => {
       } catch (error) {
         toastSuccess(`'${walletToDelete}' wallet deleted successfully`);
       }
+
+      dispatch(toggleReRender());
     } catch (error) {
       console.error("Error deleting wallet: ", error);
       toastError(`Error deleting wallet: ${error}`);
