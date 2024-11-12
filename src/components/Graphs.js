@@ -26,8 +26,7 @@ const Graphs = () => {
   const records = useSelector((state) => state.wallet.records);
 
   const [filteredRecords, setFilteredRecords] = useState([]);
-  const [loadingRecords, setLoadingRecords] = useState(true);
-  const [recordLimit, setRecordLimit] = useState("5");
+  const [recordLimit, setRecordLimit] = useState("10");
 
   useEffect(() => {
     const filterRecords = () => {
@@ -57,7 +56,6 @@ const Graphs = () => {
       }
 
       setFilteredRecords(filtered);
-      setLoadingRecords(false);
     };
 
     filterRecords();
@@ -92,7 +90,13 @@ const Graphs = () => {
 
   // Graph data
   const chartData = {
-    labels: filteredRecords.map((record) => record.date),
+    labels: filteredRecords.map((record) => {
+      const date = new Date(record.date);
+      return date.toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "numeric",
+      });
+    }),
     datasets: [
       ...wallets.map((wallet) => ({
         label: wallet,
@@ -100,6 +104,7 @@ const Graphs = () => {
         borderColor: getRandomColor(),
         fill: false,
         borderWidth: 2,
+        pointRadius: 1,
       })),
       {
         label: "Total",
@@ -108,6 +113,7 @@ const Graphs = () => {
         fill: false,
         borderDash: [2, 2],
         borderWidth: 2,
+        pointRadius: 1,
       },
     ],
   };
@@ -117,12 +123,14 @@ const Graphs = () => {
       x: {
         ticks: {
           color: "#e3e2ec",
+          maxTicksLimit: 5,
         },
       },
       y: {
         beginAtZero: true,
         ticks: {
           color: "#e3e2ec",
+          maxTicksLimit: 5,
         },
       },
     },
@@ -134,12 +142,13 @@ const Graphs = () => {
       },
     },
     responsive: true,
+    maintainAspectRatio: false,
   };
 
   return (
     <div className="h-full w-full flex flex-col items-center">
       {filteredRecords.length > 0 && wallets.length > 0 ? (
-        <div className="w-full flex flex-col items-center p-4 pt-2 mb-4 rounded-lg bg-background-light">
+        <div className="w-full h-full flex flex-col items-center p-4 pt-2 rounded-lg bg-background-light">
           <h1 className="m-1 text-lg">WALLET BALANCES OVER TIME</h1>
           <div className="flex flex-wrap gap-2 w-full m-2">
             <h1>Show:</h1>
@@ -156,11 +165,11 @@ const Graphs = () => {
               <option value="100">100</option>
             </select>
           </div>
-          <Line data={chartData} options={chartOptions} />
-        </div>
-      ) : loadingRecords ? (
-        <div className="flex flex-col justify-center items-center">
-          <div className="w-6 mt-32 spinner"></div>
+          <Line
+            data={chartData}
+            options={chartOptions}
+            className="max-h-[300px]"
+          />
         </div>
       ) : (
         <p className="pr-1 text-left w-full">No data available to display.</p>

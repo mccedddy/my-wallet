@@ -43,7 +43,6 @@ const Home = () => {
   // Fetch wallets
   useEffect(() => {
     const fetchWalletNames = async () => {
-      console.log("fetching wallets");
       dispatch(setLoadingWallets(true));
 
       const userDocRef = doc(db, "users", user.email);
@@ -62,7 +61,6 @@ const Home = () => {
   // Fetch records
   useEffect(() => {
     if (wallets.length > 0) {
-      console.log("fetching records");
       const fetchRecords = async () => {
         dispatch(setLoadingRecords(true));
 
