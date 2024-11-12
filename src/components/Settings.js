@@ -7,6 +7,7 @@ import {
   EmailAuthProvider,
   updatePassword,
 } from "firebase/auth";
+import { logOut } from "../firebase/authService";
 import {
   collection,
   query,
@@ -18,9 +19,16 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserName } from "../reducers/userSlice";
 
-const Settings = ({ user, username, handleLogOut, onUpdate }) => {
-  const [newUsername, setNewUsername] = useState(username);
+const Settings = () => {
+  const user = useSelector((state) => state.user.value);
+  const userName = useSelector((state) => state.user.name);
+
+  const dispatch = useDispatch();
+
+  const [newUserName, setNewUserName] = useState(userName);
   const [password, setPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
@@ -29,12 +37,12 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
 
   useEffect(() => {
-    setNewUsername(username);
-  }, [username]);
+    dispatch(setUserName(userName));
+  }, [userName, dispatch]);
 
   const checkUsernameExists = async (username) => {
     const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("username", "==", username))
+      query(collection(db, "users"), where("username", "==", newUserName))
     );
     return !querySnapshot.empty;
   };
@@ -43,7 +51,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
     e.preventDefault();
 
     try {
-      const usernameExists = await checkUsernameExists(newUsername);
+      const usernameExists = await checkUsernameExists(newUserName);
       if (usernameExists) {
         toastError("Username is already taken. Please choose another one.");
         return;
@@ -53,10 +61,10 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
       const userDocSnap = await getDoc(userDocRef);
 
       if (userDocSnap.exists()) {
-        await setDoc(userDocRef, { username: newUsername }, { merge: true });
+        await setDoc(userDocRef, { username: newUserName }, { merge: true });
       }
-      toastSuccess(`Changed username to ${newUsername}`);
-      onUpdate();
+      toastSuccess(`Changed username to ${newUserName}`);
+      dispatch(setUserName(newUserName));
     } catch (error) {
       console.log("Error changing username:", error);
     }
@@ -143,7 +151,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
   };
 
   const showSave =
-    newUsername && newUsername.trim() !== "" && newUsername !== username;
+    newUserName && newUserName.trim() !== "" && newUserName !== userName;
 
   return (
     <div className="h-full w-full flex flex-col items-center">
@@ -155,8 +163,8 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
             <input
               type="text"
               placeholder="Username"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
+              value={newUserName}
+              onChange={(e) => setNewUserName(e.target.value)}
               className="w-full sm:w-80 h-8 rounded px-2 text-text bg-background-lighter"
             />
           </div>
@@ -238,7 +246,7 @@ const Settings = ({ user, username, handleLogOut, onUpdate }) => {
             </button>
           )}
           <button
-            onClick={handleLogOut}
+            onClick={logOut}
             className="h-8 w-24 bg-secondary px-4 rounded"
           >
             LOG OUT

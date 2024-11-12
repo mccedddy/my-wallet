@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { logOut } from "../firebase/authService";
 import { db } from "../firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import Navbar from "./Navbar";
 import Records from "./Records";
 import Graphs from "./Graphs";
@@ -17,31 +23,91 @@ import GraphIcon from "../assets/icons/graph.svg";
 import GraphIconDark from "../assets/icons/graphDark.svg";
 import OwedIcon from "../assets/icons/owed.svg";
 import OwedIconDark from "../assets/icons/owedDark.svg";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setWallets,
+  setRecords,
+  setLoadingWallets,
+  setLoadingRecords,
+} from "../reducers/walletSlice";
 
-const Home = ({ user }) => {
-  const [refresh, setRefresh] = useState(false);
+const Home = () => {
+  const user = useSelector((state) => state.user.value);
+  const wallets = useSelector((state) => state.wallet.wallets);
+  const reRender = useSelector((state) => state.wallet.reRender);
+
+  const dispatch = useDispatch();
+
   const [page, setPage] = useState("records");
-  const [username, setUsername] = useState("");
 
+  // Fetch wallets
   useEffect(() => {
-    const fetchUsername = async () => {
-      if (user?.email) {
-        const userDocRef = doc(db, "users", user.email);
-        const userDocSnap = await getDoc(userDocRef);
+    const fetchWalletNames = async () => {
+      dispatch(setLoadingWallets(true));
 
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          setUsername(data.username || "Guest");
-        }
+      const userDocRef = doc(db, "users", user.email);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const data = userDocSnap.data();
+        dispatch(setWallets(data.wallets || []));
       }
+
+      dispatch(setLoadingWallets(false));
     };
 
-    fetchUsername();
-  }, [user, refresh]);
+    fetchWalletNames();
+  }, [user, reRender, dispatch]);
 
-  const triggerRefresh = () => {
-    setRefresh(!refresh);
-  };
+  // Fetch records
+  useEffect(() => {
+    if (wallets.length > 0) {
+      const fetchRecords = async () => {
+        dispatch(setLoadingRecords(true));
+
+        const recordsCollectionRef = collection(
+          db,
+          "users",
+          user.email,
+          "records"
+        );
+
+        const recordsQuery = query(
+          recordsCollectionRef,
+          orderBy("timestamp", "desc")
+        );
+        const snapshot = await getDocs(recordsQuery);
+
+        const fetchedRecords = [];
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const { timestamp, description, id, ...walletBalances } = data;
+
+          const hasRelevantWallets = Object.keys(walletBalances).some(
+            (wallet) => wallets.includes(wallet)
+          );
+
+          if (hasRelevantWallets) {
+            fetchedRecords.push({
+              id: id,
+              date: new Date(timestamp).toLocaleDateString(),
+              time: new Date(timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              wallets: walletBalances,
+              description: description,
+            });
+          }
+        });
+
+        dispatch(setRecords(fetchedRecords));
+        dispatch(setLoadingRecords(false));
+      };
+      fetchRecords();
+    }
+  }, [user, wallets, dispatch]);
 
   const openCreateWallet = () => {
     setPage("wallets");
@@ -53,7 +119,7 @@ const Home = ({ user }) => {
 
   return (
     <div className="h-full w-full flex flex-col flex-grow items-center">
-      <Navbar username={username} />
+      <Navbar username={user.name} />
       <div className="w-11/12 md:w-9/12 lg:w-8/12 flex flex-col">
         <div className="flex mt-4 mb-2 text-center border-b-2 border-background-light gap-5">
           <button
@@ -127,17 +193,10 @@ const Home = ({ user }) => {
         {page === "records" && (
           <Records user={user} openCreateWallet={openCreateWallet} />
         )}
-        {page === "graphs" && <Graphs user={user} />}
-        {page === "wallets" && <Wallets user={user} />}
-        {/* {page === "owed" && <Owed user={user} />} */}
-        {page === "settings" && (
-          <Settings
-            user={user}
-            username={username}
-            handleLogOut={logOut}
-            onUpdate={triggerRefresh}
-          />
-        )}
+        {page === "graphs" && <Graphs />}
+        {page === "wallets" && <Wallets />}
+        {/* {page === "owed" && <Owed />} */}
+        {page === "settings" && <Settings />}
       </div>
     </div>
   );
