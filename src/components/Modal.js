@@ -85,14 +85,15 @@ const Modal = ({ toggleModal, type }) => {
     e.preventDefault();
 
     if (type === "addRecord") {
-      const uniqueRecords = newRecords.reduce((acc, curr) => {
-        acc[curr.wallet] = curr;
-        return acc;
-      }, {});
-      const filteredRecords = Object.values(uniqueRecords);
+      const hasDuplicates = (arr) => {
+        const uniqueRecords = new Set(arr.map((record) => record.wallet));
+        return uniqueRecords.size !== arr.length;
+      };
 
-      setNewRecords([{ wallet: "", balance: "" }]);
-      setDescription("");
+      if (hasDuplicates(newRecords)) {
+        toastError("Please remove duplicate entries!");
+        return;
+      }
 
       try {
         const recordsCollectionRef = collection(
@@ -119,7 +120,7 @@ const Modal = ({ toggleModal, type }) => {
           }
         }
 
-        filteredRecords.forEach((record) => {
+        newRecords.forEach((record) => {
           mergedRecords[record.wallet] = record.balance;
         });
 
@@ -132,6 +133,9 @@ const Modal = ({ toggleModal, type }) => {
           timestamp,
         });
 
+        setNewRecords([{ wallet: "", balance: "" }]);
+        setDescription("");
+
         toastSuccess("Record saved successfully");
         toggleModal();
         dispatch(toggleReRender());
@@ -140,15 +144,14 @@ const Modal = ({ toggleModal, type }) => {
         toastError(`Error saving record: ${error}`);
       }
     } else if (type === "addWallet") {
-      // Save wallets
-      const uniqueWallets = newWallets.reduce((acc, curr) => {
-        if (curr.walletName) acc[curr.walletName] = curr;
-        return acc;
-      }, {});
-      const filteredWallets = Object.keys(uniqueWallets);
+      // Extract wallet names to check for duplicates
+      const walletNames = newWallets.map((wallet) => wallet.walletName);
+      const hasDuplicates = (arr) => new Set(arr).size !== arr.length;
 
-      // Reset wallets after saving
-      setNewWallets([{ walletName: "" }]);
+      if (hasDuplicates(walletNames)) {
+        toastError("Please remove duplicate entries!");
+        return;
+      }
 
       try {
         const userDocRef = doc(db, "users", user.email);
@@ -156,16 +159,16 @@ const Modal = ({ toggleModal, type }) => {
 
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          const updatedWallets = [
-            ...(userData.wallets || []),
-            ...filteredWallets,
-          ];
+          const updatedWallets = [...(userData.wallets || []), ...walletNames];
 
           await setDoc(
             userDocRef,
             { wallets: updatedWallets },
             { merge: true }
           );
+
+          // Reset wallets after saving
+          setNewWallets([{ walletName: "" }]);
 
           toastSuccess("Wallet created successfully");
           toggleModal();
