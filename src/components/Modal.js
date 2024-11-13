@@ -354,7 +354,7 @@ const Modal = ({ toggleModal, type }) => {
         <button
           type="button"
           onClick={handleAddWallet}
-          className="h-8 w-full p-1 my-2 text-xs flex justify-center bg-background-lighter text-text-dark rounded"
+          className="h-8 w-full p-1 mt-2 text-xs flex justify-center bg-background-lighter text-text-dark rounded"
         >
           <img src={addIcon} alt="add" className="h-6 w-6" />
         </button>
@@ -390,11 +390,11 @@ const Modal = ({ toggleModal, type }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-30 shadow-lg"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm shadow-lg"
       onClick={toggleModal}
     >
       <div
-        className="h-3/6 md:h-3/6 lg:h-4/6 w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-background-light"
+        className="max-h-[500px] w-10/12 md:w-7/12 lg:w-4/12 flex flex-col items-center rounded bg-background-light"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-10 w-full p-3 bg-secondary flex rounded-t justify-between items-center">
@@ -411,7 +411,7 @@ const Modal = ({ toggleModal, type }) => {
             ×
           </h1>
         </div>
-        <div className="h-full w-full p-3 bg-background-light overflow-y-auto custom-scrollbar">
+        <div className="h-full w-full p-3 pb-0 bg-background-light overflow-y-auto custom-scrollbar">
           <form
             id="modalForm"
             onSubmit={handleSave}
