@@ -89,19 +89,21 @@ const Records = ({ openCreateWallet }) => {
         </div>
       ) : (
         <div className="w-full">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <button
               onClick={toggleModal}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               ADD RECORD
             </button>
+            <p className="text-text-dark">|</p>
             <button
               onClick={() => toggleModify("edit")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               EDIT RECORD
             </button>
+            <p className="text-text-dark">|</p>
             <button
               onClick={() => toggleModify("delete")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
@@ -206,7 +208,7 @@ const Records = ({ openCreateWallet }) => {
             </div>
 
             {/* Total table */}
-            <table className="w-8 text-center">
+            <table className="lg:w-32 w-24 text-center">
               <thead>
                 <tr>
                   <th className="h-10 bg-background-light rounded px-3">

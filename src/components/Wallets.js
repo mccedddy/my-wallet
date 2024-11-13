@@ -125,19 +125,21 @@ const Wallets = () => {
         </div>
       ) : (
         <div className="w-full">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <button
               onClick={toggleModal}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               ADD WALLET
             </button>
+            <p className="text-text-dark">|</p>
             <button
               onClick={() => toggleModify("edit")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
             >
               EDIT WALLET
             </button>
+            <p className="text-text-dark">|</p>
             <button
               onClick={() => toggleModify("delete")}
               className="h-6 text-xs sm:text-sm text-text-dark hover:text-text bg-background"
