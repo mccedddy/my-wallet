@@ -4,8 +4,8 @@ function Overview() {
   return (
     <div className='overview'>
       <div className='overview-total'>
-          <p className='total-text'>Total</p>
-          <p className='total-amount'>P13,000</p>
+          <h2 className='total-text'>Total</h2>
+          <h1 className='total-amount'>P13,000</h1>
       </div>
 			<div className='overview-wallets'>
 				<div className='wallet'>
