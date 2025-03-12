@@ -1,0 +1,60 @@
+@import 'colors';
+@import 'global';
+
+.home {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overview {
+  width: 100%;
+  padding: 10px 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  .overview-total {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .total-text {
+      font-size: 30px;
+    }
+
+    .total-amount {
+      font-size: 36px;
+      font-weight: 600;
+    }
+  }
+
+  .overview-wallets {
+    width: 100%;
+    padding: 20px 0px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .wallet {
+      width: 100%;
+      padding: 3px 0px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
