@@ -1,8 +1,11 @@
-@import 'colors';
-@import 'global';
+@import './utils/colors';
+@import './utils/global';
 @import './components/header';
 @import './components/navbar';
 @import './components/overview';
+@import './components/pageContainer';
+@import './components/records';
+@import './components/recordItem';
 
 .home {
   width: 100vw;

@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import Overview from '../components/Overview';
 import Navbar from '../components/Navbar';
+import PageContainer from '../components/PageContainer';
 
 function Home() {
   return (
@@ -9,6 +10,7 @@ function Home() {
       <Header />
       <Overview />
       <Navbar />
+      <PageContainer />
     </div>
   );
 }
