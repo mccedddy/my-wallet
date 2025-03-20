@@ -7,18 +7,52 @@
   flex-direction: column;
   gap: 7px;
   border-radius: 8px;
+  transition: all 0.3s ease;
 
-  .record-item-row {
+  &.open {
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+.record-details {
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background-color: $background-secondary;
+  border-radius: 8px;
+  margin-top: -15px;
+
+  &.open {
+    border-radius: 0 0 8px 8px;
+  }
+
+  .record-details-wallet {
+    padding-bottom: 7px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 7px;
+    border-bottom: 1px solid $gray-lighter;
+  }
 
-    .record-item-bold {
-      font-weight: 600;
-    }
+  .record-details-button {
+    display: flex;
+    justify-content: end;
+  }
+}
 
-    .record-item-small {
-      font-size: 12px;
-    }
+
+.record-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .record-item-bold {
+    font-weight: 600;
+  }
+
+  .record-item-small {
+    font-size: 12px;
   }
 }

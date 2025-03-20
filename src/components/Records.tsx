@@ -5,6 +5,8 @@ function Records() {
   return (
     <div className='records'>
       <RecordItem />
+      <RecordItem />
+      <RecordItem />
     </div>
   );
 }
