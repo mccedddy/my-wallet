@@ -1,4 +1,5 @@
 import React from 'react';
+import EditIcon from '../assets/icons/pencil.svg';
 
 function RecordItem() {
   const [open, setOpen] = React.useState(false);
@@ -39,8 +40,10 @@ function RecordItem() {
             </div>
           </div>
 
-          <div className='record-details-button'>
-            <p>Edit</p>
+          <div className='record-details-button-container'>
+            <div className='record-details-button'>
+              <img src={EditIcon} alt='Edit' />
+            </div>
           </div>
         </div>
       )}
