@@ -10,14 +10,14 @@ function Records() {
   return (
     <div className='records'>
       <div className='filter'>
-        <label className='filter-label'>
+        <label>
           Date:
         </label>
-        <DatePicker selected={startDate} className='date-picker' onChange={(date) => setStartDate(date)} />
-        <label className='filter-label'>
+        <DatePicker selected={startDate} className='date-picker' onChange={(date: Date | null) => setStartDate(date)} />
+        <label>
           -
         </label>
-        <DatePicker selected={endDate} className='date-picker' onChange={(date) => setEndDate(date)} />
+        <DatePicker selected={endDate} className='date-picker' onChange={(date: Date | null) => setEndDate(date)} />
       </div>
 
       <RecordItem />

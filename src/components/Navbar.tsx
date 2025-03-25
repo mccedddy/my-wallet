@@ -20,10 +20,7 @@ function Navbar() {
 				</button>
 				<p className='navbar-btn-text'>Records</p>
 			</div>
-			<div className="navbar-item hidden">
-				<span className='navbar-btn'></span>
-				<p className='navbar-btn-text'></p>
-			</div>
+			<div className="navbar-item hidden"></div>
 			<div className="navbar-item add">
 				<button className='navbar-btn'>
 					<img src={PlusIcon} className='navbar-btn-img' alt='Plus Icon' />

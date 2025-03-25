@@ -8,12 +8,12 @@ function RecordItem() {
     <>
       <div className={`record-item ${open ? 'open' : ''}`} onClick={() => setOpen(!open)}>
         <div className='record-item-row'>
-        <p className='record-item-bold'>13/03/2025</p>
-          <p className='record-item-bold'>P13,000</p>
+        <h6 className='bold'>13/03/2025</h6>
+          <h6 className='bold'>P13,000</h6>
         </div>
         <div className='record-item-row'>
-          <p className='record-item-small'>Record Description</p>
-          <p className='record-item-small'>- P1,000</p>
+          <h6>Record Description</h6>
+          <p>- P1,000</p>
         </div>
       </div>
 
@@ -21,22 +21,22 @@ function RecordItem() {
         <div className={`record-details ${open ? 'open' : ''}`}>
           <div className='record-details-wallet'>
             <div className='record-item-row'>
-              <p className='record-item-small'>Wallet 1</p>
-              <p className='record-item-small'>P13,000</p>
+              <h6>Wallet 1</h6>
+              <h6>P13,000</h6>
             </div>
             <div className='record-item-row'>
-              <p className='record-item-small'></p>
-              <p className='record-item-small'>-P13,000</p>
+              <p></p>
+              <p>-P13,000</p>
             </div>
           </div>
           <div className='record-details-wallet'>
             <div className='record-item-row'>
-              <p className='record-item-small'>Wallet 1</p>
-              <p className='record-item-small'>P13,000</p>
+              <h6>Wallet 1</h6>
+              <h6>P13,000</h6>
             </div>
             <div className='record-item-row'>
-              <p className='record-item-small'></p>
-              <p className='record-item-small'>-P13,000</p>
+              <p></p>
+              <p>-P13,000</p>
             </div>
           </div>
 
