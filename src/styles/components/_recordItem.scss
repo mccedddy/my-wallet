@@ -26,7 +26,14 @@
 
   &.open {
     border-radius: 0 0 8px 8px;
+    animation: record-details-open 0.5s ease-in;
   }
+
+  &.close {
+    border-radius: 0 0 8px 8px;
+    animation: record-details-close 0.5s ease-out;
+  }
+  
 
   .record-details-wallet {
     padding-bottom: 7px;

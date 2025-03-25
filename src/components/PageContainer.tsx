@@ -4,7 +4,7 @@ import Records from './Records'
 function PageContainer() {
   return (
     <div className='page-container'>
-      <h1 className='page-text bold'>Records</h1>
+      <h3 className='page-text'>Records</h3>
       <Records />
     </div>
   );

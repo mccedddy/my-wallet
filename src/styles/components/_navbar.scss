@@ -9,6 +9,7 @@
     bottom: 0;
     background-color: $background-secondary;
     border-radius: 15px 15px 0px 0px;
+    z-index: 10;
   
     .navbar-item {
       height: 55px;
