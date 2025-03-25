@@ -1,26 +1,26 @@
 .navbar {
-    width: 100%;
-    height: 65px;
-    padding: 3px 0 5px 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    background-color: $background-secondary;
-    border-radius: 15px 15px 0px 0px;
-    z-index: 10;
+  width: 100%;
+  height: 65px;
+  padding: 3px 0 5px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  background-color: $background-secondary;
+  border-radius: 15px 15px 0px 0px;
+  z-index: 10;
   
-    .navbar-item {
-      height: 55px;
-      width: 60px;
-      box-sizing: border-box;
-      background-color: $background-secondary;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+  .navbar-item {
+    height: 55px;
+    width: 60px;
+    box-sizing: border-box;
+    background-color: $background-secondary;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
       &.hidden {
         background-color: transparent;

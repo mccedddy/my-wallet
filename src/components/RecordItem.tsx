@@ -32,7 +32,7 @@ function RecordItem() {
           <h6 className='bold'>P13,000</h6>
         </div>
         <div className='record-item-row'>
-          <h6>Record Description</h6>
+          <p>Record Description</p>
           <p>- P1,000</p>
         </div>
       </div>
