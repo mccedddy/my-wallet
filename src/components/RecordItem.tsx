@@ -3,24 +3,18 @@ import EditIcon from '../assets/icons/pencil.svg';
 
 function RecordItem() {
   const [open, setOpen] = React.useState(false);
-  const [closing, setClosing] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
-    setClosing(false);
   };
 
   const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setOpen(false);
-      setClosing(false);
-    }, 500);
+    setOpen(false);
   };
 
   return (
     <>
-      <div className={`record-item ${closing ? '' : open ? 'open' : ''}`} onClick={() => {
+      <div className={`record-item ${open ? 'open' : ''}`} onClick={() => {
         if (open) {
           handleClose();
         } else {
@@ -37,8 +31,8 @@ function RecordItem() {
         </div>
       </div>
 
-      {(open || closing) && (
-        <div className={`record-details ${open ? 'open' : ''} ${closing ? 'close' : ''}`} id='record-details'>
+      {(open) && (
+        <div className={`record-details ${open ? 'open' : ''}`} id='record-details'>
           <div className='record-details-wallet'>
             <div className='record-item-row'>
               <h6>Wallet 1</h6>

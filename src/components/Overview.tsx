@@ -5,7 +5,7 @@ function Overview() {
     <div className='overview'>
       <div className='overview-total'>
           <h2 className='bold'>Total</h2>
-          <h1 className='bold'>P13,000</h1>
+          <h2 className='bold'>P13,000</h2>
       </div>
 			<div className='overview-wallets'>
 				<div className='wallet'>
