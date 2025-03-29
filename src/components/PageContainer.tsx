@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Records from './Records'
+import Graphs from './Graphs'
 import { useSelector, useDispatch } from "react-redux";
 import { toggleOverview, setStartDate, setEndDate } from "../reducers/globalSlice";
 
@@ -11,9 +12,6 @@ function PageContainer() {
   const filterShown = useSelector((state: any) => state.global.filterShown);
   const startDate = useSelector((state: any) => new Date(state.global.startDate));
   const endDate = useSelector((state: any) => new Date(state.global.endDate));
-
-  // const [startDate, setStartDate] = useState<Date | null>(new Date());
-  // const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   return (
     <div className='page-container'>
@@ -45,7 +43,15 @@ function PageContainer() {
         </div>
       }
 
-      <Records />
+      {currentPage === 'Records' ? (
+        <Records currentPage={currentPage} />
+      ) : currentPage === 'Wallets' ? (
+        <Records currentPage={currentPage} />
+      ) : currentPage === 'Graphs' ? (
+        <Graphs />
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

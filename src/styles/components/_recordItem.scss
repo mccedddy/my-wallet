@@ -44,9 +44,8 @@
   }
 
   .record-details-button-container {
-    margin-top: 3px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     gap: 7px;
 
     .record-details-button {

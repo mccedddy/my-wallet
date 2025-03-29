@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import RecordItem from './RecordItem';
-import { useSelector, useDispatch } from "react-redux";
 
-function Records() {
-  const dispatch = useDispatch();
-  const currentPage = useSelector((state: any) => state.global.currentPage);
+interface RecordsProps {
+  currentPage: string;
+}
 
+function Records({ currentPage }: RecordsProps) {
   if (currentPage === 'Records') {
     return (
       <div className='records'>
-        <RecordItem />
-        <RecordItem />
-        <RecordItem />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
+        <RecordItem type='record' />
       </div>
     );
   } else {
-    return null;
+    return (
+      <div className='records'>
+        <RecordItem type='wallet' />
+        <RecordItem type='wallet' />
+        <RecordItem type='wallet' />
+        <RecordItem type='wallet' />
+        <RecordItem type='wallet' />
+      </div>
+    );
   }
 }
 
