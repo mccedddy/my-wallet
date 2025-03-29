@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Records from './Records'
+import { useSelector, useDispatch } from "react-redux";
+import { toggleOverview } from "../reducers/globalSlice";
 
 function PageContainer() {
+  const dispatch = useDispatch();
+  const currentPage = useSelector((state: any) => state.global.currentPage);
+
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   return (
     <div className='page-container'>
-      <h3 className='page-text'>Records</h3>
+      <h3 className='page-text' onClick={() => {
+        dispatch(toggleOverview())
+      }}>{currentPage}</h3>
       <div className='filter'>
         <label>
           Date:
