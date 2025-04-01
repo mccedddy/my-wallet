@@ -1,0 +1,40 @@
+.textbox {
+  width: 50%;
+  background-color: $background-primary;
+  border: 1px solid $gray-lighter;
+  border: 0px;
+  color: $text-primary;
+  text-align: right;
+  outline: 0px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+
+  &::placeholder {
+    color: $text-dark;
+  }
+}
+
+.save-container {
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+
+  .save-btn, .cancel-btn {
+    width: 80px;
+    border: 0;
+    color: $text-primary;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+
+  .save-btn {
+    background-color: $accent;
+  }
+
+  .cancel-btn {
+    background-color: transparent;
+  }
+
+}

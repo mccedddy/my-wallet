@@ -60,7 +60,7 @@ function RecordItem({ type }: RecordItemProps) {
             </div>
   
             <div className='record-details-button-container'>
-              <h6 className='bold text-dark'>ID</h6>
+              <p className='bold text-dark'>ID</p>
               <div className='record-details-button'>
                 <img src={EditIcon} alt='Edit' />
               </div>
@@ -104,7 +104,7 @@ function RecordItem({ type }: RecordItemProps) {
             </div>
   
             <div className='record-details-button-container'>
-              <h6 className='bold text-dark'>ID</h6>
+              <p className='bold text-dark'>ID</p>
               <div className='record-details-button'>
                 <img src={EditIcon} alt='Edit' />
               </div>

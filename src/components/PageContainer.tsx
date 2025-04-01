@@ -5,6 +5,7 @@ import Records from './Records'
 import Graphs from './Graphs'
 import { useSelector, useDispatch } from "react-redux";
 import { toggleOverview, setStartDate, setEndDate } from "../reducers/globalSlice";
+import AddRecord from './AddRecord';
 
 function PageContainer() {
   const dispatch = useDispatch();
@@ -49,6 +50,10 @@ function PageContainer() {
         <Records currentPage={currentPage} />
       ) : currentPage === 'Graphs' ? (
         <Graphs />
+      ) : currentPage === 'Add Record' ? (
+        <AddRecord type='record'/>
+      ) : currentPage === 'Add Wallet' ? (
+        <AddRecord type='wallet'/>
       ) : (
         <div></div>
       )}

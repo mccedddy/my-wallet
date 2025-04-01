@@ -10,13 +10,16 @@ import { toggleOverview } from "../reducers/globalSlice";
 function Home() {
   const dispatch = useDispatch();
   const overviewShown = useSelector((state: any) => state.global.overviewShown);
+  const navbarShown = useSelector((state: any) => state.global.navbarShown);
 
   return (
     <div className='home'>
       <Header />
 
       {overviewShown && <Overview /> }
-      <Navbar />
+
+      {navbarShown && <Navbar /> }
+      
       <PageContainer />
     </div>
   );

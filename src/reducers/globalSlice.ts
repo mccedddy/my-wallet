@@ -10,6 +10,8 @@ const globalSlice = createSlice({
     filterShown: true,
     startDate: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString(),
     endDate: new Date().toISOString(),
+    pagesWithoutNavbar: ['Add Record', 'Add Wallet'],
+    navbarShown: true,
   },
   reducers: {
     // Overview
@@ -42,6 +44,13 @@ const globalSlice = createSlice({
         // If coming from a page without overview and target page has overview, show overview
         if (!state.pagesWithOverview.includes(state.currentPage) && state.pagesWithOverview.includes(action.payload)) {
           state.overviewShown = true; 
+        }
+
+        // Hide/show navbar
+        if (state.pagesWithoutNavbar.includes(action.payload)) {
+          state.navbarShown = false;
+        } else {
+          state.navbarShown = true;
         }
 
         state.currentPage = action.payload;
