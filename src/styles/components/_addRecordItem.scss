@@ -13,6 +13,10 @@
   &::placeholder {
     color: $text-dark;
   }
+
+  &.color {
+    padding: 2px 10px;
+  }
 }
 
 .save-container {
@@ -36,5 +40,4 @@
   .cancel-btn {
     background-color: transparent;
   }
-
 }

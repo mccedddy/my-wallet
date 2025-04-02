@@ -36,7 +36,7 @@ function AddRecordItem({ walletValueId, walletId }: AddRecordItemProps) {
         </div>
         <div className='record-item-row'>
           <h6 className='bold'>Color</h6>
-          <input type='text' className='textbox' placeholder='#FFFFFF'></input>
+          <input type='color' className='textbox color' placeholder='#FFFFFF' value='#FFFFFF'></input>
         </div>
         <div className='record-item-row'>
           <h6 className='bold'>Order</h6>
