@@ -1,11 +1,23 @@
 import React from 'react';
 import EditIcon from '../assets/icons/pencil.svg';
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentPage } from '../reducers/globalSlice';
+
 
 interface RecordItemProps {
-  type: string;
+  data: {
+    id: string;
+    title: string;
+    value: string;
+    description?: string;
+    color?: string;
+    order?: number;
+  };
 }
 
-function RecordItem({ type }: RecordItemProps) {
+function RecordItem({ data }: RecordItemProps) {
+  const dispatch = useDispatch();
+  const currentPage = useSelector((state: any) => state.global.currentPage);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -16,7 +28,12 @@ function RecordItem({ type }: RecordItemProps) {
     setOpen(false);
   };
 
-  if (type === 'record') {
+  const handleEdit = () => {
+    const editPage = currentPage === 'Records' ? 'Edit Record' : 'Edit Wallet';
+    dispatch(setCurrentPage(editPage));
+  };
+
+  if (currentPage === 'Records') {
     return (
       <>
         <div className={`record-item ${open ? 'open' : ''}`} onClick={() => {
@@ -27,12 +44,12 @@ function RecordItem({ type }: RecordItemProps) {
           }
         }}>
           <div className='record-item-row'>
-            <h6 className='bold'>13/03/2025</h6>
-            <h6 className='bold'>P13,000</h6>
+            <h6 className='bold'>{data.title}</h6>
+            <h6 className='bold'>{data.value}</h6>
           </div>
           <div className='record-item-row'>
-            <p>Record Description</p>
-            <p>- P1,000</p>
+            <p>{data.description}</p>
+            <p>+ P1,000</p>
           </div>
         </div>
   
@@ -60,8 +77,8 @@ function RecordItem({ type }: RecordItemProps) {
             </div>
   
             <div className='record-details-button-container'>
-              <p className='bold text-dark'>ID</p>
-              <div className='record-details-button'>
+              <p className='text-dark'>{data.id}</p>
+              <div className='record-details-button' onClick={handleEdit}>
                 <img src={EditIcon} alt='Edit' />
               </div>
             </div>
@@ -69,7 +86,7 @@ function RecordItem({ type }: RecordItemProps) {
         )}
       </>
     );
-  } else if (type === 'wallet') {
+  } else if (currentPage === 'Wallets') {
     return (
       <>
         <div className={`record-item ${open ? 'open' : ''}`} onClick={() => {
@@ -80,11 +97,11 @@ function RecordItem({ type }: RecordItemProps) {
           }
         }}>
           <div className='record-item-row'>
-            <h6 className='bold'>Wallet 1</h6>
-            <h6 className='bold'>P13,000</h6>
+            <h6 className='bold'>{data.title}</h6>
+            <h6 className='bold'>{data.value}</h6>
           </div>
           <div className='record-item-row'>
-            <p>Last Updated: 03/29/2025</p>
+            <p>{data.description}</p>
           </div>
         </div>
   
@@ -93,19 +110,19 @@ function RecordItem({ type }: RecordItemProps) {
             <div className='record-details-wallet'>
               <div className='record-item-row'>
                 <h6>Color</h6>
-                <h6>#FFFFFF</h6>
+                <h6>{data.color}</h6>
               </div>
             </div>
             <div className='record-details-wallet'>
               <div className='record-item-row'>
                 <h6>Order</h6>
-                <h6>1</h6>
+                <h6>{data.order}</h6>
               </div>
             </div>
   
             <div className='record-details-button-container'>
-              <p className='bold text-dark'>ID</p>
-              <div className='record-details-button'>
+              <p className='bold text-dark'>{data.id}</p>
+              <div className='record-details-button' onClick={handleEdit}>
                 <img src={EditIcon} alt='Edit' />
               </div>
             </div>

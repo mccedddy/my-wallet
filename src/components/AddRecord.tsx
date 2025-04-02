@@ -3,22 +3,18 @@ import AddRecordItem from './AddRecordItem';
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentPage } from "../reducers/globalSlice";
 
-interface AddRecordProps {
-  type: string;
-}
-
-function AddRecord({ type }: AddRecordProps) {
+function AddRecord() {
   const dispatch = useDispatch();
-    const currentPage = useSelector((state: any) => state.global.currentPage);
+  const currentPage = useSelector((state: any) => state.global.currentPage);
 
-  if (type === 'record') {
+  if (currentPage === 'Add Record' || currentPage === 'Edit Record') {
     return(
+      // Wallets to insert or edit values
       <div className='records'>
-        <AddRecordItem type='record' />
-        <AddRecordItem type='record' />
-        <AddRecordItem type='record' />
-        <AddRecordItem type='record' />
-        <AddRecordItem type='record' />
+        <AddRecordItem />
+        <AddRecordItem />
+        <AddRecordItem />
+        <AddRecordItem />
 
         <div className='save-container'>
           <button className='cancel-btn' onClick={() => {dispatch(setCurrentPage('Records'))}}>Cancel</button>
@@ -26,10 +22,11 @@ function AddRecord({ type }: AddRecordProps) {
         </div>
       </div>
     );
-  } else if (type === 'wallet') {
+  } else if (currentPage === 'Add Wallet' || currentPage === 'Edit Wallet') {
     return(
+      // Wallet to add or edit
       <div className='records'>
-        <AddRecordItem type='wallet' />
+        <AddRecordItem />
 
         <div className='save-container'>
           <button className='cancel-btn' onClick={() => {dispatch(setCurrentPage('Wallets'))}}>Cancel</button>

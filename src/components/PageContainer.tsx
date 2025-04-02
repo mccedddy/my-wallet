@@ -45,15 +45,16 @@ function PageContainer() {
       }
 
       {currentPage === 'Records' ? (
-        <Records currentPage={currentPage} />
+        <Records />
       ) : currentPage === 'Wallets' ? (
-        <Records currentPage={currentPage} />
+        <Records />
       ) : currentPage === 'Graphs' ? (
         <Graphs />
-      ) : currentPage === 'Add Record' ? (
-        <AddRecord type='record'/>
-      ) : currentPage === 'Add Wallet' ? (
-        <AddRecord type='wallet'/>
+      ) : currentPage === 'Add Record' || 
+          currentPage === 'Add Wallet' || 
+          currentPage === 'Edit Record' || 
+          currentPage === 'Edit Wallet' ? (
+        <AddRecord />
       ) : (
         <div></div>
       )}

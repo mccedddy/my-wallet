@@ -10,7 +10,7 @@ const globalSlice = createSlice({
     filterShown: true,
     startDate: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString(),
     endDate: new Date().toISOString(),
-    pagesWithoutNavbar: ['Add Record', 'Add Wallet'],
+    pagesWithoutNavbar: ['Add Record', 'Add Wallet', 'Edit Record', 'Edit Wallet'],
     navbarShown: true,
   },
   reducers: {
