@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/main.scss';
-import Home from './pages/Home';
-import LogIn from './pages/LogIn';
+import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import { store } from "./store";
@@ -12,7 +11,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
-    <LogIn />
+    <App />
   </Provider>
 );
 

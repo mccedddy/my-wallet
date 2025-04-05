@@ -12,6 +12,7 @@ const globalSlice = createSlice({
     endDate: new Date().toISOString(),
     pagesWithoutNavbar: ['Add Record', 'Add Wallet', 'Edit Record', 'Edit Wallet'],
     navbarShown: true,
+    toggleOverviewEnabled: true,
   },
   reducers: {
     // Overview
@@ -44,6 +45,13 @@ const globalSlice = createSlice({
         // If coming from a page without overview and target page has overview, show overview
         if (!state.pagesWithOverview.includes(state.currentPage) && state.pagesWithOverview.includes(action.payload)) {
           state.overviewShown = true; 
+        }
+
+        // Set toggleOverview based on whether the target page has overview
+        if (state.pagesWithOverview.includes(action.payload)) {
+          state.toggleOverviewEnabled = true;
+        } else {
+          state.toggleOverviewEnabled = false;
         }
 
         // Hide/show navbar

@@ -23,21 +23,21 @@
   display: flex;
   gap: 10px;
   justify-content: end;
+}
 
-  .save-btn, .cancel-btn {
-    width: 80px;
-    border: 0;
-    color: $text-primary;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 5px;
-  }
+.save-btn, .cancel-btn {
+  width: 80px;
+  border: 0;
+  color: $text-primary;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
 
-  .save-btn {
-    background-color: $accent;
-  }
+.save-btn {
+  background-color: $accent;
+}
 
-  .cancel-btn {
-    background-color: transparent;
-  }
+.cancel-btn {
+  background-color: transparent;
 }
