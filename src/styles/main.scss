@@ -8,10 +8,13 @@
 @import './components/records';
 @import './components/recordItem';
 @import './components/addRecordItem';
+@import './components/logIn';
 
-.home {
+.home, .login {
   width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
