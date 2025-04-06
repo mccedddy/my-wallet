@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
 interface AddRecordItemProps {
+  // Record creation
+  walletId?: string;
+  setWalletValues: React.Dispatch<React.SetStateAction<object[]>>;
+
+  // Wallet creation
   walletName: string;
   setWalletName: React.Dispatch<React.SetStateAction<string>>;
   initialValue: string;
@@ -13,6 +18,11 @@ interface AddRecordItemProps {
 }
 
 function AddRecordItem({
+  // Record creation
+  walletId,
+  setWalletValues,
+
+  // Wallet creation
   walletName,
   setWalletName,
   initialValue,
@@ -23,19 +33,40 @@ function AddRecordItem({
   setPosition,
 }: AddRecordItemProps) {
   const currentPage = useSelector((state: any) => state.global.currentPage);
+  const [value, setValue] = useState('');
+
+  // Update the walletValues state when the value changes for the current walletId
+  useEffect(() => {
+    if (!walletId) return;
+
+    setWalletValues((prevValues) => {
+      const existingIndex = prevValues.findIndex((item: any) => item.id === walletId);
+      const updatedItem = { id: walletId, value: value };
+
+      if (existingIndex !== -1) {
+        const updatedValues = [...prevValues];
+        updatedValues[existingIndex] = updatedItem;
+        return updatedValues;
+      } else {
+        return [...prevValues, updatedItem];
+      }
+    });
+  }, [value]);
 
   if (currentPage === 'Add Record' || currentPage === 'Edit Record') {
     return (
       <div className='record-item'>
         <div className='record-item-row'>
-          <h6 className='bold'>Wallet 1</h6>
-          <input type='text' className='textbox' placeholder='Increased By'></input>
+          <h6 className='bold' style={{ color: color }}>{walletName}</h6>
+          <input type='text' className='textbox' placeholder='P13,000' value={value} onChange={(e) => setValue(e.target.value)} readOnly={currentPage === 'Edit Record'}></input>
         </div>
         
-        <div className='record-item-row'>
-          <p></p>
-          <input type='text' className='textbox' placeholder='P13,000'></input>
-        </div>
+        {currentPage === 'Add Record' && (
+          <div className='record-item-row'>
+            <p></p>
+            <input type='text' className='textbox' placeholder='Increased By'></input>
+          </div>
+        )}
       </div>
     );
   } else if (currentPage === 'Add Wallet' || currentPage === 'Edit Wallet') {

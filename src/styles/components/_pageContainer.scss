@@ -15,14 +15,14 @@
   display: flex;
   gap: 5px;
   align-items: center;
+}
 
-  .date-picker {
-    width: 75px;
-    padding: 5px 10px;
-    color: $text-primary;
-    background-color: $background-tertiary;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-  }
+.date-picker {
+  width: 75px;
+  padding: 5px 10px;
+  color: $text-primary;
+  background-color: $background-tertiary;
+  border: none;
+  border-radius: 5px;
+  outline: none;
 }

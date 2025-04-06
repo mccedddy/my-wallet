@@ -34,7 +34,8 @@ function PageContainer() {
             onChange={(date: Date | null) => {
               if (date) dispatch(setStartDate(date.toISOString()));
             }}
-          /><label>
+          />
+          <label>
             -
           </label>
           <DatePicker

@@ -7,7 +7,9 @@ import PageContainer from '../components/PageContainer';
 import { useSelector, useDispatch } from "react-redux";
 import { logIn } from "../reducers/userSlice";
 import { setWallets } from "../reducers/walletsSlice";
+import { setRecords } from "../reducers/recordsSlice";
 import { supabase } from '../services/supabaseClient';
+import { fetchWallets, fetchRecords } from '../services/walletService';
 
 function Home() {
   const dispatch = useDispatch();
@@ -47,20 +49,10 @@ function Home() {
             username: userData?.username || "",
           })
         );
-
-        // Fetch wallets from the 'wallets' table using user_id
-        const { data: walletsData, error: walletsError } = await supabase
-          .from('wallets')
-          .select('*')
-          .eq('user_id', userId);
-
-        if (walletsError) {
-          console.error("Error fetching wallets:", walletsError.message);
-          return;
-        }
-
-        // Update wallets state
-        dispatch(setWallets(walletsData || []));
+        
+        // Fetch wallets and records using the user ID
+        dispatch(setWallets(await fetchWallets(userId)));
+        dispatch(setRecords(await fetchRecords(userId)));
       }
     };
 
