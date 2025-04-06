@@ -2,7 +2,7 @@ import React from 'react';
 import EditIcon from '../assets/icons/pencil.svg';
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentPage } from '../reducers/globalSlice';
-
+import { setCurrentWallet } from '../reducers/walletsSlice';
 
 interface RecordItemProps {
   data: {
@@ -29,8 +29,10 @@ function RecordItem({ data }: RecordItemProps) {
   };
 
   const handleEdit = () => {
-    const editPage = currentPage === 'Records' ? 'Edit Record' : 'Edit Wallet';
-    dispatch(setCurrentPage(editPage));
+    if (currentPage === 'Wallets') {
+      dispatch(setCurrentPage('Edit Wallet'));
+      dispatch(setCurrentWallet(data));
+    }
   };
 
   if (currentPage === 'Records') {
@@ -97,7 +99,7 @@ function RecordItem({ data }: RecordItemProps) {
           }
         }}>
           <div className='record-item-row'>
-            <h6 className='bold'>{data.title}</h6>
+            <h6 className='bold' style={{ color: data.color }}>{data.title}</h6>
             <h6 className='bold'>{data.value}</h6>
           </div>
           <div className='record-item-row'>
@@ -110,7 +112,7 @@ function RecordItem({ data }: RecordItemProps) {
             <div className='record-details-wallet'>
               <div className='record-item-row'>
                 <h6>Color</h6>
-                <h6>{data.color}</h6>
+                <h6 style={{ color: data.color }}>{data.color}</h6>
               </div>
             </div>
             <div className='record-details-wallet'>

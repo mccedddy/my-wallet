@@ -11,7 +11,14 @@ import { current } from '@reduxjs/toolkit';
 function Navbar() {
 	const dispatch = useDispatch();
 	const currentPage = useSelector((state: any) => state.global.currentPage);
-	const currentAdd = currentPage == 'Wallets' ? 'Add Wallet' : 'Add Record';
+	const wallets = useSelector((state: any) => state.wallets.wallets);
+	
+	// Default to 'Add Wallet' if no wallets exist
+	const currentAdd = wallets.length === 0
+    ? 'Add Wallet'
+    : currentPage === 'Wallets'
+    ? 'Add Wallet'
+    : 'Add Record';
 	
   return (
     <nav className="navbar">

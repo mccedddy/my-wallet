@@ -25,7 +25,7 @@
   justify-content: end;
 }
 
-.save-btn, .cancel-btn {
+.save-btn, .cancel-btn, .delete-btn {
   width: 80px;
   border: 0;
   color: $text-primary;
@@ -40,4 +40,8 @@
 
 .cancel-btn {
   background-color: transparent;
+}
+
+.delete-btn {
+  background-color: $error;
 }

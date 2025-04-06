@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import RecordItem from './RecordItem';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function Records() {
   const currentPage = useSelector((state: any) => state.global.currentPage);
+  const wallets = useSelector((state: any) => state.wallets.wallets); // Get wallets from the Redux store
+
+  // Format timestamp to DD/MM/YY | HH:MM:SS
+  const formatDateTime = (timestamp: string) => {
+    if (!timestamp) return "N/A"; 
+    const date = new Date(timestamp);
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', ' |');
+  };
 
   if (currentPage === 'Records') {
     return (
@@ -37,36 +54,19 @@ function Records() {
   } else {
     return (
       <div className='records'>
-        <RecordItem
-          data={{
-            id: '3',
-            title: 'Wallet 3',
-            value: 'P11,000',
-            color: '#FFFFFF',
-            order: 1,
-            description: 'Last Updated: 31/03/2025',
-          }}
-        />
-        <RecordItem
-          data={{
-            id: '2',
-            title: 'Wallet 2',
-            value: 'P1,000',
-            color: '#FFFFFF',
-            order:2,
-            description: 'Last Updated: 31/03/2025',
-          }}
-        />
-        <RecordItem
-          data={{
-            id: '1',
-            title: 'Wallet 1',
-            value: 'P130,000',
-            color: '#FFFFFF',
-            order: 3,
-            description: 'Last Updated: 31/03/2025',
-          }}
-        />
+        {wallets.map((wallet: any) => (
+          <RecordItem
+            key={wallet.id}
+            data={{
+              id: wallet.id,
+              title: wallet.name,
+              value: wallet.value,
+              color: wallet.color,
+              order: wallet.position,
+              description: `Last updated at: ${formatDateTime(wallet.last_updated)}`, 
+            }}
+          />
+        ))}
       </div>
     );
   }

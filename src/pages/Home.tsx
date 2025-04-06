@@ -5,8 +5,8 @@ import Navbar from '../components/Navbar';
 import PageContainer from '../components/PageContainer';
 
 import { useSelector, useDispatch } from "react-redux";
-import { toggleOverview } from "../reducers/globalSlice";
 import { logIn } from "../reducers/userSlice";
+import { setWallets } from "../reducers/walletsSlice";
 import { supabase } from '../services/supabaseClient';
 
 function Home() {
@@ -47,6 +47,20 @@ function Home() {
             username: userData?.username || "",
           })
         );
+
+        // Fetch wallets from the 'wallets' table using user_id
+        const { data: walletsData, error: walletsError } = await supabase
+          .from('wallets')
+          .select('*')
+          .eq('user_id', userId);
+
+        if (walletsError) {
+          console.error("Error fetching wallets:", walletsError.message);
+          return;
+        }
+
+        // Update wallets state
+        dispatch(setWallets(walletsData || []));
       }
     };
 
