@@ -18,9 +18,8 @@ function AddRecord() {
   const [recordDate, setRecordDate] = useState('');
   const [recordTime, setRecordTime] = useState('');
   const [description, setDescription] = useState('');
-  const [walletValues, setWalletValues] = useState<{ id: string; value: string }[]>([]);
+  const [walletValues, setWalletValues] = useState<{ id: string; value: string; placeholder: string }[]>([]);
   const [walletName, setWalletName] = useState('');
-  const [initialValue, setInitialValue] = useState('');
   const [color, setColor] = useState('#FFFFFF');
   const [position, setPosition] = useState('');
 
@@ -35,23 +34,57 @@ function AddRecord() {
     return { date, time };
   };
 
-  // Initialize record date and time
-  useEffect(() => {
+   // Initialize record date and time
+   useEffect(() => {
     const { date, time } = getManilaTime();
     setRecordDate(currentRecord?.date || date);
     setRecordTime(currentRecord?.time || time);
     setDescription(currentRecord?.description || '');
     setWalletName(currentWallet?.name || '');
-    setInitialValue(currentWallet?.value || '0');
     setColor(currentWallet?.color || '#FFFFFF');
     setPosition(currentWallet?.order?.toString() || '1');
-  }, [currentRecord, currentWallet]);
 
-  // Update wallet values dynamically
+    if (currentPage === 'Add Record') {
+      // Fetch the latest wallet values for placeholders
+      const fetchLatestWalletValues = async () => {
+        const latestRecord = await supabase
+          .from('records')
+          .select('id')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (latestRecord.error || !latestRecord.data) {
+          console.error('Error fetching latest record:', latestRecord.error?.message);
+          return;
+        }
+
+        const { data: walletValuesData, error } = await supabase
+          .from('wallet_values')
+          .select('wallet_id, value')
+          .eq('record_id', latestRecord.data.id);
+
+        if (error) {
+          console.error('Error fetching wallet values:', error.message);
+          return;
+        }
+
+        const updatedWalletValues = wallets.map((wallet: any) => {
+          const latestValue = walletValuesData.find((wv: any) => wv.wallet_id === wallet.id)?.value || '';
+          return { id: wallet.id, value: '', placeholder: latestValue };
+        });
+
+        setWalletValues(updatedWalletValues);
+      };
+
+      fetchLatestWalletValues();
+    }
+  }, [currentPage, currentRecord, wallets]);
+
   const updateWalletValues = (walletId: string, value: string) => {
     setWalletValues((prevValues) => {
       const existingIndex = prevValues.findIndex((item: any) => item.id === walletId);
-      const updatedItem = { id: walletId, value: value };
+      const updatedItem = { id: walletId, value: value, placeholder: walletValues.find((item: any) => item.id === walletId)?.placeholder || '0' };
 
       if (existingIndex !== -1) {
         const updatedValues = [...prevValues];
@@ -91,10 +124,11 @@ function AddRecord() {
 
       const recordId = data[0].id;
       for (let walletValue of walletValues) {
-        const { id: walletId, value } = walletValue as { id: string; value: string };
+        const { id: walletId, value, placeholder } = walletValue;
+        const finalValue = value || placeholder;
         const { error } = await supabase
           .from('wallet_values')
-          .insert([{ record_id: recordId, wallet_id: walletId, value }]);
+          .insert([{ record_id: recordId, wallet_id: walletId, value: finalValue }]);
 
         if (error) {
           console.error('Error inserting wallet value:', error.message);
@@ -106,7 +140,6 @@ function AddRecord() {
         .from('wallets')
         .update({
           name: walletName,
-          value: initialValue,
           color,
           position: parseInt(position, 10),
         })
@@ -119,7 +152,7 @@ function AddRecord() {
     } else if (currentPage === 'Add Wallet') {
       const { error } = await supabase
         .from('wallets')
-        .insert([{ name: walletName, value: initialValue, color, position: parseInt(position, 10), user_id: userId }]);
+        .insert([{ name: walletName, color, position: parseInt(position, 10), user_id: userId }]);
 
       if (error) {
         console.error('Error inserting wallet:', error.message);
@@ -191,7 +224,7 @@ function AddRecord() {
             <input
               type='text'
               className='textbox'
-              placeholder='P13,000'
+              placeholder={walletValues.find((item: any) => item.id === wallet.id)?.placeholder || '0'}
               value={walletValues.find((item: any) => item.id === wallet.id)?.value || ''}
               onChange={(e) => updateWalletValues(wallet.id, e.target.value)}
               readOnly={currentPage === 'Edit Record'}
@@ -210,16 +243,6 @@ function AddRecord() {
               placeholder='Name'
               value={walletName}
               onChange={(e) => setWalletName(e.target.value)}
-            />
-          </div>
-          <div className='item-row'>
-            <h6 className='bold'>Initial Value</h6>
-            <input
-              type='text'
-              className='textbox'
-              placeholder='0'
-              value={initialValue}
-              onChange={(e) => setInitialValue(e.target.value)}
             />
           </div>
           <div className='item-row'>
