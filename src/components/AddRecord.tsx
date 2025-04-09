@@ -18,7 +18,7 @@ function AddRecord() {
   const [recordDate, setRecordDate] = useState('');
   const [recordTime, setRecordTime] = useState('');
   const [description, setDescription] = useState('');
-  const [walletValues, setWalletValues] = useState<object[]>([]);
+  const [walletValues, setWalletValues] = useState<{ id: string; value: string }[]>([]);
   const [walletName, setWalletName] = useState('');
   const [initialValue, setInitialValue] = useState('');
   const [color, setColor] = useState('#FFFFFF');
@@ -183,7 +183,7 @@ function AddRecord() {
 
   // Render wallet or record items
   const renderItems = () => {
-    if (currentPage === 'Add Record' || currentPage === 'Edit Record') {
+    if (currentPage === 'Add Record') {
       return wallets.map((wallet: any) => (
         <div key={wallet.id} className='item'>
           <div className='item-row'>
@@ -192,7 +192,7 @@ function AddRecord() {
               type='text'
               className='textbox'
               placeholder='P13,000'
-              value={walletValues.find((item: any) => item.id === wallet.id)?.toString() || ''}
+              value={walletValues.find((item: any) => item.id === wallet.id)?.value || ''}
               onChange={(e) => updateWalletValues(wallet.id, e.target.value)}
               readOnly={currentPage === 'Edit Record'}
             />
@@ -250,7 +250,7 @@ function AddRecord() {
     <div className='records'>
       {renderItems()}
 
-      { currentPage === 'Add Record' && (
+      { currentPage === 'Add Record' || currentPage === 'Edit Record' && (
         <div className='item'>
           <h6 className='bold'>Record details</h6>
           <div className='item-row'>
