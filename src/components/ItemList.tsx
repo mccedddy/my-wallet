@@ -7,8 +7,8 @@ import { setCurrentWallet } from '../reducers/walletsSlice';
 import { setCurrentRecord } from '../reducers/recordsSlice';
 
 interface ItemListProps {
-  type: 'wallet' | 'record'; // Determines whether to display wallets or records
-  data: any; // The data for the item (wallet or record)
+  type: 'wallet' | 'record';
+  data: any;
 }
 
 // Format timestamp to YYYY-MM-DD or HH:MM:SS
@@ -43,9 +43,12 @@ const formatDateTime = (timestamp: string, type: string = 'datetime') => {
 function ItemList({ type, data }: ItemListProps) {
   const dispatch = useDispatch();
   const wallets = useSelector((state: any) => state.wallets.wallets);
+  const records = useSelector((state: any) => state.records.records); 
   const [walletValues, setWalletValues] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [totalValue, setTotalValue] = useState(0);
+  const [latestWalletValue, setLatestWalletValue] = useState<number | null>(null); 
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -85,8 +88,33 @@ function ItemList({ type, data }: ItemListProps) {
       };
 
       fetchWalletValues();
+    } else if (type === 'wallet') {
+      // Fetch latest wallet values
+      const fetchLatestWalletValue = async () => {
+        const latestRecord = records[0]; 
+        if (!latestRecord) {
+          console.error('No records found.');
+          return;
+        }
+
+        const { data: walletValueData, error } = await supabase
+          .from('wallet_values')
+          .select('value')
+          .eq('wallet_id', data.id)
+          .eq('record_id', latestRecord.id) 
+          .single();
+
+        if (error) {
+          console.error('Error fetching wallet value:', error.message);
+          return;
+        }
+
+        setLatestWalletValue(walletValueData?.value || null);
+      };
+
+      fetchLatestWalletValue();
     }
-  }, [type, data.id, wallets]);
+  }, [type, data.id, records, wallets]);
 
   return (
     <>
@@ -98,10 +126,16 @@ function ItemList({ type, data }: ItemListProps) {
           <h6 className='bold' style={{ color: type === 'wallet' ? data.color : undefined }}>
             {data.name || formatDateTime(data.created_at, 'date')}
           </h6>
-          <h6 className='bold'>{type === 'record' ? totalValue : data.value}</h6>
+          {type === 'record' ? totalValue : latestWalletValue !== null ? latestWalletValue : '0'}
         </div>
         <div className='item-row'>
-          <p>{data.description? data.description : "No description"}</p>
+          <p>{type === 'record' ? 
+                data.description? data.description : 
+                "No description" : 
+                data.last_updated? 
+                  `Last updated: ${formatDateTime(data.last_updated, 'datetime')}` : 
+                  "No description"}
+          </p>
         </div>
       </div>
 

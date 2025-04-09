@@ -250,7 +250,7 @@ function AddRecord() {
     <div className='records'>
       {renderItems()}
 
-      { currentPage === 'Add Record' || currentPage === 'Edit Record' && (
+      {(currentPage === 'Add Record' || currentPage === 'Edit Record') && (
         <div className='item'>
           <h6 className='bold'>Record details</h6>
           <div className='item-row'>
