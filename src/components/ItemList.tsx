@@ -126,7 +126,7 @@ function ItemList({ type, data }: ItemListProps) {
           <h6 className='bold' style={{ color: type === 'wallet' ? data.color : undefined }}>
             {data.name || formatDateTime(data.created_at, 'date')}
           </h6>
-          {type === 'record' ? totalValue : latestWalletValue !== null ? latestWalletValue : '0'}
+          ₱ {type === 'record' ? totalValue : latestWalletValue !== null ? latestWalletValue : '0'}
         </div>
         <div className='item-row'>
           <p>{type === 'record' ? 
@@ -147,7 +147,7 @@ function ItemList({ type, data }: ItemListProps) {
               <div key={walletValue.wallet_id} className='item-details-wallet'>
                 <div className='item-row'>
                   <h6 style={{ color: wallet?.color }}>{wallet?.name || 'Unknown Wallet'}</h6>
-                  <h6>{walletValue.value}</h6>
+                  <h6>₱ {walletValue.value}</h6>
                 </div>
               </div>
             );

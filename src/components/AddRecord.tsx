@@ -226,7 +226,7 @@ function AddRecord() {
             <input
               type='text'
               className='textbox'
-              placeholder={walletValues.find((item: any) => item.id === wallet.id)?.placeholder || '0'}
+              placeholder={`₱ ${walletValues.find((item: any) => item.id === wallet.id)?.placeholder || '0'}`}
               value={walletValues.find((item: any) => item.id === wallet.id)?.value || ''}
               onChange={(e) => updateWalletValues(wallet.id, e.target.value)}
               readOnly={currentPage === 'Edit Record'}
