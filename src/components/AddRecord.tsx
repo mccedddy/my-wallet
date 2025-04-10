@@ -39,8 +39,8 @@ function AddRecord() {
    // Initialize record date and time
    useEffect(() => {
     const { date, time } = getManilaTime();
-    setRecordDate(currentRecord?.date || date);
-    setRecordTime(currentRecord?.time || time);
+    setRecordDate(currentRecord?.created_at ? new Date(currentRecord.created_at).toISOString().split('T')[0] : date);
+    setRecordTime(currentRecord?.created_at ? new Date(currentRecord.created_at).toISOString().split('T')[1].slice(0, 5) : time);
     setDescription(currentRecord?.description || '');
     setWalletName(currentWallet?.name || '');
     setColor(currentWallet?.color || '#FFFFFF');
