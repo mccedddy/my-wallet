@@ -16,12 +16,14 @@ export const fetchWallets = async (userId: string) => {
 };
 
 export const fetchRecords = async (userId: string, startDateFilter: string, endDateFilter: string) => {
+  const startDate = `${startDateFilter}T00:00:00`;
+  const endDate = `${endDateFilter}T23:59:59`;
   const { data: recordsData, error: recordsError } = await supabase
     .from('records')
     .select('*')
     .eq('user_id', userId)
-    .gte('created_at', startDateFilter)
-    .lte('created_at', endDateFilter) 
+    .gte('created_at', startDate)
+    .lte('created_at', endDate) 
     .order('created_at', { ascending: false }); 
 
   if (recordsError) {

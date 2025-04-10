@@ -36,12 +36,26 @@ function AddRecord() {
     return { date, time };
   };
 
-   // Initialize record date and time
+   // Initialize data
    useEffect(() => {
+    // Record data
+    // Date and time
     const { date, time } = getManilaTime();
-    setRecordDate(currentRecord?.created_at ? new Date(currentRecord.created_at).toISOString().split('T')[0] : date);
-    setRecordTime(currentRecord?.created_at ? new Date(currentRecord.created_at).toISOString().split('T')[1].slice(0, 5) : time);
+    
+    if (currentRecord?.created_at) {
+      const createdAt = new Date(currentRecord.created_at);
+      setRecordDate(createdAt.toISOString().split('T')[0]); 
+      const hours = String(createdAt.getHours()).padStart(2, '0');
+      const minutes = String(createdAt.getMinutes()).padStart(2, '0');
+      setRecordTime(`${hours}:${minutes}`);
+    } else {
+      setRecordDate(date);
+      setRecordTime(time);
+    }
+
     setDescription(currentRecord?.description || '');
+
+    // Wallet data
     setWalletName(currentWallet?.name || '');
     setColor(currentWallet?.color || '#FFFFFF');
     setPosition(currentWallet?.order?.toString() || '1');
@@ -164,8 +178,10 @@ function AddRecord() {
 
     const updatedWallets = await fetchWallets(userId);
     const updatedRecords = await fetchRecords(userId, startDateFilter, endDateFilter);
+    console.log(updatedRecords)
     dispatch(setWallets(updatedWallets));
     dispatch(setRecords(updatedRecords));
+    
     dispatch(setCurrentWallet(null));
     dispatch(setCurrentRecord(null));
     dispatch(setCurrentPage(currentPage.includes('Wallet') ? 'Wallets' : 'Records'));
