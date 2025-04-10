@@ -13,6 +13,8 @@ function AddRecord() {
   const currentWallet = useSelector((state: any) => state.wallets.currentWallet);
   const wallets = useSelector((state: any) => state.wallets.wallets);
   const currentRecord = useSelector((state: any) => state.records.currentRecord);
+  const startDateFilter = useSelector((state: any) => state.global.startDate);
+  const endDateFilter = useSelector((state: any) => state.global.endDate);
 
   // State for record and wallet details
   const [recordDate, setRecordDate] = useState('');
@@ -161,7 +163,7 @@ function AddRecord() {
     }
 
     const updatedWallets = await fetchWallets(userId);
-    const updatedRecords = await fetchRecords(userId);
+    const updatedRecords = await fetchRecords(userId, startDateFilter, endDateFilter);
     dispatch(setWallets(updatedWallets));
     dispatch(setRecords(updatedRecords));
     dispatch(setCurrentWallet(null));
@@ -199,7 +201,7 @@ function AddRecord() {
     }
    
     const updatedWallets = await fetchWallets(userId);
-    const updatedRecords = await fetchRecords(userId);
+    const updatedRecords = await fetchRecords(userId, startDateFilter, endDateFilter);
     dispatch(setWallets(updatedWallets));
     dispatch(setRecords(updatedRecords));
     dispatch(setCurrentWallet(null));

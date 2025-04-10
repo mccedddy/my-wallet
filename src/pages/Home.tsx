@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import Header from '../components/Header';
 import Overview from '../components/Overview';
 import Navbar from '../components/Navbar';
@@ -15,6 +15,8 @@ function Home() {
   const dispatch = useDispatch();
   const overviewShown = useSelector((state: any) => state.global.overviewShown);
   const navbarShown = useSelector((state: any) => state.global.navbarShown);
+  const startDateFilter = useSelector((state: any) => state.global.startDate);
+  const endDateFilter = useSelector((state: any) => state.global.endDate);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -52,12 +54,12 @@ function Home() {
         
         // Fetch wallets and records using the user ID
         dispatch(setWallets(await fetchWallets(userId)));
-        dispatch(setRecords(await fetchRecords(userId)));
+        dispatch(setRecords(await fetchRecords(userId, startDateFilter, endDateFilter)));
       }
     };
 
     fetchUser();
-  }, [dispatch]);
+  }, [dispatch, startDateFilter, endDateFilter]);
 
   return (
     <div className='home'>
