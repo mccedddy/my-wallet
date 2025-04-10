@@ -124,7 +124,7 @@ function ItemList({ type, data }: ItemListProps) {
       >
         <div className='item-row'>
           <h6 className='bold' style={{ color: type === 'wallet' ? data.color : undefined }}>
-            {data.name || formatDateTime(data.created_at, 'date')}
+            {data.name || formatDateTime(data.created_at, 'datetime')}
           </h6>
           ₱ {type === 'record' ? totalValue : latestWalletValue !== null ? latestWalletValue : '0'}
         </div>
