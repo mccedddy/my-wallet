@@ -33,3 +33,19 @@ export const fetchRecords = async (userId: string, startDateFilter: string, endD
 
   return recordsData;
 };
+
+export const fetchWalletValues = async (recordIds: string[]) => {
+  if (recordIds.length === 0) return [];
+
+  const { data: walletValuesData, error: walletValuesError } = await supabase
+    .from('wallet_values')
+    .select('record_id, wallet_id, value')
+    .in('record_id', recordIds);
+
+  if (walletValuesError) {
+    console.error("Error fetching wallet values:", walletValuesError.message);
+    return [];
+  }
+
+  return walletValuesData;
+};
