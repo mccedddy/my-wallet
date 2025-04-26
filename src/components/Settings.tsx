@@ -13,7 +13,7 @@ function Settings() {
     } else {
       dispatch(logOut());
       console.log('Logged out successfully');
-      location.reload();
+      window.location.href = '/my-wallet';
     }
   };
 

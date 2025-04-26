@@ -51,7 +51,7 @@ function LogIn() {
       setMessage(error.message);
     } else {
       setMessage('Login successful!');
-      location.reload();
+      window.location.href = '/my-wallet';
     }
   };
 
