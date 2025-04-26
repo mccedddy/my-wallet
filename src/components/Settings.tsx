@@ -13,7 +13,7 @@ function Settings() {
     } else {
       dispatch(logOut());
       console.log('Logged out successfully');
-      window.location.href = '/';
+      location.reload();
     }
   };
 
