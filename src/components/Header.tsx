@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import WalletIcon from '../assets/icons/walletLogo.svg';
 
 function Header() {
   const id = useSelector((state: any) => state.user.id);
@@ -8,7 +9,10 @@ function Header() {
 
   return (
     <div className="header">
-      <h3>My Wallet</h3>
+      <div className='title-container'>
+        <img src={WalletIcon} style={{height: "30px", width: "30px"}}></img>
+        <h5>My Wallet</h5>
+      </div>
       <p>{username}</p>
     </div>
   );
