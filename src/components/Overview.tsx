@@ -55,8 +55,8 @@ function Overview() {
   return (
     <div className='overview'>
       <div className='overview-total'>
-        <h2 className='bold'>Total</h2>
-        <h2 className='bold'>₱ {total.toLocaleString()}</h2>
+        <h4 className='bold'>Total</h4>
+        <h4 className='bold'>₱ {total.toLocaleString()}</h4>
       </div>
       <div className='overview-wallets'>
         {walletValues.map((wallet) => (
@@ -66,7 +66,7 @@ function Overview() {
           </div>
         ))}
       </div>
-      <p>Last Updated: {lastUpdated}</p>
+      <p className='text-dark'>Last Updated: {lastUpdated}</p>
     </div>
   );
 }
