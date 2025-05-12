@@ -5,10 +5,12 @@ import { setCurrentPage } from '../reducers/globalSlice';
 import { supabase } from '../services/supabaseClient';
 import { setCurrentWallet } from '../reducers/walletsSlice';
 import { setCurrentRecord } from '../reducers/recordsSlice';
+import { setRecordTotal } from '../reducers/recordsSlice';
 
 interface ItemListProps {
   type: 'wallet' | 'record';
   data: any;
+  change: number;
 }
 
 // Format timestamp to YYYY-MM-DD or HH:MM:SS
@@ -40,7 +42,7 @@ const formatDateTime = (timestamp: string, type: string = 'datetime') => {
   }
 };
 
-function ItemList({ type, data }: ItemListProps) {
+function ItemList({ type, data, change }: ItemListProps) {
   const dispatch = useDispatch();
   const wallets = useSelector((state: any) => state.wallets.wallets);
   const records = useSelector((state: any) => state.records.records); 
@@ -85,6 +87,7 @@ function ItemList({ type, data }: ItemListProps) {
         // Calculate total value
         const total = walletValuesData?.reduce((sum, walletValue) => sum + parseFloat(walletValue.value), 0) || 0;
         setTotalValue(total);
+        dispatch(setRecordTotal({ recordId: data.id, amount: total }));
       };
 
       fetchWalletValues();
@@ -129,13 +132,18 @@ function ItemList({ type, data }: ItemListProps) {
           ₱ {type === 'record' ? totalValue : latestWalletValue !== null ? latestWalletValue : '0'}
         </div>
         <div className='item-row'>
-          <p>{type === 'record' ? 
+          <p className='text-light'>{type === 'record' ? 
                 data.description? data.description : 
                 "No description" : 
                 data.last_updated? 
                   `Last updated: ${formatDateTime(data.last_updated, 'datetime')}` : 
                   "No description"}
           </p>
+
+          {type === 'record' && 
+          <p className={`${change > 0 ? 'text-success' : change < 0 ? 'text-error' : 'text-light'}`}>
+            {change > 0 ? '▲' : change < 0 ? '▼' : '-'} ₱ {change}
+          </p>}
         </div>
       </div>
 
