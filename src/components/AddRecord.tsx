@@ -57,8 +57,8 @@ function AddRecord() {
 
     // Wallet data
     setWalletName(currentWallet?.name || '');
-    setColor(currentWallet?.color || '#FFFFFF');
-    setPosition(currentWallet?.order?.toString() || '1');
+    setColor(currentWallet?.color);
+    setPosition(currentWallet?.position);
 
     if (currentPage === 'Add Record') {
       // Fetch the latest wallet values for placeholders

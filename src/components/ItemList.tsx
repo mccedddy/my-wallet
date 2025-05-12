@@ -171,8 +171,8 @@ function ItemList({ type, data, change }: ItemListProps) {
               </div>
               <div className='item-details-wallet'>
                 <div className='item-row'>
-                  <h6>Order</h6>
-                  <h6>{data.order}</h6>
+                  <h6>Position</h6>
+                  <h6>{data.position}</h6>
                 </div>
               </div>
             </>
